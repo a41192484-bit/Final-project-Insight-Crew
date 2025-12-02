@@ -1,251 +1,175 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{common/layout}">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layout}">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>여행지 목록</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>여행지 목록</title>
 
-    <style>
-        /* content */
-        /* 베이스 스타일 */
-        body {
-            margin: 0;
-            padding: 0;
-            background: #f5f7fa;
-            font-family: "Noto Sans KR", sans-serif;
-            color: #333;
-        }
+	<style>
+		/* content */
+		/* 베이스 스타일 */
+		body {
+			margin: 0;
+			padding: 0;
+			background: #f5f7fa;
+			font-family: "Noto Sans KR", sans-serif;
+			color: #333;
+		}
 
-        .container {
-            max-width: 70%;
-            margin: 70px auto;
-            padding: 0 20px;
-        }
+		.container {
+			max-width: 70%;
+			margin: 70px auto;
+			padding: 0 20px;
+		}
 
-        h2 {
-            font-size: 34px;
-            margin-bottom: 40px;
-        }
+		h2 {
+			font-size: 34px;
+			margin-bottom: 40px;
+		}
 
-        /* 검색 박스 */
-        .search-box {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            margin-bottom: 60px;
-        }
+		/* 검색 박스 */
+		.search-box {
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			margin-bottom: 60px;
+		}
 
-        .search-box input {
-            width: 30%;
-            padding: 12px 20px;
-            font-size: 16px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            margin-right: 6px;
-        }
+		.search-box input {
+			width: 30%;
+			padding: 12px 20px;
+			font-size: 16px;
+			border: 1px solid #ddd;
+			border-radius: 10px;
+			margin-right: 6px;
+		}
 
-        .search-box button {
-            padding: 10px 20px;
-            color: white;
-            background-color: #1e90ff;
-            border: 1px solid #b7d4ff;
-            font-size: 16px;
-            border-radius: 10px;
-            cursor: pointer;
-        }
+		.search-box button {
+			padding: 10px 20px;
+			color: white;
+			background-color: #1e90ff;
+			border: 1px solid #b7d4ff;
+			font-size: 16px;
+			border-radius: 10px;
+			cursor: pointer;
+		}
 
-        /* 탭 */
-        .tabs {
-            margin: 30px 0;
-            display: flex;
-            gap: 10px;
-        }
+		/* 탭 */
+		.tabs {
+			margin: 30px 0;
+			display: flex;
+			gap: 10px;
+		}
 
-        .tabs button {
-            padding: 10px 20px;
-            border: 1px solid #b7d4ff;
-            background: #e9f3ff;
-            border-radius: 20px;
-            cursor: pointer;
-        }
+		.tabs button {
+			padding: 10px 20px;
+			border: 1px solid #b7d4ff;
+			background: #e9f3ff;
+			border-radius: 20px;
+			cursor: pointer;
+		}
 
-        .tabs button.active {
-            background: #1e90ff;
-            color: white;
-            border-color: #1e90ff;
-        }
+		.tabs button.active {
+			background: #1e90ff;
+			color: white;
+			border-color: #1e90ff;
+		}
 
-        /* 카드 그리드 */
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 25px;
-        }
+		/* 카드 그리드 */
+		.card-grid {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 25px;
+		}
 
-        .card {
-            background: white;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-            transition: transform 0.2s;
-        }
+		.card {
+			background: white;
+			border-radius: 16px;
+			overflow: hidden;
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+			transition: transform 0.2s;
+		}
 
-        .card:hover {
-            transform: translateY(-5px);
-        }
+		.card:hover {
+			transform: translateY(-5px);
+		}
 
-        .card-link {
-            text-decoration: none;
-            color: inherit;
-            display: block;
-        }
+		.card-link {
+			text-decoration: none;
+			color: inherit;
+			display: block;
+		}
 
-        .card img {
-            width: 100%;
-            height: 170px;
-            object-fit: cover;
-        }
+		.card img {
+			width: 100%;
+			height: 170px;
+			object-fit: cover;
+		}
 
-        .card .text {
-            padding: 15px;
-        }
+		.card .text {
+			padding: 15px;
+		}
 
-        .card h3 {
-            margin: 0 0 10px;
-            font-size: 20px;
-        }
+		.card h3 {
+			margin: 0 0 10px;
+			font-size: 20px;
+		}
 
-        .card p {
-            margin: 0;
-            color: #666;
-        }
-    </style>
+		.card p {
+			margin: 0;
+			color: #666;
+		}
+	</style>
 </head>
 
 <body>
-    <div class="container" layout:fragment="content">
-        <h2>지역별 여행지</h2>
+	<div class="container" layout:fragment="content">
+		<h2>지역별 여행지</h2>
 
-        <!-- 검색 영역 -->
-        <section class="search-box">
-            <input type="text" placeholder="지역 또는 키워드를 입력하세요" />
-            <button>검색</button>
-        </section>
+		<!-- 검색 영역 -->
+		<section class="search-box">
+			<input type="text" placeholder="지역 또는 키워드를 입력하세요" />
+			<button>검색</button>
+		</section>
 
-        <!-- 카테고리 탭 -->
-        <section class="tabs">
-            <button class="active">전체</button>
-            <button>바다</button>
-            <button>산</button>
-            <button>도심</button>
-        </section>
+		<!-- 카테고리 탭 -->
+		<section class="tabs">
+			<button class="active">전체</button>
+			<button>바다</button>
+			<button>산</button>
+			<button>도심</button>
+		</section>
 
-        <!-- 카드 리스트 -->
-        <section class="card-grid" id="trip-list">
-            <a href="#" class="card-link">
-                <article class="card">
-                    <img src="/img/sample1.jpg" alt="여행지1" />
-                    <div class="text">
-                        <h3>경복궁</h3>
-                        <p>아름다운 전통 궁궐</p>
-                    </div>
-                </article>
-            </a>
+		<!-- 카드 리스트 -->
+		<section class="card-grid" id="trip-list">
+			<div th:each="t : ${tripList}">
 
-            <a href="#" class="card-link">
-                <article class="card">
-                    <img src="/img/sample2.jpg" alt="여행지2" />
-                    <div class="text">
-                        <h3>해운대 해수욕장</h3>
-                        <p>부산 대표 해변</p>
-                    </div>
-                </article>
-            </a>
+				<a href="#" class="card-link">
+					<article class="card">
+						<img th:src="${t.imageUrl}" th:alt="${t.name}" />
+						<div class="text">
+							<h3 th:text="${t.name}"></h3>
+							<p th:text="${t.description}"></p>
+						</div>
+					</article>
+				</a>
+		</section>
+	</div>
 
-            <a href="#" class="card-link">
-                <article class="card">
-                    <img src="/img/sample3.jpg" alt="여행지3" />
-                    <div class="text">
-                        <h3>남산타워</h3>
-                        <p>서울 전망 명소</p>
-                    </div>
-                </article>
-            </a>
+	<script>
+		async function loadTrips() {
+			try {
+				const res = await fetch("https://api.server.com/trips");
+				const list = await res.json();
 
-            <a href="#" class="card-link">
-                <article class="card">
-                    <img src="/img/sample3.jpg" alt="여행지3" />
-                    <div class="text">
-                        <h3>경복궁</h3>
-                        <p>아름다운 전통 궁궐</p>
-                    </div>
-                </article>
-            </a>
+				const container = document.getElementById("trip-list");
 
-            <a href="#" class="card-link">
-                <article class="card">
-                    <img src="/img/sample3.jpg" alt="여행지3" />
-                    <div class="text">
-                        <h3>해운대 해수욕장</h3>
-                        <p>부산 대표 해변</p>
-                    </div>
-                </article>
-            </a>
+				// container.innerHTML = "";
 
-            <a href="#" class="card-link">
-                <article class="card">
-                    <img src="/img/sample3.jpg" alt="여행지3" />
-                    <div class="text">
-                        <h3>남산타워</h3>
-                        <p>서울 전망 명소</p>
-                    </div>
-                </article>
-            </a>
-
-            <a href="#" class="card-link">
-                <article class="card">
-                    <img src="/img/sample3.jpg" alt="여행지3" />
-                    <div class="text">
-                        <h3>경복궁</h3>
-                        <p>아름다운 전통 궁궐</p>
-                    </div>
-                </article>
-            </a>
-
-            <a href="#" class="card-link">
-                <article class="card">
-                    <img src="/img/sample3.jpg" alt="여행지3" />
-                    <div class="text">
-                        <h3>해운대 해수욕장</h3>
-                        <p>부산 대표 해변</p>
-                    </div>
-                </article>
-            </a>
-
-            <a href="#" class="card-link">
-                <article class="card">
-                    <img src="/img/sample3.jpg" alt="여행지3" />
-                    <div class="text">
-                        <h3>남산타워</h3>
-                        <p>서울 전망 명소</p>
-                    </div>
-                </article>
-            </a>
-        </section>
-    </div>
-
-    <script>
-        async function loadTrips() {
-            try {
-                const res = await fetch("https://api.server.com/trips");
-                const list = await res.json();
-
-                const container = document.getElementById("trip-list");
-
-                // container.innerHTML = "";
-
-                list.forEach(item => {
-                    container.innerHTML += `
+				list.forEach(item => {
+					container.innerHTML += `
                 <a href="detail.html?id=${item.id}" class="card-link">
                     <article class="card">
                         <img src="${item.image}" alt="${item.title}">
@@ -255,16 +179,16 @@
                         </div>
                     </article>
                 </a>`;
-                });
-            } catch (e) {
-                console.error(e);
-                alert("여행지 목록 로딩 중 오류 발생");
-            }
-        }
+				});
+			} catch (e) {
+				console.error(e);
+				alert("여행지 목록 로딩 중 오류 발생");
+			}
+		}
 
-        loadTrips();
+		loadTrips();
 
-    </script>
+	</script>
 </body>
 
 </html>

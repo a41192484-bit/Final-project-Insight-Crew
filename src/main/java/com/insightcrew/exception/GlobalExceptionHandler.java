@@ -15,10 +15,10 @@ public class GlobalExceptionHandler {
                 .body(e.getMessage());
     }
 
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<?> handleRuntime(RuntimeException e) {
-        return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("서버 오류가 발생했습니다.");
-    }
+//    @ExceptionHandler(RuntimeException.class)
+//    public ResponseEntity<?> handleRuntime(RuntimeException e) {
+//        return ResponseEntity
+//                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                .body("서버 오류가 발생했습니다.");
+//    }
 }
