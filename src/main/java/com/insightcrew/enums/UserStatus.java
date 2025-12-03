@@ -1,5 +1,5 @@
 package com.insightcrew.enums;
 
-public enum Status {
+public enum UserStatus {
 	ACTIVE, INACTIVE
 }

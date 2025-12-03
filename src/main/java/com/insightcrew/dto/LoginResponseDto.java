@@ -1,5 +1,7 @@
 package com.insightcrew.dto;
 
+import com.insightcrew.enums.UserRole;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -9,5 +11,5 @@ public class LoginResponseDto {
 	private boolean success;
 	private String id;
 	private String message;
-	private String role;
+	private UserRole role;
 }

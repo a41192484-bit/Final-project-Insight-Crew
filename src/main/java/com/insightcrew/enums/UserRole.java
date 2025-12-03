@@ -1,5 +1,5 @@
 package com.insightcrew.enums;
 
-public enum Role {
+public enum UserRole {
 	ADMIN, USER
 }
