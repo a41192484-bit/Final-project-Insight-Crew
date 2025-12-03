@@ -1,194 +1,247 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{common/layout}">
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout}">
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>여행지 목록</title>
+    <meta charset="UTF-8">
+    <title>여행지 목록</title>
 
-	<style>
-		/* content */
-		/* 베이스 스타일 */
-		body {
-			margin: 0;
-			padding: 0;
-			background: #f5f7fa;
-			font-family: "Noto Sans KR", sans-serif;
-			color: #333;
-		}
+    <style>
+        body {
+            display: block !important;
+            width: 100% !important;
+            margin: 0;
+            padding: 0;
+        }
 
-		.container {
-			max-width: 70%;
-			margin: 70px auto;
-			padding: 0 20px;
-		}
+        #trip-container {
+            width: 960px;
+            margin: 40px auto 100px auto;
+            font-family: Arial, sans-serif;
+        }
 
-		h2 {
-			font-size: 34px;
-			margin-bottom: 40px;
-		}
+        .ranking-box {
+            background: #F5F3FF;
+            border: 1px solid #868FEE;
+            border-radius: 12px;
+            padding: 25px 30px;
+            margin-bottom: 40px;
+        }
 
-		/* 검색 박스 */
-		.search-box {
-			display: flex;
-			align-items: center;
-			gap: 6px;
-			margin-bottom: 60px;
-		}
+        .ranking-title {
+            font-size: 26px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #6F73FF;
+            text-align: center;
+        }
 
-		.search-box input {
-			width: 30%;
-			padding: 12px 20px;
-			font-size: 16px;
-			border: 1px solid #ddd;
-			border-radius: 10px;
-			margin-right: 6px;
-		}
+        .ranking-list {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
 
-		.search-box button {
-			padding: 10px 20px;
-			color: white;
-			background-color: #1e90ff;
-			border: 1px solid #b7d4ff;
-			font-size: 16px;
-			border-radius: 10px;
-			cursor: pointer;
-		}
+        .rank-card {
+            width: 18%;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            text-decoration: none;
+            color: black;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            transition: transform 0.2s;
+        }
 
-		/* 탭 */
-		.tabs {
-			margin: 30px 0;
-			display: flex;
-			gap: 10px;
-		}
+        .rank-card:hover {
+            transform: translateY(-5px);
+        }
 
-		.tabs button {
-			padding: 10px 20px;
-			border: 1px solid #b7d4ff;
-			background: #e9f3ff;
-			border-radius: 20px;
-			cursor: pointer;
-		}
+        .rank-card img {
+            width: 100%;
+            height: 110px;
+            object-fit: cover;
+        }
 
-		.tabs button.active {
-			background: #1e90ff;
-			color: white;
-			border-color: #1e90ff;
-		}
+        .rank-info {
+            padding: 12px;
+            text-align: center;
+        }
 
-		/* 카드 그리드 */
-		.card-grid {
-			display: grid;
-			grid-template-columns: repeat(3, 1fr);
-			gap: 25px;
-		}
+        .search-area {
+            margin: 30px 0 15px 0;
+            text-align: center;
+        }
 
-		.card {
-			background: white;
-			border-radius: 16px;
-			overflow: hidden;
-			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-			transition: transform 0.2s;
-		}
+        .search-area input {
+            width: 300px;
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            font-size: 15px;
+        }
 
-		.card:hover {
-			transform: translateY(-5px);
-		}
+        .search-area button {
+            padding: 11px 20px;
+            background: #868FEE;
+            color: white;
+            border-radius: 10px;
+            border: 1px solid #868FEE;
+            cursor: pointer;
+        }
 
-		.card-link {
-			text-decoration: none;
-			color: inherit;
-			display: block;
-		}
+        .category-box {
+            text-align: center;
+            margin: 25px 0 40px 0;
+        }
 
-		.card img {
-			width: 100%;
-			height: 170px;
-			object-fit: cover;
-		}
+        .category-box button {
+            padding: 8px 18px;
+            margin: 0 8px;
+            border-radius: 18px;
+            border: 1px solid #868FEE;
+            background: #F5F3FF;
+            cursor: pointer;
+            color: black;
+        }
 
-		.card .text {
-			padding: 15px;
-		}
+        .category-box button.active {
+            background: #868FEE;
+            color: white;
+        }
 
-		.card h3 {
-			margin: 0 0 10px;
-			font-size: 20px;
-		}
+        .trip-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+        }
 
-		.card p {
-			margin: 0;
-			color: #666;
-		}
-	</style>
+        .trip-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            transition: transform 0.2s;
+        }
+
+        .trip-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .trip-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .trip-card-body {
+            padding: 12px;
+        }
+
+        .pagination {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .pagination a {
+            padding: 8px 14px;
+            border: 1px solid #868FEE;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #868FEE;
+        }
+
+        .pagination a.active {
+            background: #868FEE;
+            color: white;
+        }
+    </style>
 </head>
 
 <body>
-	<div class="container" layout:fragment="content">
-		<h2>지역별 여행지</h2>
 
-		<!-- 검색 영역 -->
-		<section class="search-box">
-			<input type="text" placeholder="지역 또는 키워드를 입력하세요" />
-			<button>검색</button>
-		</section>
+<div id="trip-container" layout:fragment="content">
 
-		<!-- 카테고리 탭 -->
-		<section class="tabs">
-			<button class="active">전체</button>
-			<button>바다</button>
-			<button>산</button>
-			<button>도심</button>
-		</section>
+    <section class="ranking-box">
+        <div class="ranking-title">오늘의 추천 여행지 TOP 5</div>
 
-		<!-- 카드 리스트 -->
-		<section class="card-grid" id="trip-list">
-			<div th:each="t : ${tripList}">
+        <div class="ranking-list">
+            <a th:each="r : ${rankingTop5}"
+               th:href="@{/trip/detail/{id}(id=${r.tripId})}"
+               class="rank-card">
+                <img th:src="${r.imageUrl}" th:alt="ranking-image">
+                <div class="rank-info">
+                    <h3 th:text="${r.title}"></h3>
+                    <p th:text="${r.reason}"></p>
+                </div>
+            </a>
+        </div>
+    </section>
 
-				<a href="#" class="card-link">
-					<article class="card">
-						<img th:src="${t.imageUrl}" th:alt="${t.name}" />
-						<div class="text">
-							<h3 th:text="${t.name}"></h3>
-							<p th:text="${t.description}"></p>
-						</div>
-					</article>
-				</a>
-		</section>
+    <section class="search-area">
+        <form th:action="@{/trip/list}" method="get">
+            <input type="text" name="keyword" placeholder="지역 또는 키워드를 입력하세요">
+            <button type="submit">검색</button>
+        </form>
+    </section>
+
+    <section class="category-box">
+        <button class="active">전체</button>
+        <button>바다</button>
+        <button>산</button>
+        <button>도심</button>
+        <button>관광지</button>
+        <button>액티비티</button>
+    </section>
+
+    <section class="trip-grid">
+        <div th:each="t : ${tripList}" class="trip-card">
+            <a th:href="@{/trip/detail/{id}(id=${t.tripId})}" style="text-decoration:none; color:black;">
+                <img th:src="${t.imageUrl}" th:alt="trip-image">
+                <div class="trip-card-body">
+                    <h3 th:text="${t.name}"></h3>
+                    <p th:text="${t.description}"></p>
+                </div>
+            </a>
+        </div>
+    </section>
+
+	<!-- 🔵 페이징 (컨트롤러 연결 전이므로 임시 주석 처리) -->
+
+	<!--
+	<div class="pagination">
+
+	    <a th:href="@{/trip/list(page=${page-1})}"
+	       th:if="${page > 1}">
+	       이전
+	    </a>
+
+	    <a th:each="p : ${#numbers.sequence(1, totalPages)}"
+	       th:href="@{/trip/list(page=${p})}"
+	       th:classappend="${p == page} ? 'active'">
+	        <span th:text="${p}"></span>
+	    </a>
+
+	    <a th:href="@{/trip/list(page=${page+1})}"
+	       th:if="${page < totalPages}">
+	        다음
+	    </a>
+
+	</div>
+	-->
+
+	<!-- 🔵 디자인 미리보기용 임시 페이징 -->
+	<div class="pagination">
+	    <a class="active">1</a>
+	    <a>2</a>
+	    <a>3</a>
 	</div>
 
-	<script>
-		async function loadTrips() {
-			try {
-				const res = await fetch("https://api.server.com/trips");
-				const list = await res.json();
+</div>
 
-				const container = document.getElementById("trip-list");
-
-				// container.innerHTML = "";
-
-				list.forEach(item => {
-					container.innerHTML += `
-                <a href="detail.html?id=${item.id}" class="card-link">
-                    <article class="card">
-                        <img src="${item.image}" alt="${item.title}">
-                        <div class="text">
-                            <h3>${item.title}</h3>
-                            <p>${item.description}</p>
-                        </div>
-                    </article>
-                </a>`;
-				});
-			} catch (e) {
-				console.error(e);
-				alert("여행지 목록 로딩 중 오류 발생");
-			}
-		}
-
-		loadTrips();
-
-	</script>
 </body>
-
 </html>
