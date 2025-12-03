@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class LoginResponseDto {
 	private boolean success;
-	private String id;
+	private String userid;
 	private String message;
 	private UserRole role;
 }

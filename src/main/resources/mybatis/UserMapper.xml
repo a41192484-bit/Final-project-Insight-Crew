@@ -8,7 +8,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- enum 매핑 포함. db테이블 값. -->
 	<resultMap id="member" type="com.insightcrew.vo.UserEntity">
 		<id property="pkId" column="member_id"/>
-		<result property="id" column="login_id"/>
+		<result property="userid" column="login_id"/>
 		<result property="password" column="password"/>
 		<result property="name" column="name"/>
 		<result property="nickname" column="nickname"/>
@@ -17,5 +17,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="indate" column="in_date"/>
 		<result property="outdate" column="out_date"/>
 	</resultMap>
+	
+	<!-- 로그인 아이디 찾기 -->
+	<select id="findByUserid" parameterType="String" resultMap="member">
+		select *
+		from member
+		where login_id=#{userid}
+	</select>
+	
+	<!-- 로그인 비번 찾기 -->
+	<select id="findBypassword" parameterType="String" resultMap="member">
+		select *
+		from member
+		where password=#{password}
+	</select>
 
 </mapper>
