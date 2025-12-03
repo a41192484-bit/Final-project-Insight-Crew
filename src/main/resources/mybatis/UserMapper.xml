@@ -6,7 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="">
 
 	<!-- enum 매핑 포함. db테이블 값. -->
-	<resultMap id="member" type="com.insightcrew.vo">
+	<resultMap id="member" type="com.insightcrew.vo.UserEntity">
 		<id property="pkId" column="member_id"/>
 		<result property="id" column="login_id"/>
 		<result property="password" column="password"/>
