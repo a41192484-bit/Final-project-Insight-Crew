@@ -42,5 +42,25 @@
     <select id="countAll" resultType="int">
         SELECT COUNT(*) FROM trip
     </select>
+    
+    <select id="findTripDetailById" parameterType="long"
+        resultType="com.insightcrew.domain.trip.dto.TripDetailResponse">
+
+    	SELECT 
+        	trip_id AS tripId,
+        	name,
+        	category,
+        	full_address AS fullAddress,
+        	description,
+        	image_url AS imageUrl,
+        	detail_image_url AS detailImageUrl,
+        	tel,
+        	homepage,
+        	lat,
+        	lon
+    	FROM trip
+    	WHERE trip_id = #{tripId}
+
+	</select>
 
 </mapper>

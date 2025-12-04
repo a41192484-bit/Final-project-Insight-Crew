@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.insightcrew.domain.trip.dto.TripDetailResponse;
 import com.insightcrew.domain.trip.vo.TripVo;
 
 @Mapper
@@ -21,4 +22,6 @@ public interface TripMapper {
     List<TripVo> findPage(@Param("offset") int offset, @Param("size") int size);
 
     int countAll();
+    
+    TripDetailResponse findTripDetailById(Long tripId);
 }

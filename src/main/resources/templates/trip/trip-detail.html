@@ -1,223 +1,250 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    layout:decorate="~{common/layout}">
+	layout:decorate="~{common/layout}">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>여행지 상세조회</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>여행지 상세조회</title>
 
-    <style>
-        .detail-container {
-            max-width: 900px;
-            margin: 40px auto;
-        }
+	<style>
+		.detail-container {
+			width: 900px;
+			margin: 40px auto 80px auto;
+			font-family: 'Pretendard', sans-serif;
+		}
 
-        /* 대표 이미지 */
-        .detail-image img {
-            width: 100%;
-            height: 350px;
-            object-fit: cover;
-            border-radius: 18px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
+		/* 대표 이미지 */
+		.detail-image img {
+		    width: 82%;                /* 적당한 카드 폭 */
+		    max-height: 360px;         /* 사진이 너무 크지 않게 */
+		    object-fit: cover;
+		    border-radius: 20px;
+		    display: block;
+		    margin: 0 auto;
+		    box-shadow: 0 5px 16px rgba(0, 0, 0, 0.08);
+		}
 
-        /* 제목 */
-        .detail-header {
-            margin-top: 25px;
-        }
+		/* 제목 + 설명 */
+		.detail-header {
+			text-align: center;
+			margin-top: 30px;
+			margin-bottom: 15px;
+		}
 
-        .detail-header h1 {
-            font-size: 30px;
-            margin-bottom: 8px;
-        }
+		.detail-header h1 {
+			font-size: 32px;
+			font-weight: 700;
+			margin-bottom: 8px;
+		}
 
-        .subtitle {
-            font-size: 18px;
-            color: #666;
-        }
+		.subtitle {
+			font-size: 15px;
+			color: #666;
+		}
 
-        /* 정보 카드들 */
-        .info-cards {
-            margin-top: 30px;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-        }
+		/* 정보 카드 박스 */
+		.info-cards {
+			margin-top: 40px;
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 24px;
+		}
 
-        .info-card {
-            display: flex;
-            gap: 12px;
-            background: white;
-            padding: 15px;
-            border-radius: 14px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-            align-items: center;
-        }
+		/* 개별 카드 */
+		.info-card {
+			background: #ffffff;
+			padding: 26px 24px;
+			border-radius: 16px;
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+			display: flex;
+			align-items: flex-start;
+			gap: 14px;
+		}
 
-        .info-card .icon {
-            width: 30px;
-            height: 30px;
-            object-fit: contain;
-        }
+		/* 아이콘 Wrapper — 아이콘 위치 FIX */
+		.icon-wrap {
+			width: 30px;
+			height: 30px;
+			display: flex;
+			justify-content: center;
+			align-items: flex-start;
+			padding-top: 2px;
+		}
 
-        /* 상세 설명 */
-        .detail-content {
-            margin-top: 40px;
-            background: white;
-            padding: 20px 25px;
-            border-radius: 18px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-        }
+		.icon {
+			width: 28px;
+			height: 28px;
+			object-fit: contain;
+		}
 
-        .detail-content h2 {
-            margin-bottom: 15px;
-        }
+		/* 글자 묶음 */
+		.text-wrap h4 {
+			margin: 0;
+			padding: 0;
+			font-size: 17px;
+			font-weight: 600;
+			color: #333;
+			line-height: 1.2;
+		}
 
-        /* 목록 버튼 */
-        .back-btn-wrap {
-            margin-top: 35px;
-            text-align: center;
-        }
+		.text-wrap .value {
+			margin-top: 8px;
+			font-size: 14px;
+			line-height: 1.45;
+			color: #555;
+			word-break: keep-all;
+		}
 
-        .back-btn {
-            display: inline-block;
-            padding: 12px 22px;
-            background: #1e90ff;
-            color: white;
-            font-size: 16px;
-            border-radius: 12px;
-            text-decoration: none;
-        }
+		/* 상세 소개 */
+		.detail-content {
+			margin-top: 45px;
+			background: #F7F7FF;
+			padding: 30px 35px;
+			border-radius: 20px;
+		}
 
-        .back-btn:hover {
-            background: #006edc;
-        }
-    </style>
+		.detail-content h2 {
+			margin-bottom: 15px;
+			font-size: 22px;
+			font-weight: 700;
+		}
+
+		.detail-content .desc {
+			font-size: 15px;
+			color: #444;
+			line-height: 1.65;
+			word-break: keep-all;
+		}
+
+		/* 목록 버튼 */
+		.back-btn-wrap {
+			margin-top: 40px;
+			text-align: center;
+		}
+
+		.back-btn {
+			padding: 13px 28px;
+			background: #6F73FF;
+			color: white;
+			font-size: 16px;
+			border-radius: 12px;
+			text-decoration: none;
+			font-weight: 600;
+			box-shadow: 0 3px 8px rgba(111, 115, 255, 0.25);
+		}
+
+		.back-btn:hover {
+			background: #565BFF;
+		}
+	</style>
+
 </head>
 
 <body>
-    <div layout:fragment="content">
-        <main class="detail-container">
 
-            <!-- 대표 이미지 -->
-            <div class="detail-image">
-                <img src="img/sample1.jpg" alt="경복궁">
-            </div>
+	<div layout:fragment="content">
+		
+		<!-- 🌟 TripInsight 여행지 상세 타이틀 -->
+		<div style="text-align:center; margin-top:40px; margin-bottom:25px;">
 
-            <!-- 제목 & 설명 -->
-            <section class="detail-header">
-                <h1>경복궁</h1>
-                <p class="subtitle">아름다운 전통 궁궐</p>
-            </section>
+		    <!-- <div style="font-size:28px; margin-bottom:8px;">
+		        🏝️🚌
+		    </div> -->
 
-            <!-- 정보 카드 -->
-            <section class="info-cards">
-                <div class="info-card address-card">
-                    <img src="img/icon/location.png" class="icon">
-                    <div>
-                        <h4>주소</h4>
-                        <p class="value">서울 종로구 사직로 161</p>
-                    </div>
-                </div>
+		    <div style="font-size:24px; font-weight:700; color:#6F73FF;">
+		        TripInsight 여행지 상세정보
+		    </div>
 
-                <div class="info-card time-card">
-                    <img src="img/icon/time.png" class="icon">
-                    <div>
-                        <h4>운영 시간</h4>
-                        <p class="value">09:00 ~ 18:00</p>
-                    </div>
-                </div>
+		</div>
 
-                <div class="info-card phone-card">
-                    <img src="img/icon/phone.png" class="icon">
-                    <div>
-                        <h4>문의</h4>
-                        <p class="value">02-3700-3900</p>
-                    </div>
-                </div>
-            </section>
+		<main class="detail-container">
 
-            <!-- 상세 설명 -->
-            <section class="detail-content">
-                <h2>상세 소개</h2>
-                <p class="desc">
-                    경복궁은 조선 시대의 정궁으로, 역사와 문화를 느낄 수 있는
-                    대표적인 명소입니다. 고궁과 정원의 아름다움, 근정전과 경회루까지
-                    감상할 수 있어 국내외 많은 관광객들이 찾는 장소입니다.
-                </p>
-            </section>
+			<!-- 대표 이미지 -->
+			<div class="detail-image">
+				<img th:src="${detail.detailImageUrl}" onerror="this.src='/img/no-image.png'">
+			</div>
 
-            <!-- 목록으로 돌아가기 -->
-            <div class="back-btn-wrap">
-                <a href="trip.html" class="back-btn">목록으로 돌아가기</a>
-            </div>
+			<!-- 제목 & 간단 설명 -->
+			<section class="detail-header">
+			    <h2 th:text="${detail.name}"></h2>
+			    <p class="subtitle"
+			       th:text="${#strings.isEmpty(detail.description) 
+			                ? '지역의 자연환경과 주변 문화가 조화를 이루는 공간으로, 가벼운 방문부터 여유로운 산책까지 누구나 부담 없이 즐길 수 있는 장소입니다.' 
+			                : detail.description}">
+			        간단 설명
+			    </p>
+			</section>
 
-        </main>
-    </div>
+			<!-- 정보 카드 3개 -->
+			<section class="info-cards">
 
-    <script>
-        // URL에서 id 꺼내기
-        const params = new URLSearchParams(window.location.search);
-        const id = params.get("id");
+				<!-- 주소 -->
+				<div class="info-card">
+					<div class="icon-wrap">
+						<img src="/img/location.png" class="icon">
+					</div>
+					<div class="text-wrap">
+						<h4>주소</h4>
+						<p class="value" th:text="${detail.fullAddress}"></p>
+					</div>
+				</div>
 
-        // 샘플 데이터 (디자인 확인용)
-        const sampleData = {
-            image: "img/sample1.jpg",
-            title: "경복궁",
-            shortDesc: "아름다운 전통 궁궐",
-            address: "서울 종로구 사직로 161",
-            operatingTime: "09:00 ~ 18:00",
-            phone: "02-3700-3900",
-            description: "경복궁은 조선 시대의 정궁으로, 역사와 문화를 느낄 수 있는 대표적인 명소입니다."
-        };
+				<!-- 홈페이지 -->
+				<div class="info-card">
+					<div class="icon-wrap">
+						<img src="/img/homepage.png" class="icon">
+					</div>
+					<div class="text-wrap">
+						<h4>홈페이지</h4>
+						<p class="value">
+						    <span th:if="${!#strings.isEmpty(detail.homepage)}">
+						        <a th:href="${detail.homepage}" target="_blank"
+						            style="color:#6F73FF; text-decoration:underline;">
+						            방문하기
+						        </a>
+						    </span>
 
-        // 화면 렌더링 함수
-        function renderDetail(data) {
-            document.querySelector(".detail-image img").src = data.image;
-            document.querySelector(".detail-image img").alt = data.title;
+						    <span th:if="${#strings.isEmpty(detail.homepage)}">
+						        공식 정보 준비중
+						    </span>
+						</p>
+					</div>
+				</div>
 
-            document.querySelector(".detail-header h1").innerText = data.title;
-            document.querySelector(".subtitle").innerText = data.shortDesc;
+				<!-- 문의 -->
+				<div class="info-card">
+				    <div class="icon-wrap">
+				        <img src="/img/tel.png" class="icon">
+				    </div>
+				    <div class="text-wrap">
+				        <h4>문의</h4>
+				        <p class="value"
+				           th:text="${#strings.isEmpty(detail.tel) ? '문의처 정보 준비중' : detail.tel}">
+				        </p>
+				    </div>
+				</div>
 
-            document.querySelector(".address-card .value").innerText = data.address;
-            document.querySelector(".time-card .value").innerText = data.operatingTime;
-            document.querySelector(".phone-card .value").innerText = data.phone;
+			</section>
 
-            document.querySelector(".detail-content .desc").innerText = data.description;
-        }
+			<!-- 상세 소개 -->
+			<section class="detail-content">
+			    <h3>상세 소개</h3>
+			    <p class="desc"
+			       th:text="${#strings.isEmpty(detail.description) 
+			                ? '이 여행지는 지역의 자연환경과 주변 문화가 조화를 이루는 공간으로, 가벼운 방문부터 여유로운 산책까지 누구나 부담 없이 즐길 수 있는 장소입니다. 계절마다 다른 분위기와 특유의 매력이 있어 도심 속 힐링과 작은 여행이 필요한 이들에게 편안한 쉼을 제공합니다. 편안한 분위기 속에서 주변 풍경을 바라보며, 잠시 머무르는 것만으로도 충분한 여유를 느낄 수 있는 여행지입니다.' 
+			                : detail.description}">
+			    </p>
+			</section>
 
-        // API 연동 함수
-        async function loadDetail() {
-            // id가 없으면: 디자인 확인 모드 (샘플 데이터로 렌더링)
-            if (!id) {
-                console.warn("id 없음 → 디자인 미리보기 모드 작동");
-                renderDetail(sampleData);
-                return;
-            }
+			<!-- 목록 버튼 -->
+			<div class="back-btn-wrap">
+				<a href="/trip/list" class="back-btn">목록으로 돌아가기</a>
+			</div>
 
-            // id가 있으면: 실제 API 호출
-            try {
-                const res = await fetch(`https://api.server.com/trips/${id}`);
+		</main>
 
-                if (!res.ok) {
-                    throw new Error("API 오류: " + res.status);
-                }
-
-                const data = await res.json();
-                renderDetail(data);
-
-            } catch (err) {
-                console.error("상세정보 에러:", err);
-                alert("상세 정보를 불러올 수 없습니다. (샘플 데이터로 표시됩니다.)");
-
-                // API 오류 시에도 샘플 데이터 표시
-                renderDetail(sampleData);
-            }
-        }
-
-        loadDetail();
-    </script>
+	</div>
 
 </body>
 

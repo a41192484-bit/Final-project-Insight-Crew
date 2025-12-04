@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.insightcrew.domain.trip.dto.TripDetailResponse;
 import com.insightcrew.domain.trip.vo.TripVo;
 import com.insightcrew.repository.TripMapper;
 
@@ -31,5 +32,9 @@ public class TripService {
     public int getTotalPages(int size) {
         int totalCount = tripMapper.countAll();
         return (int) Math.ceil((double) totalCount / size);
+    }
+    
+    public TripDetailResponse getTripDetail(Long tripId) {
+        return tripMapper.findTripDetailById(tripId);
     }
 }

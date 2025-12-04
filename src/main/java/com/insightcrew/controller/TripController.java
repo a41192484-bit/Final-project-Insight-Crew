@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.insightcrew.domain.trip.dto.TripDetailResponse;
 import com.insightcrew.domain.trip.vo.TripVo;
 import com.insightcrew.service.TripService;
 
@@ -46,8 +47,11 @@ public class TripController {
 
     // 여행지 상세보기
     @GetMapping("/trip/detail/{id}")
-    public String detail(@PathVariable Long id, Model model) {
-        model.addAttribute("trip", tripService.findById(id));
+    public String tripDetail(@PathVariable("id") Long id, Model model) {
+
+        TripDetailResponse detail = tripService.getTripDetail(id);
+        model.addAttribute("detail", detail);
+
         return "trip/trip-detail";
     }
 }
