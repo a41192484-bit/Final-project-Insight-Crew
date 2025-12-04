@@ -1,21 +1,18 @@
 package com.insightcrew.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import com.insightcrew.domain.auth.dto.LoginRequestDto;
-
 
 
 @Controller
 @RequestMapping("/auth")
 public class LoginController {
 	
-	@PostMapping("/login")
-	public String requestLogin(@ModelAttribute LoginRequestDto logindto) {
-		return null;
+	//화면 요청이라 get. 로그인 처리 요청은 post.
+	@GetMapping("/login")
+	public String loginPage() {
+		return "auth/login";
 	}
 	
 }

@@ -28,17 +28,19 @@ public class SecurityConfig {
         //페이지별 사이트url별로 접근 권한 설정
         .authorizeHttpRequests(auth -> auth
         				//어떤 url이 대상인지
-                        .requestMatchers("/", "/login/**", "/css/**", "/js/**", "/img/**")
-                        .permitAll()
+                        .requestMatchers("/auth/login", "/auth/login-process", "/css/**", "/js/**", "/img/**")
+                        .permitAll() //누구나 접근 허용
                         .requestMatchers("/board/list").hasRole("USER") // USER 권한 필요
+                        .requestMatchers("/member-mypage").hasRole("USER")
+                        .requestMatchers("/member-mypage/member-info").hasRole("USER")
                         .requestMatchers("/java").hasRole("ADMIN") // ADMIN 권한 필요
                         .anyRequest().authenticated() // 그 외 모든 요청 인증 필요
         )
         .formLogin(login -> login
-                        .loginPage("/login/login") // 커스텀 로그인 페이지
-                        .loginProcessingUrl("/login") // POST 로그인 처리 URL
+                        .loginPage("/auth/login") // 내가 만든 로그인 페이지 경로
+                        .loginProcessingUrl("/auth/login-process") // POST 로그인 처리 URL. 시큐리티가 실제 인증 처리하는url
                         .defaultSuccessUrl("/", true) // 로그인 성공 시 이동
-                        .failureUrl("/login/login?error") // 로그인 실패 시 이동
+                        .failureUrl("/auth/login?error=true") // 로그인 실패 시 이동
                         .permitAll())
         .logout(logout -> logout
                         .logoutUrl("/logout") // 로그아웃 요청 URL
