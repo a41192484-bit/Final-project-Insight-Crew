@@ -2,8 +2,8 @@ package com.insightcrew.domain.member.vo;
 
 import java.time.LocalDateTime;
 
-import com.insightcrew.enums.UserRole;
-import com.insightcrew.enums.UserStatus;
+import com.insightcrew.domain.member.enums.UserRole;
+import com.insightcrew.domain.member.enums.UserStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,4 +1,4 @@
-package com.insightcrew.enums;
+package com.insightcrew.domain.member.enums;
 
 public enum UserStatus {
 	ACTIVE, INACTIVE

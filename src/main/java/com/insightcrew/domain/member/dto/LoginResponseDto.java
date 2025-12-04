@@ -1,6 +1,6 @@
 package com.insightcrew.domain.member.dto;
 
-import com.insightcrew.enums.UserRole;
+import com.insightcrew.domain.member.enums.UserRole;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
