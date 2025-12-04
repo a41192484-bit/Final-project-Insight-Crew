@@ -16,7 +16,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MemberEntity {
+public class MemberVo {
+	// pk id(고유식별자)는 세션, 인증, 권한 처리할 때 필수
 	private Long pkId;
 	
 	private String userid;
