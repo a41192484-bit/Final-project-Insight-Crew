@@ -6,7 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="">
 
 	<!-- enum 매핑 포함. db테이블 값. -->
-	<resultMap id="member" type="com.insightcrew.vo.UserEntity">
+	<resultMap id="memberResultMap" type="com.insightcrew.domain.member.vo.MemberVo">
 		<id property="pkId" column="member_id"/>
 		<result property="userid" column="login_id"/>
 		<result property="password" column="password"/>
@@ -18,15 +18,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="outdate" column="out_date"/>
 	</resultMap>
 	
-	<!-- 로그인 아이디 찾기 -->
-	<select id="findByUserid" parameterType="String" resultMap="member">
+	<!-- 로그인 아이디 찾는 쿼리문 -->
+	<select id="findByUserid" parameterType="String" resultMap="memberResultMap">
 		select *
 		from member
 		where login_id=#{userid}
+		and status = 'active';
 	</select>
 	
-	<!-- 로그인 비번 찾기 -->
-	<select id="findBypassword" parameterType="String" resultMap="member">
+	<!-- 로그인 비번 찾는 쿼리문 -->
+	<select id="findBypassword" parameterType="String" resultMap="memberResultMap">
 		select *
 		from member
 		where password=#{password}
