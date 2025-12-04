@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
-<mapper namespace="">
+<mapper namespace="com.insightcrew.repositary.MemberRepositary">
 
 	<!-- enum 매핑 포함. db테이블 값. -->
 	<resultMap id="memberResultMap" type="com.insightcrew.domain.member.vo.MemberVo">
@@ -23,7 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select *
 		from member
 		where login_id=#{userid}
-		and status = 'active';
+		and status = 'ACTIVE';
 	</select>
 	
 	<!-- 로그인 비번 찾는 쿼리문 -->
