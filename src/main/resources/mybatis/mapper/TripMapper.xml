@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.insightcrew.repository.TripMapper">
+
+    <select id="existsByContentId" resultType="int">
+        SELECT COUNT(*)
+        FROM trip
+        WHERE content_id = #{contentId}
+    </select>
+
+    <insert id="insert">
+        INSERT INTO trip (
+            content_id, name, region_code, category,
+            content_type_id, lat, lon, full_address,
+            image_url, detail_image_url, tel, homepage,
+            description
+        ) VALUES (
+            #{contentId}, #{name}, #{regionCode}, #{category},
+            #{contentTypeId}, #{lat}, #{lon}, #{fullAddress},
+            #{imageUrl}, #{detailImageUrl}, #{tel}, #{homepage},
+            #{description}
+        )
+    </insert>
+
+    <select id="findAll" resultType="com.insightcrew.domain.trip.vo.TripVo">
+        SELECT * FROM trip ORDER BY trip_id DESC
+    </select>
+
+    <select id="findById" resultType="com.insightcrew.domain.trip.vo.TripVo">
+        SELECT * FROM trip WHERE trip_id = #{tripId}
+    </select>
+
+    <select id="findPage" resultType="com.insightcrew.domain.trip.vo.TripVo">
+        SELECT *
+        FROM trip
+        ORDER BY trip_id DESC
+        LIMIT #{size} OFFSET #{offset}
+    </select>
+
+    <select id="countAll" resultType="int">
+        SELECT COUNT(*) FROM trip
+    </select>
+
+</mapper>
