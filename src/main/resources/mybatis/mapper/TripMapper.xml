@@ -4,12 +4,14 @@
 
 <mapper namespace="com.insightcrew.repository.TripMapper">
 
+    <!-- 중복 체크 -->
     <select id="existsByContentId" resultType="int">
         SELECT COUNT(*)
         FROM trip
         WHERE content_id = #{contentId}
     </select>
 
+    <!-- INSERT -->
     <insert id="insert">
         INSERT INTO trip (
             content_id, name, region_code, category,
@@ -24,14 +26,17 @@
         )
     </insert>
 
+    <!-- 전체 조회 -->
     <select id="findAll" resultType="com.insightcrew.domain.trip.vo.TripVo">
         SELECT * FROM trip ORDER BY trip_id DESC
     </select>
 
+    <!-- ID 조회 -->
     <select id="findById" resultType="com.insightcrew.domain.trip.vo.TripVo">
         SELECT * FROM trip WHERE trip_id = #{tripId}
     </select>
 
+    <!-- 페이징 목록 -->
     <select id="findPage" resultType="com.insightcrew.domain.trip.vo.TripVo">
         SELECT *
         FROM trip
@@ -39,28 +44,82 @@
         LIMIT #{size} OFFSET #{offset}
     </select>
 
+    <!-- 전체 개수 -->
     <select id="countAll" resultType="int">
         SELECT COUNT(*) FROM trip
     </select>
-    
-    <select id="findTripDetailById" parameterType="long"
-        resultType="com.insightcrew.domain.trip.dto.TripDetailResponse">
 
-    	SELECT 
-        	trip_id AS tripId,
-        	name,
-        	category,
-        	full_address AS fullAddress,
-        	description,
-        	image_url AS imageUrl,
-        	detail_image_url AS detailImageUrl,
-        	tel,
-        	homepage,
-        	lat,
-        	lon
-    	FROM trip
-    	WHERE trip_id = #{tripId}
+    <!-- 상세 조회 -->
+    <select id="findTripDetailById" resultType="com.insightcrew.domain.trip.dto.TripDetailResponse">
+        SELECT 
+            trip_id AS tripId,
+            name,
+            category,
+            full_address AS fullAddress,
+            description,
+            image_url AS imageUrl,
+            detail_image_url AS detailImageUrl,
+            tel,
+            homepage,
+            lat,
+            lon
+        FROM trip
+        WHERE trip_id = #{tripId}
+    </select>
 
-	</select>
+
+    <!-- 검색 + 카테고리 + 페이징 -->
+    <select id="searchTrips" resultType="com.insightcrew.domain.trip.vo.TripVo">
+        SELECT
+            trip_id AS tripId,
+            content_id AS contentId,
+            name,
+            category,
+            full_address AS fullAddress,
+            image_url AS imageUrl,
+            detail_image_url AS detailImageUrl,
+            lat,
+            lon,
+            region_code AS regionCode,
+            content_type_id AS contentTypeId,
+            tel,
+            homepage,
+            description
+        FROM trip
+        WHERE 1 = 1
+
+        <if test="keyword != null and keyword.trim() != ''">
+            AND (
+                name LIKE CONCAT('%', #{keyword}, '%')
+                OR full_address LIKE CONCAT('%', #{keyword}, '%')
+            )
+        </if>
+
+        <if test="category != null and category.trim() != '' and category != 'ALL'">
+            AND category = #{category}
+        </if>
+
+        ORDER BY trip_id DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+
+    <!-- 검색된 총 개수 (페이징용) -->
+    <select id="countTrips" resultType="int">
+        SELECT COUNT(*)
+        FROM trip
+        WHERE 1 = 1
+
+        <if test="keyword != null and keyword.trim() != ''">
+            AND (
+                name LIKE CONCAT('%', #{keyword}, '%')
+                OR full_address LIKE CONCAT('%', #{keyword}, '%')
+            )
+        </if>
+
+        <if test="category != null and category.trim() != '' and category != 'ALL'">
+            AND category = #{category}
+        </if>
+    </select>
 
 </mapper>
