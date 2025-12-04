@@ -1,4 +1,4 @@
-package com.insightcrew.vo;
+package com.insightcrew.domain.member.vo;
 
 import java.time.LocalDateTime;
 

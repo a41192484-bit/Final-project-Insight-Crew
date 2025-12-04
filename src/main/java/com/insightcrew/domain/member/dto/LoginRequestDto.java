@@ -1,4 +1,4 @@
-package com.insightcrew.dto;
+package com.insightcrew.domain.member.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

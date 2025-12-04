@@ -3,8 +3,8 @@ package com.insightcrew.repositary;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.insightcrew.dto.LoginRequestDto;
-import com.insightcrew.vo.UserEntity;
+import com.insightcrew.domain.member.dto.LoginRequestDto;
+import com.insightcrew.domain.member.vo.UserEntity;
 
 @Mapper
 public interface UserRepositary {

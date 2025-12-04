@@ -1,4 +1,4 @@
-package com.insightcrew.dto;
+package com.insightcrew.domain.member.dto;
 
 import com.insightcrew.enums.UserRole;
 
