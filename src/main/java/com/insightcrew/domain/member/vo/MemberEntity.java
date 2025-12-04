@@ -7,17 +7,19 @@ import com.insightcrew.domain.member.enums.UserStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserEntity {
+public class MemberEntity {
 	private Long pkId;
 	
-	private String id;
+	private String userid;
 	private String password;
 	private String name;
 	private String nickname;
@@ -26,5 +28,5 @@ public class UserEntity {
 	private UserStatus status;
 	
 	private LocalDateTime indate;
-	private String outdate;
+	private LocalDateTime outdate;
 }
