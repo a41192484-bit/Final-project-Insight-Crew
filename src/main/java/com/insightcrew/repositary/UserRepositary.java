@@ -3,7 +3,7 @@ package com.insightcrew.repositary;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.insightcrew.domain.member.dto.LoginRequestDto;
+import com.insightcrew.domain.auth.dto.LoginRequestDto;
 import com.insightcrew.domain.member.vo.UserEntity;
 
 @Mapper
