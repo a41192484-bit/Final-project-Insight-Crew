@@ -41,7 +41,9 @@ public class SecurityConfig {
                         .loginProcessingUrl("/auth/login-process") // POST 로그인 처리 URL. 시큐리티가 실제 인증 처리하는url
                         .defaultSuccessUrl("/", true) // 로그인 성공 시 이동
                         .failureUrl("/auth/login?error=true") // 로그인 실패 시 이동
-                        .permitAll())
+                        .permitAll()) //로그인 실패 후 다시 로그인 페이지로 접근할 수 있도록 하는 것.
+        								//이래야 로그인 실패 메시지도 확인 가능.
+        								//안 쓰면 오류 발생.
         .logout(logout -> logout
                         .logoutUrl("/logout") // 로그아웃 요청 URL
                         .logoutSuccessUrl("/") // 로그아웃 후 리다이렉트

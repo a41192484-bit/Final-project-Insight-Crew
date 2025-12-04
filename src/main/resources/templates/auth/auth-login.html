@@ -134,9 +134,9 @@
                 <div id="boxIN2">
                     <div>
                         <span>아이디</span>
-                        <input type="text" id="userId" placeholder="이메일 형식 아이디 입력">
+                        <input type="text" id="userId" name="username" placeholder="이메일 형식 아이디 입력">
                         <span>비밀번호</span>
-                        <input type="password" id="userPass" placeholder="비밀번호 입력">
+                        <input type="password" id="userPass" name="password" placeholder="비밀번호 입력">
                     </div>
                     <div>
                         <button type="submit">로그인</button>
@@ -144,9 +144,15 @@
                 </div>
 				</form>
 				
+				
+				<div th:if="${param.error}" style="color: red;">
+					로그인 실패: 아이디 또는 비밀번호를 확인하세요.
+				</div>
+				
+				
                 <div id="boxIN3">
                     <span>계정이 없으신가요?</span>
-                    <a href="./auth-join.html">'회원가입' ▶</a>
+                    <a th:href="@{/auth-join}">'회원가입' ▶</a>
                 </div>
             </div>
         </div>
@@ -168,34 +174,6 @@
                 alert("로그인합니다.");
             }
 
-            fetch("/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ userId, password: userPass })
-            })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.success) {
-                        alert("로그인 성공!");
-                        //로그인 유지
-                        user.isLogin = true;
-
-                        //데이터베이스에서 가져온 정보 프론트에 있는 변수에 저장
-                        user.id = data.login_id;
-                        user.name = data.name;
-                        user.nickName = data.nickname;
-                        //비밀번호는 민감하니 따로 처리
-                        let pass;
-                        pass = data.password
-                        user.password = "*".repeat(pass.length);
-
-                        updateMenu();
-                        window.location.href = "./member-mypage.html";
-                    } else {
-                        alert("로그인 실패");
-                    }
-                })
-                .catch(err => console.error(err));
         }
     </script>
 
