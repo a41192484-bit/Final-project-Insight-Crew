@@ -1,8 +1,11 @@
 package com.insightcrew.domain.member.dto;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+
+@Getter
+@Setter
 public class MemberJoinRequestDto {
 	private String id;
 	private String password;
