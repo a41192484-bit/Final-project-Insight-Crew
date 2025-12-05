@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.insightcrew.domain.member.dto.MemberJoinDto;
+import com.insightcrew.domain.member.dto.MemberJoinRequestDto;
 import com.insightcrew.service.MemberService;
 
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class JoinController {
 	
 	//가입
 	@PostMapping("/join")
-	public String join(MemberJoinDto dto) {
+	public String join(MemberJoinRequestDto dto) {
 		memberService.join(dto);
 		return "redirect: /auth/login ? joinSuccess=true";
 	}

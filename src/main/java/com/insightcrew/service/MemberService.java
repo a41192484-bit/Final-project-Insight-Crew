@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.insightcrew.domain.member.dto.MemberJoinDto;
+import com.insightcrew.domain.member.dto.MemberJoinRequestDto;
 import com.insightcrew.domain.member.enums.UserRole;
 import com.insightcrew.domain.member.enums.UserStatus;
 import com.insightcrew.domain.member.vo.MemberVo;
@@ -25,7 +25,7 @@ public class MemberService {
 	}
 	
 	//가입
-	public void join(MemberJoinDto dto) {
+	public void join(MemberJoinRequestDto dto) {
 		if(memberRepositary.findByUserid(dto.getId()) != null) {
 			throw new IllegalArgumentException("이미 존재하는 아이디");
 		}

@@ -335,7 +335,7 @@
 
         <div id="body">
 			
-			<form th:action="@{/auth/join}" method="post">
+			<form th:action="@{/auth/join}" method="post" onsubmit="return validateJoin()">
             <div id="joinBox">
                 <div id="joinTitle">
                     <span>◈ 회원가입 ◈</span>
@@ -375,6 +375,7 @@
             </div>
 			</form>
 			
+			
         </div>
 
     </div>
@@ -407,7 +408,7 @@
             const userId = document.getElementById("userid").value;
 
             //encodeURIComponent: 특수문자, 공백 등을 깨지지 않게 안전한 형태로 바꾸는 역할 
-            fetch(`auth/check-id ? userid=${encodeURIComponent(userId)}`)
+            fetch(`/auth/check-id ? userid=${encodeURIComponent(userId)}`)
                 .then(res => res.json())
                 .then(data => {
                     if (data.exists) {
@@ -434,28 +435,6 @@
         }
 		
 
-        //회원가입 정보 전송
-        function saveJoin() {
-            const infoList = { userId, password, name, nickName };
-
-            fetch('스프링툴 path', {
-                method: 'POST', //데이터를 서버에 저장하거나 처리함
-                headers: {  //제이슨 형태로 데이터를 보냄
-                    'content-type': 'application/json'
-                },
-                body: JSON.stringify(infoList) //문자열 형태, 서버로 보내는 데이터(내용)
-            })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.success) {
-                        alert("회원가입 완료!");
-                        window.location.href = "/member-login.html"; //로그인페이지로 이동
-                    } else {
-                        alert("회원가입 실패");
-                    }
-                })
-                .catch(err => console.error(err));
-        }
     </script>
 
 </body>
