@@ -408,7 +408,7 @@
             const userId = document.getElementById("userid").value;
 
             //encodeURIComponent: 특수문자, 공백 등을 깨지지 않게 안전한 형태로 바꾸는 역할 
-            fetch(`/auth/check-id ? userid=${encodeURIComponent(userId)}`)
+            fetch(`/auth/check-id?userid=${encodeURIComponent(userId)}`)
                 .then(res => res.json())
                 .then(data => {
                     if (data.exists) {
@@ -421,9 +421,9 @@
 
 		//닉네임 중복 확인
         function checkNickBtn() {
-            const nickName = document.getElementById("nickName").value;
+            const nickName = document.getElementById("nickname").value;
 
-            fetch(`/auth/check-nick ? nickname=${encodeURIComponent(nickName)}`)
+            fetch(`/auth/check-nick?nickname=${encodeURIComponent(nickName)}`)
                 .then(res => res.json())
                 .then(data => {
                     if (data.exists) {
