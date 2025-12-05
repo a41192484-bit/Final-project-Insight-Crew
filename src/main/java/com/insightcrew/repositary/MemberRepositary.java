@@ -8,9 +8,8 @@ import com.insightcrew.domain.member.vo.MemberVo;
 
 @Mapper
 public interface MemberRepositary {
-	// 아이디 찾기
-	MemberVo findByUserid(@Param("userid") String userid);
+	void save(MemberVo vo);
 	
-	// 비번찾기
-	MemberVo findBypassword(@Param("password") String password);
+	MemberVo findByUserid(String userid);
+	MemberVo findByNickname(String nickname);
 }

@@ -130,11 +130,11 @@
                     <h2>◈ 로그인 ◈</h2>
                 </div>
 				
-				<form th:action="@{/auth/login-process}" method="post">
+				<form th:action="@{/auth/login-process}" method="post" onsubmit="return validateLogin(event)">
                 <div id="boxIN2">
                     <div>
                         <span>아이디</span>
-                        <input type="text" id="userId" name="username" placeholder="이메일 형식 아이디 입력">
+                        <input type="text" id="userId" name="userid" placeholder="이메일 형식 아이디 입력">
                         <span>비밀번호</span>
                         <input type="password" id="userPass" name="password" placeholder="비밀번호 입력">
                     </div>
@@ -143,11 +143,6 @@
                     </div>
                 </div>
 				</form>
-				
-				
-				<div th:if="${param.error}" style="color: red;">
-					로그인 실패: 아이디 또는 비밀번호를 확인하세요.
-				</div>
 				
 				
                 <div id="boxIN3">
@@ -159,23 +154,24 @@
 
     </div>
     
-
+	<th:block layout:fragment="script">
     <script src="menu.js"></script>
     <script>
-        function login() {
+        function validateLogin(event) {
             //입력값
             const userId = document.getElementById("userId").value;
             const userPass = document.getElementById("userPass").value;
 
             if (!userId || !userPass) {
                 alert("아이디와 비밀번호를 모두 입력하세요.");
-                return;
-            } else {
-                alert("로그인합니다.");
+				event.preventDefault();
+                return false;
             }
+			return true;
 
         }
     </script>
+	</th:block>
 
 </body>
 

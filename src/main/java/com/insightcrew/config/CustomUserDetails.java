@@ -26,6 +26,10 @@ public class CustomUserDetails implements UserDetails {
 	//스프링시큐리티 권한객체로 변환
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities(){
+		if (membervo.getRole() == null) {
+	        return List.of();
+	    }
+		
 		return List.of(new SimpleGrantedAuthority("ROLE_" + membervo.getRole().name()));
 	}
 	

@@ -334,42 +334,47 @@
     <div layout:fragment="content">
 
         <div id="body">
+			
+			<form th:action="@{/auth/join}" method="post">
             <div id="joinBox">
                 <div id="joinTitle">
                     <span>◈ 회원가입 ◈</span>
                 </div>
+				
                 <div id="joinList">
                     <div id="inputInfo">
                         <ul>
                             <li>
-                                <label for="id">아이디 :</label>
-                                <input type="text" id="id" placeholder="이메일 형식으로 입력">
+                                <label for="userid">아이디 :</label>
+                                <input type="text" id="userid" name="userid" placeholder="이메일 형식으로 입력">
                                 <button onclick="checkIdBtn()">중복확인</button>
                             </li>
                             <li>
                                 <label for="password">비밀번호 :</label>
-                                <input type="text" id="password" placeholder="비밀번호 입력">
+                                <input type="text" id="password" name="password" placeholder="비밀번호 입력">
                             </li>
                             <li>
                                 <label for="passCheck">비밀번호 확인 :</label>
                                 <input type="text" id="passCheck" placeholder="비밀번호 확인">
                             </li>
                             <li>
-                                <label for="username">이름 :</label>
-                                <input type="text" id="username" placeholder="이름 입력">
+                                <label for="name">이름 :</label>
+                                <input type="text" id="name" name="name" placeholder="이름 입력">
                             </li>
                             <li>
-                                <label for="nickName">닉네임 :</label>
-                                <input type="text" id="nickName" placeholder="닉네임 입력">
+                                <label for="nickname">닉네임 :</label>
+                                <input type="text" id="nickname" name="nickname" placeholder="닉네임 입력">
                                 <button onclick="checkNickBtn()">중복확인</button>
                             </li>
                         </ul>
                     </div>
                 </div>
                 <div id="joinBtn">
-                    <button onclick="">시작하기</button>
+                    <button type="submit">시작하기</button>
                 </div>
             </div>
+			</form>
+			
         </div>
 
     </div>
@@ -379,16 +384,30 @@
 
     <script src="menu.js"></script>
     <script>
-        //중복확인
+		function validateJoin(){
+			const userid = document.getElementById("userid").value;
+			const password = document.getElementById("password").value;
+			const passCheck = document.getElementById("passCheck").value;
+			const name = document.getElementById("name").value;
+			
+			if(!userid || !password || !name){
+				alert("입력하지 않은 필수 항목이 있습니다.");
+				return false;
+			}
+			
+			if(password !== passCheck){
+				alert("비밀번호가 일치하지 않습니다.");
+				return false;
+			}
+			return true;
+		}
+		
+        //id 중복확인
         function checkIdBtn() {
-            const userId = document.getElementById("id").value;
+            const userId = document.getElementById("userid").value;
 
-            if (!userId) {
-                alert("아이디를 입력하세요.")
-                return;
-            }
             //encodeURIComponent: 특수문자, 공백 등을 깨지지 않게 안전한 형태로 바꾸는 역할 
-            fetch(`스프링툴 path넣기 ? userId=${encodeURIComponent(userId)}`)
+            fetch(`auth/check-id ? userid=${encodeURIComponent(userId)}`)
                 .then(res => res.json())
                 .then(data => {
                     if (data.exists) {
@@ -396,19 +415,14 @@
                     } else {
                         alert("사용 가능한 아이디입니다.");
                     }
-                })
-                .catch(err => console.error(err));
+                });
         }
 
+		//닉네임 중복 확인
         function checkNickBtn() {
             const nickName = document.getElementById("nickName").value;
 
-            // if (!nickName) {
-            //     alert("닉네임을 입력하세요.");
-            //     return;
-            // }
-
-            fetch(`스프링툴 path넣기 ? nickName=${encodeURIComponent(nickName)}`)
+            fetch(`/auth/check-nick ? nickname=${encodeURIComponent(nickName)}`)
                 .then(res => res.json())
                 .then(data => {
                     if (data.exists) {
@@ -416,31 +430,12 @@
                     } else {
                         alert("사용 가능한 닉네임입니다.");
                     }
-                })
-                .catch(err => console.error(err));
+                });
         }
+		
 
         //회원가입 정보 전송
         function saveJoin() {
-            const userId = document.getElementById("id").value;
-            const password = document.getElementById("password").value;
-            const passCheck = document.getElementById("passCheck").value;
-            const name = document.getElementById("username").value;
-            const nickName = document.getElementById("nickName").value;
-
-            if (!password || !name) {
-                alert("입력하지 않은 항목이 있습니다.");
-                return;
-            }
-
-            if (!passCheck) {
-                alert("비밀번호 확인을 하지 않았습니다.")
-                return;
-            } else if (password !== passCheck) {
-                alert("비밀번호가 일치하지 않습니다.")
-                return;
-            }
-
             const infoList = { userId, password, name, nickName };
 
             fetch('스프링툴 path', {

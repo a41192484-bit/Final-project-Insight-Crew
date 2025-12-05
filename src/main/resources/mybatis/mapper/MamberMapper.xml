@@ -19,18 +19,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</resultMap>
 	
 	<!-- 로그인 아이디 찾는 쿼리문 -->
-	<select id="findByUserid" parameterType="String" resultMap="memberResultMap">
-		select *
-		from member
-		where login_id=#{userid}
-		and status = 'ACTIVE';
+	<select id="findByUserid" parameterType="string" resultMap="memberResultMap">
+	SELECT
+		member_id,
+        login_id,
+        password,
+        name,
+        nickname,
+        role,
+        status,
+        in_date,
+        out_date
+		FROM member
+		WHERE login_id=#{userid}
+		AND status = 'ACTIVE';
 	</select>
 	
-	<!-- 로그인 비번 찾는 쿼리문 -->
-	<select id="findBypassword" parameterType="String" resultMap="memberResultMap">
-		select *
-		from member
-		where password=#{password}
-	</select>
 
 </mapper>

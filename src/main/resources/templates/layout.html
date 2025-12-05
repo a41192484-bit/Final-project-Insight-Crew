@@ -222,13 +222,19 @@
                         <li><a href="">자유게시판</a></li>
                     </ul>
                     <ul id="menu2">
-                        <li id="member">
-                            <a id="goLogin" href="">로그인/회원가입</a>
-                            <a id="myPage" href="" style="display:none;">마이페이지</a>
+						<!-- 로그인 전 -->
+                        <li sec:authorize="isAnonymous()">
+                            <a href="/auth-login">로그인/회원가입</a>
+						</li>
+						
+						<!-- 로그인 후 -->
+						<li sec:authorize="isAnonymous()">
+                            <a href="/member/mypage">마이페이지</a>
                         </li>
                     </ul>
                 </div>
             </div>
+			
         </header>
 
 
@@ -253,6 +259,8 @@
             </div>
         </footer>
     </div>
+	
+	<th:block layout:fragment="script"></th:block>
 
 </body>
 

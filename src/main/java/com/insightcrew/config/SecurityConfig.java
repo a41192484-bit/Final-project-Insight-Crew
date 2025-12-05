@@ -1,5 +1,6 @@
 package com.insightcrew.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -7,6 +8,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+
+import com.insightcrew.service.CustomUserDetailsService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,9 +23,13 @@ public class SecurityConfig {
 		return new BCryptPasswordEncoder();
 	}
 
+	@Autowired
+	private CustomUserDetailsService customUserDetailsService;
+	
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     	http
+    	.userDetailsService(customUserDetailsService)
     	//웹사이트에서 보내는 악의적인 공격을 보호함. 근데 여기서는 disable()로 끔.
         .csrf(csrf -> csrf.disable())
         //페이지별 사이트url별로 접근 권한 설정
@@ -39,6 +46,8 @@ public class SecurityConfig {
         .formLogin(login -> login
                         .loginPage("/auth/login") // 내가 만든 로그인 페이지 경로
                         .loginProcessingUrl("/auth/login-process") // POST 로그인 처리 URL. 시큐리티가 실제 인증 처리하는url
+                        .usernameParameter("userid")  //인풋 값 이름 여기다가 지정
+                        .passwordParameter("password") //인풋값 이름 여기다 지정
                         .defaultSuccessUrl("/", true) // 로그인 성공 시 이동
                         .failureUrl("/auth/login?error=true") // 로그인 실패 시 이동
                         .permitAll()) //로그인 실패 후 다시 로그인 페이지로 접근할 수 있도록 하는 것.
