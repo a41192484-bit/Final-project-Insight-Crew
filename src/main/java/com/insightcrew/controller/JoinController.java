@@ -31,7 +31,7 @@ public class JoinController {
 	}
 	
 	//가입
-	@PostMapping("/join")
+	@PostMapping("/auth-join")
 	public String join(MemberJoinRequestDto requestdto, Model model) {
 		MemberJoinResponseDto res = memberService.join(requestdto);
 		model.addAttribute("result", res);

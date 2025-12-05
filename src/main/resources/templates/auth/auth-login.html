@@ -122,6 +122,7 @@
 </head>
 
 <body>
+	<form th:action="@{/auth/login-process}" method="post" onsubmit="return validateLogin(event)">
     <div layout:fragment="content">
 
         <div id="body">
@@ -130,7 +131,7 @@
                     <h2>◈ 로그인 ◈</h2>
                 </div>
 				
-				<form th:action="@{/auth/login-process}" method="post" onsubmit="return validateLogin(event)">
+				
                 <div id="boxIN2">
                     <div>
                         <span>아이디</span>
@@ -142,7 +143,7 @@
                         <button type="submit">로그인</button>
                     </div>
                 </div>
-				</form>
+				
 				
 				
                 <div id="boxIN3">
@@ -153,6 +154,8 @@
         </div>
 
     </div>
+	</form>
+	
     
 	<th:block layout:fragment="script">
     <script src="menu.js"></script>

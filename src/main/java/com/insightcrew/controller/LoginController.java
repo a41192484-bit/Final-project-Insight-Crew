@@ -2,6 +2,7 @@ package com.insightcrew.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 
@@ -13,6 +14,12 @@ public class LoginController {
 	@GetMapping("/login")
 	public String loginPage() {
 		return "auth/auth-login";
+	}
+	
+	//로그인
+	@PostMapping("/login-process")
+	public String login() {
+		return
 	}
 	
 }
