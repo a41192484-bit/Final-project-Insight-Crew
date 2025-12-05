@@ -13,18 +13,18 @@
 
     <!-- INSERT -->
     <insert id="insert">
-        INSERT INTO trip (
-            content_id, name, region_code, category,
-            content_type_id, lat, lon, full_address,
-            image_url, detail_image_url, tel, homepage,
-            description
-        ) VALUES (
-            #{contentId}, #{name}, #{regionCode}, #{category},
-            #{contentTypeId}, #{lat}, #{lon}, #{fullAddress},
-            #{imageUrl}, #{detailImageUrl}, #{tel}, #{homepage},
-            #{description}
-        )
-    </insert>
+    	INSERT IGNORE INTO trip (
+        	content_id, name, region_code, category,
+        	content_type_id, lat, lon, full_address,
+        	image_url, detail_image_url, tel, homepage,
+        	description
+    	) VALUES (
+        	#{contentId}, #{name}, #{regionCode}, #{category},
+        	#{contentTypeId}, #{lat}, #{lon}, #{fullAddress},
+        	#{imageUrl}, #{detailImageUrl}, #{tel}, #{homepage},
+        	#{description}
+    	)
+	</insert>
 
     <!-- 전체 조회 -->
     <select id="findAll" resultType="com.insightcrew.domain.trip.vo.TripVo">

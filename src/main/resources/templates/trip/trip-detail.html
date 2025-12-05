@@ -1,251 +1,260 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{common/layout}">
+      layout:decorate="~{common/layout}">
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>여행지 상세조회</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>여행지 상세조회</title>
 
-	<style>
-		.detail-container {
-			width: 900px;
-			margin: 40px auto 80px auto;
-			font-family: 'Pretendard', sans-serif;
-		}
+    <style>
+        .detail-container {
+            width: 900px;
+            margin: 40px auto 80px auto;
+            font-family: 'Pretendard', sans-serif;
+        }
 
-		/* 대표 이미지 */
-		.detail-image img {
-		    width: 82%;                /* 적당한 카드 폭 */
-		    max-height: 360px;         /* 사진이 너무 크지 않게 */
-		    object-fit: cover;
+        /* 대표 이미지 */
+        .detail-image img {
+            width: 82%;
+            max-height: 360px;
+            object-fit: cover;
+            border-radius: 20px;
+            display: block;
+            margin: 0 auto;
+            box-shadow: 0 5px 16px rgba(0, 0, 0, 0.08);
+        }
+		
+        /* 제목 + 설명 */
+        .detail-header {
+            text-align: center;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        .detail-header h1,
+        .detail-header h2 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 15px;
+            color: #666;
+        }
+		
+		.no-img {
+		    width: 300px !important;
+		    height: 300px !important;
+		    object-fit: contain !important;
+		    background: #f8f8ff;
+		    padding: 20px;
 		    border-radius: 20px;
-		    display: block;
-		    margin: 0 auto;
-		    box-shadow: 0 5px 16px rgba(0, 0, 0, 0.08);
 		}
 
-		/* 제목 + 설명 */
-		.detail-header {
-			text-align: center;
-			margin-top: 30px;
-			margin-bottom: 15px;
-		}
+        /* 정보 카드 */
+        .info-cards {
+            margin-top: 40px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
 
-		.detail-header h1 {
-			font-size: 32px;
-			font-weight: 700;
-			margin-bottom: 8px;
-		}
+        .info-card {
+            background: #ffffff;
+            padding: 26px 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
 
-		.subtitle {
-			font-size: 15px;
-			color: #666;
-		}
+        .icon-wrap {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 2px;
+        }
 
-		/* 정보 카드 박스 */
-		.info-cards {
-			margin-top: 40px;
-			display: grid;
-			grid-template-columns: repeat(3, 1fr);
-			gap: 24px;
-		}
+        .icon {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+        }
 
-		/* 개별 카드 */
-		.info-card {
-			background: #ffffff;
-			padding: 26px 24px;
-			border-radius: 16px;
-			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-			display: flex;
-			align-items: flex-start;
-			gap: 14px;
-		}
+        .text-wrap h4 {
+            margin: 0;
+            padding: 0;
+            font-size: 17px;
+            font-weight: 600;
+            color: #333;
+            line-height: 1.2;
+        }
 
-		/* 아이콘 Wrapper — 아이콘 위치 FIX */
-		.icon-wrap {
-			width: 30px;
-			height: 30px;
-			display: flex;
-			justify-content: center;
-			align-items: flex-start;
-			padding-top: 2px;
-		}
+        .text-wrap .value {
+            margin-top: 8px;
+            font-size: 14px;
+            line-height: 1.45;
+            color: #555;
+            word-break: keep-all;
+        }
 
-		.icon {
-			width: 28px;
-			height: 28px;
-			object-fit: contain;
-		}
+        /* 상세 소개 */
+        .detail-content {
+            margin-top: 45px;
+            background: #F7F7FF;
+            padding: 30px 35px;
+            border-radius: 20px;
+        }
 
-		/* 글자 묶음 */
-		.text-wrap h4 {
-			margin: 0;
-			padding: 0;
-			font-size: 17px;
-			font-weight: 600;
-			color: #333;
-			line-height: 1.2;
-		}
+        .detail-content h3 {
+            margin-bottom: 15px;
+            font-size: 22px;
+            font-weight: 700;
+        }
 
-		.text-wrap .value {
-			margin-top: 8px;
-			font-size: 14px;
-			line-height: 1.45;
-			color: #555;
-			word-break: keep-all;
-		}
+        .detail-content .desc {
+            font-size: 15px;
+            color: #444;
+            line-height: 1.65;
+            word-break: keep-all;
+        }
 
-		/* 상세 소개 */
-		.detail-content {
-			margin-top: 45px;
-			background: #F7F7FF;
-			padding: 30px 35px;
-			border-radius: 20px;
-		}
+        /* 목록 버튼 */
+        .back-btn-wrap {
+            margin-top: 40px;
+            text-align: center;
+        }
 
-		.detail-content h2 {
-			margin-bottom: 15px;
-			font-size: 22px;
-			font-weight: 700;
-		}
+        .back-btn {
+            padding: 13px 28px;
+            background: #6F73FF;
+            color: white;
+            font-size: 16px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 3px 8px rgba(111, 115, 255, 0.25);
+        }
 
-		.detail-content .desc {
-			font-size: 15px;
-			color: #444;
-			line-height: 1.65;
-			word-break: keep-all;
-		}
-
-		/* 목록 버튼 */
-		.back-btn-wrap {
-			margin-top: 40px;
-			text-align: center;
-		}
-
-		.back-btn {
-			padding: 13px 28px;
-			background: #6F73FF;
-			color: white;
-			font-size: 16px;
-			border-radius: 12px;
-			text-decoration: none;
-			font-weight: 600;
-			box-shadow: 0 3px 8px rgba(111, 115, 255, 0.25);
-		}
-
-		.back-btn:hover {
-			background: #565BFF;
-		}
-	</style>
-
+        .back-btn:hover {
+            background: #565BFF;
+        }
+    </style>
 </head>
 
 <body>
 
-	<div layout:fragment="content">
-		
-		<!-- 🌟 TripInsight 여행지 상세 타이틀 -->
-		<div style="text-align:center; margin-top:40px; margin-bottom:25px;">
+<div layout:fragment="content">
 
-		    <!-- <div style="font-size:28px; margin-bottom:8px;">
-		        🏝️🚌
-		    </div> -->
+    <!-- 상단 타이틀 -->
+    <div style="text-align:center; margin-top:40px; margin-bottom:25px;">
+        <div style="font-size:22px; font-weight:600; color:#6F73FF;">
+            여행지 상세정보
+        </div>
+    </div>
 
-		    <div style="font-size:22px; font-weight:600; color:#6F73FF;">
-		        여행지 상세정보
-		    </div>
+    <main class="detail-container">
 
-		</div>
+        <!-- 대표 이미지 -->
+        <div class="detail-image">
+			<img th:src="${#strings.isEmpty(detail.detailImageUrl) ? '/img/no-image.png' : detail.detailImageUrl}"
+			     th:classappend="${#strings.isEmpty(detail.detailImageUrl)} ? 'no-img' : ''"
+			     onerror="this.onerror=null; this.src='/img/no-image.png'">
+        </div>
 
-		<main class="detail-container">
+        <!-- 제목 & 간단 설명 -->
+        <section class="detail-header">
+            <h2 th:text="${detail.name}"></h2>
 
-			<!-- 대표 이미지 -->
-			<div class="detail-image">
-				<img th:src="${detail.detailImageUrl}" onerror="this.src='/img/no-image.png'">
-			</div>
+            <p class="subtitle"
+               th:text="${#strings.isEmpty(detail.description) ? 
+                        '지역의 자연환경과 주변 문화가 조화를 이루는 공간으로, 누구나 부담 없이 즐길 수 있는 여행지입니다.' 
+                        : detail.description}">
+            </p>
+        </section>
 
-			<!-- 제목 & 간단 설명 -->
-			<section class="detail-header">
-			    <h2 th:text="${detail.name}"></h2>
-			    <p class="subtitle"
-			       th:text="${#strings.isEmpty(detail.description) 
-			                ? '지역의 자연환경과 주변 문화가 조화를 이루는 공간으로, 가벼운 방문부터 여유로운 산책까지 누구나 부담 없이 즐길 수 있는 장소입니다.' 
-			                : detail.description}">
-			        간단 설명
-			    </p>
-			</section>
+        <!-- 정보 카드 -->
+        <section class="info-cards">
 
-			<!-- 정보 카드 3개 -->
-			<section class="info-cards">
+            <!-- 주소 -->
+            <div class="info-card">
+                <div class="icon-wrap">
+                    <img src="/img/location.png" class="icon">
+                </div>
+                <div class="text-wrap">
+                    <h4>주소</h4>
+                    <p class="value"
+                       th:text="${#strings.isEmpty(detail.fullAddress) ? '주소 정보 없음' : detail.fullAddress}">
+                    </p>
+                </div>
+            </div>
 
-				<!-- 주소 -->
-				<div class="info-card">
-					<div class="icon-wrap">
-						<img src="/img/location.png" class="icon">
-					</div>
-					<div class="text-wrap">
-						<h4>주소</h4>
-						<p class="value" th:text="${detail.fullAddress}"></p>
-					</div>
-				</div>
+            <!-- 홈페이지 -->
+            <div class="info-card">
+                <div class="icon-wrap">
+                    <img src="/img/homepage.png" class="icon">
+                </div>
+                <div class="text-wrap">
+                    <h4>홈페이지</h4>
 
-				<!-- 홈페이지 -->
-				<div class="info-card">
-					<div class="icon-wrap">
-						<img src="/img/homepage.png" class="icon">
-					</div>
-					<div class="text-wrap">
-						<h4>홈페이지</h4>
-						<p class="value">
-						    <span th:if="${!#strings.isEmpty(detail.homepage)}">
-						        <a th:href="${detail.homepage}" target="_blank"
-						            style="color:#6F73FF; text-decoration:underline;">
-						            방문하기
-						        </a>
-						    </span>
+                    <p class="value">
 
-						    <span th:if="${#strings.isEmpty(detail.homepage)}">
-						        공식 정보 준비중
-						    </span>
-						</p>
-					</div>
-				</div>
+                        <!-- 홈페이지 링크 있을 때 -->
+                        <span th:if="${!#strings.isEmpty(detail.homepage)}">
+                            <a th:href="${detail.homepage}" target="_blank"
+                               style="color:#6F73FF; text-decoration:underline;">
+                                방문하기
+                            </a>
+                        </span>
 
-				<!-- 문의 -->
-				<div class="info-card">
-				    <div class="icon-wrap">
-				        <img src="/img/tel.png" class="icon">
-				    </div>
-				    <div class="text-wrap">
-				        <h4>문의</h4>
-				        <p class="value"
-				           th:text="${#strings.isEmpty(detail.tel) ? '문의처 정보 준비중' : detail.tel}">
-				        </p>
-				    </div>
-				</div>
+                        <!-- 없을 때 -->
+                        <span th:if="${#strings.isEmpty(detail.homepage)}">
+                            공식 정보 준비중
+                        </span>
 
-			</section>
+                    </p>
+                </div>
+            </div>
 
-			<!-- 상세 소개 -->
-			<section class="detail-content">
-			    <h3>상세 소개</h3>
-			    <p class="desc"
-			       th:text="${#strings.isEmpty(detail.description) 
-			                ? '이 여행지는 지역의 자연환경과 주변 문화가 조화를 이루는 공간으로, 가벼운 방문부터 여유로운 산책까지 누구나 부담 없이 즐길 수 있는 장소입니다. 계절마다 다른 분위기와 특유의 매력이 있어 도심 속 힐링과 작은 여행이 필요한 이들에게 편안한 쉼을 제공합니다. 편안한 분위기 속에서 주변 풍경을 바라보며, 잠시 머무르는 것만으로도 충분한 여유를 느낄 수 있는 여행지입니다.' 
-			                : detail.description}">
-			    </p>
-			</section>
+            <!-- 문의 -->
+            <div class="info-card">
+                <div class="icon-wrap">
+                    <img src="/img/tel.png" class="icon">
+                </div>
+                <div class="text-wrap">
+                    <h4>문의</h4>
+                    <p class="value"
+                       th:text="${#strings.isEmpty(detail.tel) ? '문의처 정보 준비중' : detail.tel}">
+                    </p>
+                </div>
+            </div>
 
-			<!-- 목록 버튼 -->
-			<div class="back-btn-wrap">
-				<a href="/trip/list" class="back-btn">목록으로 돌아가기</a>
-			</div>
+        </section>
 
-		</main>
+        <!-- 상세 소개 -->
+        <section class="detail-content">
+            <h3>상세 소개</h3>
 
-	</div>
+            <p class="desc"
+               th:text="${#strings.isEmpty(detail.description) 
+                        ? '이 여행지는 자연환경과 주변 문화가 조화를 이루는 공간으로, 방문객들에게 편안한 여행 경험을 제공합니다.' 
+                        : detail.description}">
+            </p>
+        </section>
+
+        <!-- 목록으로 -->
+        <div class="back-btn-wrap">
+            <a href="/trip/list" class="back-btn">목록으로 돌아가기</a>
+        </div>
+
+    </main>
+
+</div>
 
 </body>
-
 </html>

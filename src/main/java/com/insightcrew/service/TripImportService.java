@@ -20,134 +20,211 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TripImportService {
 
-	private final TripApiClient apiClient;
-	private final TripMapper tripMapper;
+    private final TripApiClient apiClient;
+    private final TripMapper tripMapper;
 
-	private static final String[] CONTENT_TYPES = { "12", "14", "15", "28", "38" };
+    // 관광공사 contentTypeId
+    private static final String[] CONTENT_TYPES = { "12", "14", "15", "28", "38" };
 
-	private static final int[] AREA_CODES = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 31, 32, 33, 34, 35, 36, 37, 38, 39 };
+    // 관광공사 areaCode
+    private static final int[] AREA_CODES = {
+            1, 2, 3, 4, 5, 6, 7, 8, 9,
+            31, 32, 33, 34, 35, 36, 37, 38, 39
+    };
 
-	public void importAll() {
+    // 안전장치: 한 타입/지역당 최대 몇 페이지까지 돌릴지
+    private static final int MAX_PAGE = 200; // numOfRows=20이면 4000개까지 커버
 
-		for (String contentTypeId : CONTENT_TYPES) {
-			for (int areaCode : AREA_CODES) {
-				importByTypeAndArea(contentTypeId, areaCode);
-			}
-		}
-	}
+    /**
+     * 모든 contentTypeId × areaCode 조합에 대해 전체 데이터 수집
+     */
+    public void importAll() {
 
-	private void importByTypeAndArea(String contentTypeId, int areaCode) {
+        for (String contentTypeId : CONTENT_TYPES) {
+            for (int areaCode : AREA_CODES) {
+                System.out.println("▶ import start: contentTypeId=" + contentTypeId + ", areaCode=" + areaCode);
+                importByTypeAndArea(contentTypeId, areaCode);
+                System.out.println("■ import end  : contentTypeId=" + contentTypeId + ", areaCode=" + areaCode);
+            }
+        }
+    }
 
-		int page = 1;
+    /**
+     * 특정 contentTypeId + areaCode 에 대해
+     * 페이지를 끝까지 돌면서 여행지 정보 수집
+     */
+    private void importByTypeAndArea(String contentTypeId, int areaCode) {
 
-		while (true) {
+        int page = 1;
 
-			TripApiResponse response = apiClient.search(contentTypeId, areaCode, page);
+        while (page <= MAX_PAGE) {
 
-			if (response == null || response.getResponse() == null || response.getResponse().getBody() == null) {
-				break;
-			}
+            TripApiResponse response = apiClient.search(contentTypeId, areaCode, page);
 
-			Object rawItems = response.getResponse().getBody().getItems();
+            // 🔥 API 호출 실패/NULL 응답 → 이 페이지만 스킵하고 다음 페이지로
+            if (response == null
+                || response.getResponse() == null
+                || response.getResponse().getBody() == null) {
 
-			// ★ 핵심: items가 "" 또는 null 이면 다음 페이지로 넘어간다.
-			if (!(rawItems instanceof java.util.Map)) {
-				page++;
-				continue;
-			}
+                System.out.println("⚠️ [TripImport] body null → contentTypeId=" + contentTypeId
+                        + ", areaCode=" + areaCode + ", page=" + page + " → skip");
+                sleep();
+                page++;
+                continue;
+            }
 
-			// ★ items를 정상 구조로 변환
-			TripApiResponse.Items itemsObj = convertMapToItems(rawItems);
+            var body = response.getResponse().getBody();
+            Object rawItems = body.getItems();
 
-			if (itemsObj == null || itemsObj.getItem() == null || itemsObj.getItem().isEmpty()) {
-				break;
-			}
+            // 🔥 items 구조 자체가 이상할 때(문자열, null 등) → 이 페이지만 스킵
+            if (!(rawItems instanceof Map)) {
+                System.out.println("⚠️ [TripImport] items 구조 비정상 → contentTypeId=" + contentTypeId
+                        + ", areaCode=" + areaCode + ", page=" + page + " → skip");
+                sleep();
+                page++;
+                continue;
+            }
 
-			List<TripApiResponse.Item> items = itemsObj.getItem();
+            TripApiResponse.Items itemsObj = convertMapToItems(rawItems);
 
-			for (TripApiResponse.Item item : items) {
-				saveTrip(item);
-			}
+            // 🔥 items 변환 실패 → 이 페이지만 스킵
+            if (itemsObj == null || itemsObj.getItem() == null) {
+                System.out.println("⚠️ [TripImport] items 변환 실패 → contentTypeId=" + contentTypeId
+                        + ", areaCode=" + areaCode + ", page=" + page + " → skip");
+                sleep();
+                page++;
+                continue;
+            }
 
-			page++;
-		}
-	}
+            List<Item> items = itemsObj.getItem();
 
-	private void saveTrip(Item item) {
+            // 🔥 관광공사는 중간 페이지가 empty일 수도 있으니 종료조건 X, 그냥 스킵
+            if (items.isEmpty()) {
+                System.out.println("⚠️ [TripImport] empty page → contentTypeId=" + contentTypeId
+                        + ", areaCode=" + areaCode + ", page=" + page + " → skip");
+                sleep();
+                page++;
+                continue;
+            }
 
-		if (tripMapper.existsByContentId(item.getContentid()) > 0) {
-			return;
-		}
+            // 🔥 정상 데이터 insert
+            for (Item item : items) {
+                saveTrip(item);
+            }
 
-		TripVo tripVo = new TripVo();
+            sleep();
+            page++;
+        }
+    }
 
-		tripVo.setContentId(item.getContentid());
-		tripVo.setName(item.getTitle());
-		tripVo.setRegionCode(item.getAreacode());
-		tripVo.setContentTypeId(item.getContenttypeid());
-		tripVo.setLat(toDouble(item.getMapy()));
-		tripVo.setLon(toDouble(item.getMapx()));
+    /**
+     * 단일 여행지 저장
+     * - contentId 기준 중복 방지
+     */
+    private void saveTrip(Item item) {
 
-		tripVo.setFullAddress((item.getAddr1() == null ? "" : item.getAddr1()) + " "
-				+ (item.getAddr2() == null ? "" : item.getAddr2()));
+        if (item == null || item.getContentid() == null) {
+            return;
+        }
 
-		tripVo.setImageUrl(item.getFirstimage());
-		tripVo.setDetailImageUrl(item.getFirstimage2());
-		tripVo.setTel(item.getTel());
-		tripVo.setHomepage(item.getHomepage());
-		tripVo.setDescription(item.getOverview());
+        if (tripMapper.existsByContentId(item.getContentid()) > 0) {
+            // 이미 존재하면 스킵
+            return;
+        }
 
-		tripVo.setCategory(TripCategory.fromApi(item.getContenttypeid(), item.getCat1()).name());
+        TripVo tripVo = new TripVo();
 
-		tripMapper.insert(tripVo);
-	}
+        tripVo.setContentId(item.getContentid());
+        tripVo.setName(item.getTitle());
+        tripVo.setRegionCode(item.getAreacode());
+        tripVo.setContentTypeId(item.getContenttypeid());
+        tripVo.setLat(toDouble(item.getMapy()));
+        tripVo.setLon(toDouble(item.getMapx()));
 
-	private Double toDouble(String value) {
-		try {
-			if (value == null || value.isBlank()) {
-				return null;
-			}
-			return Double.parseDouble(value);
-		} catch (NumberFormatException e) {
-			return null;
-		}
-	}
+        tripVo.setFullAddress(
+                (item.getAddr1() == null ? "" : item.getAddr1()) + " " +
+                (item.getAddr2() == null ? "" : item.getAddr2())
+        );
 
-	@SuppressWarnings("unchecked")
-	private TripApiResponse.Items convertMapToItems(Object rawItems) {
-		try {
-			Map<String, Object> map = (Map<String, Object>) rawItems;
-			Object itemList = map.get("item");
+        tripVo.setImageUrl(item.getFirstimage());
+        tripVo.setDetailImageUrl(item.getFirstimage2());
+        tripVo.setTel(item.getTel());
+        tripVo.setHomepage(item.getHomepage());
+        tripVo.setDescription(item.getOverview());
 
-			TripApiResponse.Items items = new TripApiResponse.Items();
+        // 카테고리 매핑 (TripCategory.fromApi 는 너가 만든 로직 그대로 사용)
+        tripVo.setCategory(TripCategory.fromApi(item.getContenttypeid(), item.getCat1()).name());
 
-			if (itemList instanceof List<?> list) {
-				// 정상적인 경우: item이 List로 전달됨
-				List<TripApiResponse.Item> result = new ArrayList<>();
-				for (Object obj : list) {
-					result.add(convertToItem(obj));
-				}
-				items.setItem(result);
-			} else if (itemList instanceof Map<?, ?> single) {
-				// item이 1개인데 JSON에서 map으로 오는 경우
-				List<TripApiResponse.Item> result = new ArrayList<>();
-				result.add(convertToItem(single));
-				items.setItem(result);
-			}
+        tripMapper.insert(tripVo);
+    }
 
-			return items;
+    private Double toDouble(String value) {
+        try {
+            if (value == null || value.isBlank()) {
+                return null;
+            }
+            return Double.parseDouble(value);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
 
-		} catch (Exception e) {
-			return null;
-		}
-	}
+    @SuppressWarnings("unchecked")
+    private TripApiResponse.Items convertMapToItems(Object rawItems) {
+        try {
+            Map<String, Object> map = (Map<String, Object>) rawItems;
+            Object itemList = map.get("item");
 
-	private TripApiResponse.Item convertToItem(Object obj) {
-		try {
-			ObjectMapper mapper = new ObjectMapper();
-			return mapper.convertValue(obj, TripApiResponse.Item.class);
-		} catch (Exception e) {
-			return null;
-		}
-	}
+            TripApiResponse.Items items = new TripApiResponse.Items();
+
+            if (itemList instanceof List<?> list) {
+                // item이 List로 오는 경우
+                List<TripApiResponse.Item> result = new ArrayList<>();
+                for (Object obj : list) {
+                    TripApiResponse.Item converted = convertToItem(obj);
+                    if (converted != null) {
+                        result.add(converted);
+                    }
+                }
+                items.setItem(result);
+
+            } else if (itemList instanceof Map<?, ?> single) {
+                // item이 1개인데 Map으로 오는 경우
+                List<TripApiResponse.Item> result = new ArrayList<>();
+                TripApiResponse.Item converted = convertToItem(single);
+                if (converted != null) {
+                    result.add(converted);
+                }
+                items.setItem(result);
+            } else {
+                // item이 전혀 없거나 이상한 타입인 경우
+                items.setItem(new ArrayList<>());
+            }
+
+            return items;
+
+        } catch (Exception e) {
+            System.out.println("⚠️ [TripImport] convertMapToItems 에러");
+            return null;
+        }
+    }
+
+    private TripApiResponse.Item convertToItem(Object obj) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.convertValue(obj, TripApiResponse.Item.class);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
+     * API 과부하 방지용 딜레이
+     */
+    private void sleep() {
+        try {
+            Thread.sleep(180); // 0.18초 정도면 무난
+        } catch (InterruptedException ignored) {
+        }
+    }
 }
