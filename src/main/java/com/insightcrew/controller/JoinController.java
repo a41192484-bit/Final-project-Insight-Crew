@@ -47,6 +47,8 @@ public class JoinController {
 	}
 	
 	//닉넨임 중복체크
+	@GetMapping("/check-nick")
+	@ResponseBody
 	public Map<String, Boolean> checkNickname(@RequestParam String nickname){
 		boolean exists = memberService.existsByNickname(nickname);
 		return Map.of("exists",exists);

@@ -16,10 +16,4 @@ public class LoginController {
 		return "auth/auth-login";
 	}
 	
-	//로그인
-	@PostMapping("/login-process")
-	public String login() {
-		return
-	}
-	
 }
