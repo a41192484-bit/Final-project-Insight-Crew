@@ -54,18 +54,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 회원가입:가입정보 넣기-->
 	<insert id="insertMember">
-		INSERT INTO member (
-			member_id,
-	        login_id,
-	        password,
-	        name,
-	        nickname,
-	        role,
-	        status,
-	        in_date,
-	        out_date
-		)
-		VALUE(#{userid},#{password},#{name},#{nickname})
-		AND role = 'USER', status = 'ACTIVE';
+		INSERT INTO member (login_id, password, name, nickname, role, status, in_date)
+		VALUE(#{userid},#{password},#{name},#{nickname},#{role},#{status},NOW())
 	</insert>
+	
 </mapper>
