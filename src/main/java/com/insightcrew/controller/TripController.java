@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.insightcrew.domain.trip.dto.TripDetailResponse;
 import com.insightcrew.domain.trip.vo.TripVo;
+import com.insightcrew.service.TripRankingService;
 import com.insightcrew.service.TripService;
 
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class TripController {
 
     private final TripService tripService;
+    private final TripRankingService tripRankingService;
 
     // 여행지 목록 + 검색 + 카테고리 + 페이징
     @GetMapping("/trip/list")
@@ -54,6 +56,7 @@ public class TripController {
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
+        model.addAttribute("rankingTop5", tripRankingService.getTodayRanking());
 
         // 검색/카테고리 유지
         model.addAttribute("keyword", keyword);
