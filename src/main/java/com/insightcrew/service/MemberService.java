@@ -60,7 +60,7 @@ public class MemberService {
 		vo.setRole(UserRole.USER);
 		vo.setStatus(UserStatus.ACTIVE);
 		
-		memberRepositary.insertMamber(vo);
+		memberRepositary.insertMember(vo);
 		
 		return new MemberJoinResponseDto(true, "회원가입 성공");
 	}
