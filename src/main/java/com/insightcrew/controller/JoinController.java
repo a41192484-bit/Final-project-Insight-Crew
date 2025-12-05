@@ -22,16 +22,18 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/auth")
 public class JoinController {
 	
-	private final MemberService memberService;
-	
 	//회원가입 뷰 불러옴
-	@GetMapping("/auth-join")
+	@GetMapping("/join")
 	public String joinForm() {
-		return "auth/join";
+		return "auth-join";
 	}
 	
+	private final MemberService memberService;
+	
+
+	
 	//가입
-	@PostMapping("/auth-join")
+	@PostMapping("/join")
 	public String join(MemberJoinRequestDto requestdto, Model model) {
 		MemberJoinResponseDto res = memberService.join(requestdto);
 		model.addAttribute("result", res);
