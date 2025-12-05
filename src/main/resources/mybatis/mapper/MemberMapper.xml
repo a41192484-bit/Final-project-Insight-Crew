@@ -36,7 +36,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<!-- 닉네임 찾는 쿼리문 -->
-	<select id="findByNickname" resultType="memberResultMap">
+	<select id="findByNickname" resultMap="memberResultMap">
 		SELECT
 			member_id,
 	        login_id,
