@@ -18,11 +18,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 	
+	//이거는 passwordEncoderConfig.java로 따로 빼도 됨.
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 
+	
+	
 	@Autowired
 	private CustomUserDetailsService customUserDetailsService;
 	
