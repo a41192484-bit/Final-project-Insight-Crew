@@ -1,11 +1,10 @@
 package com.insightcrew.service;
 
-import java.time.LocalDateTime;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.insightcrew.domain.member.dto.MemberJoinRequestDto;
+import com.insightcrew.domain.member.dto.MemberJoinResponseDto;
 import com.insightcrew.domain.member.enums.UserRole;
 import com.insightcrew.domain.member.enums.UserStatus;
 import com.insightcrew.domain.member.vo.MemberVo;
@@ -24,33 +23,47 @@ public class MemberService {
 		return memberRepositary.findByUserid(userid);
 	}
 	
-	//가입
-	public void join(MemberJoinRequestDto dto) {
-		if(memberRepositary.findByUserid(dto.getId()) != null) {
-			throw new IllegalArgumentException("이미 존재하는 아이디");
+	//아이디 중복체크
+	public boolean existsByUserid(String userid) {
+		//db에서 id를 조회했는데 null이 아니면 존재=중복임.
+		return memberRepositary.findByUserid(userid) != null;
+	}
+	
+	//닉네임 중복체크
+	public boolean existsByNickname(String nickname) {
+		if(nickname == null || nickname.isBlank()) {
+			return false;
+		}
+        return memberRepositary.findByNickname(nickname) != null;
+    }
+	
+	//회원가입
+	public MemberJoinResponseDto join(MemberJoinRequestDto requestdto) {
+		if(existsByUserid(requestdto.getUserid())) {
+			return new MemberJoinResponseDto(false, "이미 사용 중인 아이디입니다.");
 		}
 		
-		String encodedPw = passwordEncoder.encode(dto.getPassword());
-
-		MemberVo vo = MemberVo.builder()
-				.userid(dto.getUserid())
-				.password(encodedPw)
-				.name(dto.getName())
-                .nickname(dto.getNickname())
-                .role(UserRole.USER)
-                .status(UserStatus.ACTIVE)
-                .indate(LocalDateTime.now())
-                .build();
+		if(existsByNickname(requestdto.getNickname())) {
+			return new MemberJoinResponseDto(false, "이미 사용 중인 닉네임입니다.");
+		}
 		
-		memberRepository.save(vo);
+		//비밀번호 암호화. 감싸기.
+		String encodedPw = passwordEncoder.encode(requestdto.getPassword());
+		
+		//memberVO 생성
+		MemberVo vo = new MemberVo();
+		
+		vo.setUserid(requestdto.getUserid());
+		vo.setPassword(encodedPw);
+		vo.setName(requestdto.getName());
+		vo.setNickname(requestdto.getNickname());
+		vo.setRole(UserRole.USER);
+		vo.setStatus(UserStatus.ACTIVE);
+		
+		memberRepositary.insertMamber(vo);
+		
+		return new MemberJoinResponseDto(true, "회원가입 성공");
 	}
 	
-	public boolean existsByUserid(String userid) {
-		return memberRepository.findByUserid(userid) != null;
-	}
-	
-	public boolean existsByNickname(String nickname) {
-        return memberRepository.findByNickname(nickname) != null;
-    }
 
 }
