@@ -35,5 +35,37 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		AND status = 'ACTIVE';
 	</select>
 	
-
+	<!-- 닉네임 찾는 쿼리문 -->
+	<select id="findByNickname" resultType="memberResultMap">
+		SELECT
+			member_id,
+	        login_id,
+	        password,
+	        name,
+	        nickname,
+	        role,
+	        status,
+	        in_date,
+	        out_date
+		FROM member
+		WHERE nickname=#{nickname}
+		AND status = 'ACTIVE';
+	</select>
+	
+	<!-- 회원가입:가입정보 넣기-->
+	<insert id="insertMember">
+		INSERT INTO member (
+			member_id,
+	        login_id,
+	        password,
+	        name,
+	        nickname,
+	        role,
+	        status,
+	        in_date,
+	        out_date
+		)
+		VALUE(#{userid},#{password},#{name},#{nickname})
+		AND role = 'USER', status = 'ACTIVE';
+	</insert>
 </mapper>
