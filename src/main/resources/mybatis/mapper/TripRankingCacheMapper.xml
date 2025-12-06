@@ -4,40 +4,64 @@
 
 <mapper namespace="com.insightcrew.repository.TripRankingCacheMapper">
 
-    <!-- 1) 기존 캐시 전체 삭제 -->
+    <!-- 랭킹 전체 삭제 -->
     <delete id="deleteAll">
         DELETE FROM ranking_cache
     </delete>
 
-    <!-- 2) 랭킹 1건 저장 -->
+    <!-- 랭킹 저장 -->
     <insert id="insertRanking">
         INSERT INTO ranking_cache (
-            rank_no,
             trip_id,
+            ranking,
             score,
-            reason,
-            created_at
+            temperature,
+            weather,
+            region       <!-- ★ 신규 컬럼 -->
         ) VALUES (
-            #{rankNo},
             #{tripId},
+            #{rankNo},
             #{score},
-            #{reason},
-            NOW()
+            #{temperature},
+            #{weather},
+            #{region}    <!-- ★ TripRankingDto.region -->
         )
     </insert>
 
-    <!-- 3) 오늘의 TOP5 조회 -->
+    <!-- TOP5 조회 (전체) -->
     <select id="findTop5" resultType="com.insightcrew.domain.trip.dto.TripRankingDto">
-        SELECT
-            rc.rank_no   AS rankNo,
-            rc.trip_id   AS tripId,
-            t.name       AS title,
-            t.image_url  AS imageUrl,
-            rc.score     AS score,
-            rc.reason    AS reason
+        SELECT 
+            rc.ranking      AS rankNo,
+            rc.trip_id      AS tripId,
+            t.name          AS title,
+            t.image_url     AS imageUrl,
+            rc.score        AS score,
+            rc.temperature  AS temperature,
+            rc.weather      AS weather,
+            rc.region       AS region       <!-- ★ 지역 추가 -->
         FROM ranking_cache rc
         JOIN trip t ON rc.trip_id = t.trip_id
-        ORDER BY rc.rank_no ASC
+        ORDER BY rc.ranking ASC
+        LIMIT 5
+    </select>
+
+    <!-- TOP5 조회 (지역 선택) -->
+    <select id="findTop5ByRegion" 
+            resultType="com.insightcrew.domain.trip.dto.TripRankingDto">
+        SELECT 
+            rc.ranking      AS rankNo,
+            rc.trip_id      AS tripId,
+            t.name          AS title,
+            t.image_url     AS imageUrl,
+            rc.score        AS score,
+            rc.temperature  AS temperature,
+            rc.weather      AS weather,
+            rc.region       AS region
+        FROM ranking_cache rc
+        JOIN trip t ON rc.trip_id = t.trip_id
+        WHERE rc.region = #{region}          <!-- ★ 지역 조건 -->
+        ORDER BY rc.ranking ASC
+        LIMIT 5
     </select>
 
 </mapper>

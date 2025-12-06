@@ -22,11 +22,12 @@ public class TripController {
     private final TripService tripService;
     private final TripRankingService tripRankingService;
 
-    // 여행지 목록 + 검색 + 카테고리 + 페이징
+    // 여행지 목록 + 검색 + 카테고리 + 페이징 + 지역기반 랭킹
     @GetMapping("/trip/list")
     public String list(@RequestParam(name = "page", defaultValue = "1") int page,
                        @RequestParam(name = "keyword", required = false) String keyword,
                        @RequestParam(name = "category", required = false) String category,
+                       @RequestParam(name = "region", required = false) String region,   // ★ 추가
                        Model model) {
 
         int size = 16;       // 한 페이지에 16개
@@ -34,10 +35,13 @@ public class TripController {
 
         // null 방지 처리
         if (keyword == null || keyword.trim().isEmpty()) {
-            keyword = null;   // XML 조건문에서 편하게 null 유지
+            keyword = null;
         }
         if (category == null || category.trim().isEmpty()) {
             category = null;
+        }
+        if (region != null && region.trim().isEmpty()) {
+            region = null;
         }
 
         // 검색 + 카테고리 + 페이징 목록
@@ -50,13 +54,23 @@ public class TripController {
         int startPage = ((page - 1) / pageCount) * pageCount + 1;
         int endPage = Math.min(startPage + pageCount - 1, totalPages);
 
+        // 지역 리스트 (드롭다운용)
+        model.addAttribute("regions", tripService.getRegionList());
+        model.addAttribute("region", region);
+
+        // ⭐ 지역 필터가 있으면 지역별 TOP5, 없으면 오늘의 TOP5
+        if (region == null) {
+            model.addAttribute("rankingTop5", tripRankingService.getTodayRanking());
+        } else {
+            model.addAttribute("rankingTop5", tripRankingService.getTodayRankingByRegion(region));
+        }
+
         // 화면 전달
         model.addAttribute("tripList", tripList);
         model.addAttribute("page", page);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
-        model.addAttribute("rankingTop5", tripRankingService.getTodayRanking());
 
         // 검색/카테고리 유지
         model.addAttribute("keyword", keyword);

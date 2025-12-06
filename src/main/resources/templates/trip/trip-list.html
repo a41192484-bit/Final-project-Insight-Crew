@@ -20,6 +20,25 @@
             font-family: Arial, sans-serif;
         }
 
+        .region-select {
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 1px solid #868FEE;
+            background: #F5F3FF;
+            font-size: 15px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .region-select:hover {
+            background: #e8e6ff;
+        }
+
+        .ranking-region {
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
         .ranking-box {
             background: #F5F3FF;
             border: 1px solid #868FEE;
@@ -59,7 +78,7 @@
 
         .rank-card img {
             width: 100%;
-           	height: 110px;
+            height: 110px;
             object-fit: cover;
         }
 
@@ -129,12 +148,12 @@
             transform: translateY(-5px);
         }
 
-		.trip-card img {
-		    width: 100%;
-		    height: 150px;
-		    object-fit: contain;
-		    background: #f7f7f7;
-		}
+        .trip-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: contain;
+            background: #f7f7f7;
+        }
 
         .trip-card-body { padding: 12px; }
 
@@ -152,7 +171,7 @@
             min-width: 36px;
             height: 36px;
             display: flex;
-           	align-items: center;
+            align-items: center;
             justify-content: center;
             padding: 0 4px;
             border: 1px solid #868FEE;
@@ -190,7 +209,29 @@
 
     <!-- TOP5 -->
     <section class="ranking-box" th:if="${rankingTop5 != null}">
-        <div class="ranking-title">랭킹 TOP 5</div>
+
+        <!-- 지역 선택 -->
+        <div class="ranking-region">
+            <form th:action="@{/trip/list}" method="get" style="display:flex; justify-content:center; gap:10px;">
+                <select name="region" class="region-select" onchange="this.form.submit()">
+                    <option value="">전체 지역</option>
+                    <option th:each="r : ${regions}"
+                            th:value="${r}"
+                            th:text="${r}"
+                            th:selected="${region == r}">
+                    </option>
+                </select>
+
+                <!-- ★ 지역 유지 -->
+                <input type="hidden" name="keyword" th:value="${keyword ?: ''}">
+                <input type="hidden" name="category" th:value="${category ?: ''}">
+            </form>
+        </div>
+
+        <div class="ranking-title">
+            <span th:text="${region != null ? region + ' 추천 여행지 TOP 5' : '랭킹 TOP 5'}"></span>
+        </div>
+
         <div class="ranking-list">
             <a th:each="r : ${rankingTop5}" th:href="@{/trip/detail/{id}(id=${r.tripId})}" class="rank-card">
                 <img th:src="${r.imageUrl}" onerror="this.src='/images/default.png'">
@@ -208,6 +249,7 @@
             <input type="text" name="keyword" placeholder="지역 또는 키워드를 입력하세요"
                    th:value="${keyword}">
             <input type="hidden" name="category" th:value="${category ?: ''}">
+            <input type="hidden" name="region" th:value="${region ?: ''}"> <!-- ★ 지역 유지 -->
             <button type="submit">검색</button>
         </form>
     </section>
@@ -215,22 +257,22 @@
     <!-- 카테고리 -->
     <section class="category-box">
 
-		<a th:href="@{/trip/list(category='ALL', keyword=${keyword})}"
-		   th:classappend="${(category == null or category == 'ALL') ? 'active' : ''}">All</a>
+        <a th:href="@{/trip/list(category='ALL', keyword=${keyword ?: ''}, region=${region ?: ''})}"
+           th:classappend="${(category == null or category == 'ALL') ? 'active' : ''}">All</a>
 
-        <a th:href="@{/trip/list(category='NATURE', keyword=${keyword ?: ''})}"
+        <a th:href="@{/trip/list(category='NATURE', keyword=${keyword ?: ''}, region=${region ?: ''})}"
            th:classappend="${category} == 'NATURE' ? 'active' : ''">자연</a>
 
-        <a th:href="@{/trip/list(category='CULTURE', keyword=${keyword ?: ''})}"
+        <a th:href="@{/trip/list(category='CULTURE', keyword=${keyword ?: ''}, region=${region ?: ''})}"
            th:classappend="${category} == 'CULTURE' ? 'active' : ''">문화</a>
 
-        <a th:href="@{/trip/list(category='LEISURE', keyword=${keyword ?: ''})}"
+        <a th:href="@{/trip/list(category='LEISURE', keyword=${keyword ?: ''}, region=${region ?: ''})}"
            th:classappend="${category} == 'LEISURE' ? 'active' : ''">체험</a>
 
-        <a th:href="@{/trip/list(category='FOOD', keyword=${keyword ?: ''})}"
+        <a th:href="@{/trip/list(category='FOOD', keyword=${keyword ?: ''}, region=${region ?: ''})}"
            th:classappend="${category} == 'FOOD' ? 'active' : ''">음식</a>
 
-        <a th:href="@{/trip/list(category='SHOPPING', keyword=${keyword ?: ''})}"
+        <a th:href="@{/trip/list(category='SHOPPING', keyword=${keyword ?: ''}, region=${region ?: ''})}"
            th:classappend="${category} == 'SHOPPING' ? 'active' : ''">쇼핑</a>
 
     </section>
@@ -253,18 +295,18 @@
     <div class="pagination">
 
         <a th:if="${startPage > 1}"
-           th:href="@{/trip/list(page=${startPage - 1}, keyword=${keyword ?: ''}, category=${category ?: ''})}">
+           th:href="@{/trip/list(page=${startPage - 1}, keyword=${keyword ?: ''}, category=${category ?: ''}, region=${region ?: ''})}">
             이전
         </a>
 
         <a th:each="p : ${#numbers.sequence(startPage, endPage)}"
-           th:href="@{/trip/list(page=${p}, keyword=${keyword ?: ''}, category=${category ?: ''})}"
+           th:href="@{/trip/list(page=${p}, keyword=${keyword ?: ''}, category=${category ?: ''}, region=${region ?: ''})}"
            th:classappend="${p == page} ? 'active' : ''">
             <span th:text="${p}"></span>
         </a>
 
         <a th:if="${endPage < totalPages}"
-           th:href="@{/trip/list(page=${endPage + 1}, keyword=${keyword ?: ''}, category=${category ?: ''})}">
+           th:href="@{/trip/list(page=${endPage + 1}, keyword=${keyword ?: ''}, category=${category ?: ''}, region=${region ?: ''})}">
             다음
         </a>
 

@@ -17,34 +17,21 @@ public class TripService {
 
     private final TripMapper tripMapper;
 
-    /* ======================
-        여행지 전체 저장 (API → DB)
-       ====================== */
+    /** 여행지 전체 저장 */
     public int saveAllTrips(List<TripVo> tripList) {
-
         int savedCount = 0;
 
         for (TripVo vo : tripList) {
-
-            // INSERT IGNORE → 중복이면 자동 무시
             tripMapper.insert(vo);
             savedCount++;
 
-            // API 호출 제한 방지 딜레이
-            try {
-                Thread.sleep(150);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
+            try { Thread.sleep(150); }
+            catch (InterruptedException e) { Thread.currentThread().interrupt(); }
         }
-
-        return savedCount; 
+        return savedCount;
     }
 
-    /* ======================
-        기본 조회
-       ====================== */
-
+    /** 기본 조회 */
     public List<TripVo> findAll() {
         return tripMapper.findAll();
     }
@@ -53,9 +40,7 @@ public class TripService {
         return tripMapper.findById(id);
     }
 
-    /* ======================
-        기본 페이징 목록
-       ====================== */
+    /** 페이징 기본 조회 */
     public List<TripVo> getTripPage(int page, int size) {
         int offset = (page - 1) * size;
         return tripMapper.findPage(offset, size);
@@ -66,17 +51,12 @@ public class TripService {
         return (int) Math.ceil((double) totalCount / size);
     }
 
-    /* ======================
-        상세 조회
-       ====================== */
+    /** 상세 조회 */
     public TripDetailResponse getTripDetail(Long tripId) {
         return tripMapper.findTripDetailById(tripId);
     }
 
-    /* ======================
-        검색 + 카테고리 + 페이징 목록
-       ====================== */
-
+    /** 검색 + 카테고리 + 페이징 목록 */
     public List<TripVo> searchTrips(String keyword, String category, int page, int size) {
 
         int offset = (page - 1) * size;
@@ -85,9 +65,7 @@ public class TripService {
         return tripMapper.searchTrips(keyword, categoryValue, offset, size);
     }
 
-    /* ===========================
-        검색/카테고리 전체 페이지 수
-       =========================== */
+    /** 검색 전체 페이지 수 */
     public int getSearchTotalPages(String keyword, String category, int size) {
 
         String categoryValue = convertToDbCategory(category);
@@ -96,20 +74,29 @@ public class TripService {
         return (int) Math.ceil((double) totalCount / size);
     }
 
-    /* ===========================
-        ENUM → DB 값 변환 메서드
-       =========================== */
+    /** ENUM 변환 */
     private String convertToDbCategory(String category) {
 
         if (category == null || category.trim().isEmpty() || category.equals("ALL")) {
-            return null; // 전체 조회
+            return null;
         }
 
         try {
             TripCategory tripCategory = TripCategory.valueOf(category);
-            return tripCategory.name();   // ★ DB 값과 일치 (중요!!)
+            return tripCategory.name();
         } catch (Exception e) {
             return null;
         }
+    }
+
+    /** ⭐ 지역 리스트 (드롭다운 UI용) */
+    public List<String> getRegionList() {
+        return List.of(
+                "서울", "인천", "대전", "대구", "광주", "부산", "울산", "세종",
+                "경기", "강원", "충북", "충남",
+                "전북", "전남",
+                "경북", "경남",
+                "제주"
+        );
     }
 }

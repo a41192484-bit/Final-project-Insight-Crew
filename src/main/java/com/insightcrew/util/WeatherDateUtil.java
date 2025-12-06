@@ -11,6 +11,6 @@ public class WeatherDateUtil {
     }
 
     public static String getBaseTime() {
-        return "0500";
+        return "1243";
     }
 }

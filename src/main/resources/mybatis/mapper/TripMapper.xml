@@ -121,5 +121,18 @@
             AND category = #{category}
         </if>
     </select>
+    
+    <!-- 한국관광공사 API 데이터 이어받기 -->
+    <select id="getImportStatus" resultType="map">
+    	SELECT * FROM trip_import_status WHERE id = 1
+	</select>
+
+	<update id="updateImportStatus">
+    	UPDATE trip_import_status
+    	SET content_type_id = #{contentTypeId},
+        	area_code = #{areaCode},
+        	last_page = #{lastPage}
+    	WHERE id = 1
+	</update>
 
 </mapper>

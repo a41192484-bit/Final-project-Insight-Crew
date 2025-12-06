@@ -7,30 +7,60 @@ import lombok.Setter;
 @Setter
 public class TripVo {
 
-	private Long tripId; // 여행지 고유번호
+    private Long tripId;
 
-	private String contentId;       // 관광공사 여행지 고유 아이디 (contentid)
-	private String name;            // 여행지명 (title)
-	private String category;        // 카테고리, ENUM이 DB에는 String으로 저장됨
-	private String fullAddress;     // 주소 addr1+addr2
-	private String imageUrl;        // 메인 이미지 url
-	private String detailImageUrl;  // 상세보기 이미지 url
+    private String contentId;
+    private String name;
+    private String category;
+    private String fullAddress;
+    private String imageUrl;
+    private String detailImageUrl;
 
-	private Double lat;             // 위도(mapy)
-	private Double lon;             // 경도(mapx)
+    private Double lat;
+    private Double lon;
 
-	private String regionCode;      // 지역 코드 (areacode)
-	private String contentTypeId;   // 관광공사 유형코드 (contentTypeId)
+    private String regionCode;     // 관광공사 지역 코드 (1 = 서울, 2 = 인천 ...)
+    private String contentTypeId;
 
-	private String tel;             // 전화번호 (tel)
-	private String homepage;        // 홈페이지 주소(detailCommon2 -> homepage)
-	
-	private String description;     // 설명(overview)
-	
-	public String getImageUrl() {
-	    if (imageUrl == null || imageUrl.trim().isEmpty()) {
-	        return "/images/no-image.png";
-	    }
-	    return imageUrl;
-	}
+    private String tel;
+    private String homepage;
+    private String description;
+
+    /** no-image 처리 */
+    public String getImageUrl() {
+        if (imageUrl == null || imageUrl.trim().isEmpty()) {
+            return "/images/no-image.png";
+        }
+        return imageUrl;
+    }
+
+    /**
+     * ⭐ 지역명 추출 로직
+     * regionCode → 시/도 이름 매핑
+     */
+    public String getRegionName() {
+
+        if (regionCode == null) return "기타";
+
+        return switch (regionCode) {
+            case "1"  -> "서울";
+            case "2"  -> "인천";
+            case "3"  -> "대전";
+            case "4"  -> "대구";
+            case "5"  -> "광주";
+            case "6"  -> "부산";
+            case "7"  -> "울산";
+            case "8"  -> "세종";
+            case "31" -> "경기";
+            case "32" -> "강원";
+            case "33" -> "충북";
+            case "34" -> "충남";
+            case "35" -> "경북";
+            case "36" -> "경남";
+            case "37" -> "전북";
+            case "38" -> "전남";
+            case "39" -> "제주";
+            default   -> "기타";
+        };
+    }
 }
