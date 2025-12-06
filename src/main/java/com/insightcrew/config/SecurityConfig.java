@@ -37,11 +37,9 @@ public class SecurityConfig {
         .csrf(csrf -> csrf.disable())
         //페이지별 사이트url별로 접근 권한 설정
         .authorizeHttpRequests(auth -> auth
-        				//어떤 url이 대상인지
-                        .requestMatchers("/auth/login", "/auth/login-process", "/css/**", "/js/**", "/img/**")
-                        .permitAll() //누구나 접근 허용
-                        .requestMatchers("/board/list").hasRole("USER") // USER 권한 필요
-                        .requestMatchers("/member-mypage").hasRole("USER")
+        				//어떤 url이 대상인지. permitAll()은 누구나 접근 허용
+                        .requestMatchers("/auth/**", "/css/**", "/js/**", "/img/**").permitAll()
+                        .requestMatchers("/member-mypage").hasRole("USER") // USER 권한 필요
                         .requestMatchers("/member-mypage/member-info").hasRole("USER")
                         .requestMatchers("/java").hasRole("ADMIN") // ADMIN 권한 필요
                         .anyRequest().authenticated() // 그 외 모든 요청 인증 필요

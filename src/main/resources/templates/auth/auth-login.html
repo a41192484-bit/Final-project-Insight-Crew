@@ -122,7 +122,7 @@
 </head>
 
 <body>
-	<form th:action="@{/auth/login}" method="post" onsubmit="return validateLogin(event)">
+	<form th:action="@{/auth/login-process}" method="post" onsubmit="return validateLogin(event)">
     <div layout:fragment="content">
 
         <div id="body">
@@ -165,6 +165,7 @@
 
             if (!userId || !userPass) {
                 alert("아이디와 비밀번호를 모두 입력하세요.");
+				//서버 제출 막기
 				event.preventDefault();
                 return false;
             }
