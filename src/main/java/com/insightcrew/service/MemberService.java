@@ -26,20 +26,23 @@ public class MemberService {
 	
 	//회원가입
 	public MemberJoinResponseDto join(MemberJoinRequestDto requestdto) {
+		//아이디 중복 체크 
 		if(existsByUserid(requestdto.getUserid())) {
 			return new MemberJoinResponseDto(false, "이미 사용 중인 아이디입니다.");
 		}
 		
+		//닉네임 중복 체크
 		if(existsByNickname(requestdto.getNickname())) {
 			return new MemberJoinResponseDto(false, "이미 사용 중인 닉네임입니다.");
 		}
 		
 		//비밀번호 암호화. 감싸기.
+		//스프링 시큐리티에 있는 BCryptPasswordEncoder 암호화 사용.
 		String encodedPw = passwordEncoder.encode(requestdto.getPassword());
 		
-		//memberVO 생성
+		//memberVO 새로운 정보를 담을 객체 생성
 		MemberVo vo = new MemberVo();
-		
+		//클라이언트가 보낸 값 저장
 		vo.setUserid(requestdto.getUserid());
 		vo.setPassword(encodedPw);
 		vo.setName(requestdto.getName());
@@ -60,6 +63,8 @@ public class MemberService {
 	
 	//닉네임 중복체크
 	public boolean existsByNickname(String nickname) {
+		//null은 값 자체가 없음.
+		//isBlank()는 빈 문자열. 이렇게 " " 공백만 있는 문자열.
 		if(nickname == null || nickname.isBlank()) {
 			return false;
 		}

@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.insightcrew.domain.member.dto.MemberJoinRequestDto;
 import com.insightcrew.domain.member.dto.MemberJoinResponseDto;
@@ -48,9 +47,12 @@ public class JoinController {
 	
 	//아이디 중복체크
 	@GetMapping("/check-id")
-	@ResponseBody
+	@ResponseBody  //리턴값을 json으로 변환해서 브라우저에 보내라
 	public Map<String, Boolean> checkId(@RequestParam String userid){
 		boolean exists = memberService.existsByUserid(userid);
+		
+		//Map.of는 브라우저에게 줄 json 데이터를 만드는 역할
+		//json: {"exists",true} 아니면 {"exists",false}
 		return Map.of("exists",exists);
 	}
 	
