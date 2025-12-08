@@ -63,11 +63,6 @@ public class MemberService {
 	
 	//닉네임 중복체크
 	public boolean existsByNickname(String nickname) {
-		//null은 값 자체가 없음.
-		//isBlank()는 빈 문자열. 이렇게 " " 공백만 있는 문자열.
-		if(nickname == null || nickname.isBlank()) {
-			return false;
-		}
         return memberRepositary.findByNickname(nickname) != null;
     }
 

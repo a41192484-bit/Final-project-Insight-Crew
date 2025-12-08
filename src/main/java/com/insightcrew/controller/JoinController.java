@@ -47,7 +47,7 @@ public class JoinController {
 	
 	//아이디 중복체크
 	@GetMapping("/check-id")
-	@ResponseBody  //리턴값을 json으로 변환해서 브라우저에 보내라
+	@ResponseBody  //리턴값을 json으로 변환해서 브라우저에 보내라 -> 이런 이유로 Map<String, Boolean> 사용
 	public Map<String, Boolean> checkId(@RequestParam String userid){
 		boolean exists = memberService.existsByUserid(userid);
 		
@@ -56,7 +56,7 @@ public class JoinController {
 		return Map.of("exists",exists);
 	}
 	
-	//닉넨임 중복체크
+	//닉네임 중복체크
 	@GetMapping("/check-nick")
 	@ResponseBody
 	public Map<String, Boolean> checkNickname(@RequestParam String nickname){

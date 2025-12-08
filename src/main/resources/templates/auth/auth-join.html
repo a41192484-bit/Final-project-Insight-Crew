@@ -421,7 +421,12 @@
 
 		//닉네임 중복 확인
         function checkNickBtn() {
-            const nickName = document.getElementById("nickname").value;
+            const nickName = document.getElementById("nickname").value.trim();
+			
+			if(!nickname){
+				alert("닉네임을 입력해주세요.");
+				return;
+			}
 
             fetch(`/auth/check-nick?nickname=${encodeURIComponent(nickName)}`)
                 .then(res => res.json())
