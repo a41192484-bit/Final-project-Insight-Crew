@@ -3,6 +3,7 @@ package com.insightcrew.controller;
 import java.util.Map;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,14 +31,19 @@ public class JoinController {
 	
 	//가입하기
 	@PostMapping("/join")
-	public String join(MemberJoinRequestDto requestdto, RedirectAttributes redirectAttributes) {
+	public String join(MemberJoinRequestDto requestdto, Model model) {
 		
 		MemberJoinResponseDto res = memberService.join(requestdto);
-		redirectAttributes.addFlashAttribute("joinResult", res);
+		model.addAttribute("message", res.getMessage());
+		
+		if(res.isSuccess()) {
+			return "redirect:/member/member-mypage";
+		}else {
+			return "auth/auth-join";
+		}
 		
 		//바로 auth-login을 리턴하면 여전히 post 상태이기 때문에 브라우저 새로고침 시 post 재전송 경고 발생.
 		//새로고침 안전하게 하기 위해서 redirect 사용.
-		return "redirect:/auth/login";
 	}
 	
 	//아이디 중복체크
