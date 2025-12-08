@@ -61,4 +61,5 @@ public class JoinController {
 		boolean exists = memberService.existsByNickname(nickname);
 		return Map.of("exists",exists);
 	}
+	
 }

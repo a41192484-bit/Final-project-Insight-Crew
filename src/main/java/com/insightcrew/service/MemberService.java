@@ -23,19 +23,6 @@ public class MemberService {
 		return memberRepositary.findByUserid(userid);
 	}
 	
-	//아이디 중복체크
-	public boolean existsByUserid(String userid) {
-		//db에서 id를 조회했는데 null이 아니면 존재=중복임.
-		return memberRepositary.findByUserid(userid) != null;
-	}
-	
-	//닉네임 중복체크
-	public boolean existsByNickname(String nickname) {
-		if(nickname == null || nickname.isBlank()) {
-			return false;
-		}
-        return memberRepositary.findByNickname(nickname) != null;
-    }
 	
 	//회원가입
 	public MemberJoinResponseDto join(MemberJoinRequestDto requestdto) {
@@ -65,5 +52,18 @@ public class MemberService {
 		return new MemberJoinResponseDto(true, "회원가입 성공");
 	}
 	
+	//아이디 중복체크
+	public boolean existsByUserid(String userid) {
+		//db에서 id를 조회했는데 null이 아니면 존재=중복임.
+		return memberRepositary.findByUserid(userid) != null;
+	}
+	
+	//닉네임 중복체크
+	public boolean existsByNickname(String nickname) {
+		if(nickname == null || nickname.isBlank()) {
+			return false;
+		}
+        return memberRepositary.findByNickname(nickname) != null;
+    }
 
 }
