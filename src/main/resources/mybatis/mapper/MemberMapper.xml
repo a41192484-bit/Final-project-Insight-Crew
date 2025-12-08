@@ -20,16 +20,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 아이디 찾는 쿼리문 -->
 	<select id="findByUserid" parameterType="string" resultMap="memberResultMap">
-	SELECT
-		member_id,
-        login_id,
-        password,
-        name,
-        nickname,
-        role,
-        status,
-        in_date,
-        out_date
+		SELECT *
 		FROM member
 		WHERE login_id=#{userid}
 		AND status = 'ACTIVE';
@@ -37,16 +28,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 닉네임 찾는 쿼리문 -->
 	<select id="findByNickname" resultMap="memberResultMap">
-		SELECT
-			member_id,
-	        login_id,
-	        password,
-	        name,
-	        nickname,
-	        role,
-	        status,
-	        in_date,
-	        out_date
+		SELECT *
 		FROM member
 		WHERE nickname=#{nickname}
 		AND status = 'ACTIVE';
