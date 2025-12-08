@@ -26,12 +26,14 @@ public class MemberService {
 	
 	//회원가입
 	public MemberJoinResponseDto join(MemberJoinRequestDto requestdto) {
-		//아이디 중복 체크 
+		//서버에서 아이디 중복 체크 
 		if(existsByUserid(requestdto.getUserid())) {
+			//응답dto에서 "성공여부"를 묻는 거라. 중복여부 true를 리턴받으면 중복이라 실패.
+			//그래서 여기서는 false로 응답.
 			return new MemberJoinResponseDto(false, "이미 사용 중인 아이디입니다.");
 		}
 		
-		//닉네임 중복 체크
+		//서버에서 닉네임 중복 체크
 		if(existsByNickname(requestdto.getNickname())) {
 			return new MemberJoinResponseDto(false, "이미 사용 중인 닉네임입니다.");
 		}
