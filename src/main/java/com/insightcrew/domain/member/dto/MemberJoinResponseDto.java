@@ -9,4 +9,7 @@ import lombok.Data;
 public class MemberJoinResponseDto {
 	private boolean success;
 	private String message;
+	
+	private String userid;
+	private String nickname;
 }
