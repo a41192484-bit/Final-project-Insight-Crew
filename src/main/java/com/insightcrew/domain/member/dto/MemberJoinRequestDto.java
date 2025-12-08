@@ -1,5 +1,7 @@
 package com.insightcrew.domain.member.dto;
 
+import com.insightcrew.domain.member.enums.UserRole;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,4 +13,5 @@ public class MemberJoinRequestDto {
 	private String password;
 	private String name;
 	private String nickname;
+	private UserRole role;
 }

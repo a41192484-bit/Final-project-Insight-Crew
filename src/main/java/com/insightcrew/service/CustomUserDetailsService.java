@@ -18,12 +18,12 @@ public class CustomUserDetailsService implements UserDetailsService {
 	private final MemberRepositary memberRepositary;
 	
 	@Override
-	public UserDetails loadUserByUsername(String userid) {
-		MemberVo vo = memberRepositary.findByUserid(userid);
+	public UserDetails loadUserByUsername(String userid) throws UsernameNotFoundException {
+		MemberVo membervo = memberRepositary.findByUserid(userid);
 		
-		if (vo == null) {
+		if (membervo == null) {
 			throw new UsernameNotFoundException(userid+" 라는 사용자 없음.");
 		}
-		return new CustomUserDetails(vo);
+		return new CustomUserDetails(membervo);
 	}
 }

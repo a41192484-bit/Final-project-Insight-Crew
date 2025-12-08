@@ -122,59 +122,60 @@
 </head>
 
 <body>
-	<form th:action="@{/auth/login-process}" method="post" onsubmit="return validateLogin(event)">
     <div layout:fragment="content">
-
-        <div id="body">
-            <div id="loginBox">
-                <div>
-                    <h2>◈ 로그인 ◈</h2>
-                </div>
-				
-                <div id="boxIN2">
+        <form th:action="@{/auth/login-process}" method="post" onsubmit="return validateLogin(event)">
+            <div id="body">
+                <div id="loginBox">
                     <div>
-                        <span>아이디</span>
-                        <input type="text" id="userId" name="userid" placeholder="이메일 형식 아이디 입력">
-                        <span>비밀번호</span>
-                        <input type="password" id="userPass" name="password" placeholder="비밀번호 입력">
+                        <h2>◈ 로그인 ◈</h2>
                     </div>
-                    <div>
-                        <button type="submit">로그인</button>
-                    </div>
-                </div>
-				
 
-                <div id="boxIN3">
-                    <span>계정이 없으신가요?</span>
-                    <a th:href="@{/auth/join}">'회원가입' ▶</a>
+                    <div id="boxIN2">
+                        <div>
+                            <span>아이디</span>
+                            <input type="text" id="userId" name="userid" placeholder="이메일 형식 아이디 입력">
+                            <span>비밀번호</span>
+                            <input type="password" id="userPass" name="password" placeholder="비밀번호 입력">
+                        </div>
+                        <div>
+                            <button type="submit">로그인</button>
+                        </div>
+                    </div>
+
+                    <div id="boxIN3">
+                        <span>계정이 없으신가요?</span>
+                        <a th:href="@{/auth/join}">회원가입 ▶</a>
+                    </div>
                 </div>
             </div>
-        </div>
 
+            <div th:if="${joinResult != null}">
+                <p th:text="${joinResult.message}" style="color:green;"></p>
+            </div>
+        </form>
     </div>
-	</form>
-	
-    
-	<th:block layout:fragment="script">
-    <script src="menu.js"></script>
+
     <script>
+        // validateLogin 함수 정의
         function validateLogin(event) {
-            //입력값
+            console.log("validateLogin 함수 호출됨");
+
+            // 입력값
             const userId = document.getElementById("userId").value;
             const userPass = document.getElementById("userPass").value;
 
+            // 유효성 검사
             if (!userId || !userPass) {
                 alert("아이디와 비밀번호를 모두 입력하세요.");
-				//서버 제출 막기
-				event.preventDefault();
-                return false;
+                event.preventDefault();  // 폼 제출을 막음
+                return false;  // 폼 제출을 막음
             }
-			return true;
-
+            return true;  // 유효성 검사 통과 시 폼을 제출
         }
     </script>
-	</th:block>
 
+    <th:block layout:fragment="script"></th:block>
+
+    <script src="menu.js"></script>
 </body>
-
 </html>

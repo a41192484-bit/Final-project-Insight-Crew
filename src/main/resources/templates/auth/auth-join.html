@@ -331,9 +331,9 @@
 </head>
 
 <body>
-	<form th:action="@{/auth/join}" method="post" onsubmit="return validateJoin(event)">
+	
     <div layout:fragment="content">
-
+	<form th:action="@{/auth/join}" method="post">
         <div id="body">
 			
             <div id="joinBox">
@@ -375,9 +375,10 @@
             </div>
 			
         </div>
-
-    </div>
+	
 	</form>
+    </div>
+	
 
 
 

@@ -20,16 +20,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/auth")
 public class JoinController {
-	
-	//회원가입 뷰 불러옴
+	private final MemberService memberService;
+
+	//회원가입 화면
 	@GetMapping("/join")
-	public String joinForm() {
-		return "auth-join";
+	public String joinPage() {
+		return "auth/auth-join";
 	}
 	
-	private final MemberService memberService;
-	
-	//가입
+	//가입하기
 	@PostMapping("/join")
 	public String join(MemberJoinRequestDto requestdto, RedirectAttributes redirectAttributes) {
 		

@@ -18,7 +18,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="outdate" column="out_date"/>
 	</resultMap>
 	
-	<!-- 로그인 아이디 찾는 쿼리문 -->
+	<!-- 아이디 찾는 쿼리문 -->
 	<select id="findByUserid" parameterType="string" resultMap="memberResultMap">
 	SELECT
 		member_id,
