@@ -50,7 +50,7 @@ public class JoinController {
 	@ResponseBody  //리턴값을 json으로 변환해서 브라우저에 보내라 -> 이런 이유로 Map<String, Boolean> 사용
 	public Map<String, Boolean> checkId(@RequestParam String userid){
 		boolean exists = memberService.existsByUserid(userid);
-		
+		System.out.println("아이디 중복 체크 버튼 눌렀음");
 		//Map.of는 브라우저에게 줄 json 데이터를 만드는 역할
 		//json: {"exists",true} 아니면 {"exists",false}
 		return Map.of("exists",exists);

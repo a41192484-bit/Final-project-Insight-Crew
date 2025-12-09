@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
-<mapper namespace="com.insightcrew.repositary.MemberRepositary">
+<mapper namespace="com.insightcrew.repository.MemberRepository">
 
 	<!-- enum 매핑 포함. db테이블 값. -->
 	<resultMap id="memberResultMap" type="com.insightcrew.domain.member.vo.MemberVo">
@@ -27,7 +27,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<!-- 닉네임 찾는 쿼리문 -->
-	<select id="findByNickname" resultMap="memberResultMap">
+	<select id="findByNickname" parameterType="string" resultMap="memberResultMap">
 		SELECT *
 		FROM member
 		WHERE nickname=#{nickname}

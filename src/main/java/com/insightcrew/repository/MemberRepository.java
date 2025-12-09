@@ -1,4 +1,4 @@
-package com.insightcrew.repositary;
+package com.insightcrew.repository;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -6,7 +6,7 @@ import com.insightcrew.domain.member.vo.MemberVo;
 
 
 @Mapper
-public interface MemberRepositary {
+public interface MemberRepository {
 	
 	//아이디 조회
 	MemberVo findByUserid(String userid);

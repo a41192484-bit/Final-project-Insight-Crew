@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.insightcrew.config.CustomUserDetails;
 import com.insightcrew.domain.member.vo.MemberVo;
-import com.insightcrew.repositary.MemberRepositary;
+import com.insightcrew.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -15,11 +15,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 	
-	private final MemberRepositary memberRepositary;
+	private final MemberRepository memberRepository;
 	
 	@Override
 	public UserDetails loadUserByUsername(String userid) throws UsernameNotFoundException {
-		MemberVo membervo = memberRepositary.findByUserid(userid);
+		MemberVo membervo = memberRepository.findByUserid(userid);
 		
 		if (membervo == null) {
 			throw new UsernameNotFoundException(userid+" 라는 사용자 없음.");

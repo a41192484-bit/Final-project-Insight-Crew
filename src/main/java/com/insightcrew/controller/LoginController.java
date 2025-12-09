@@ -18,4 +18,7 @@ public class LoginController {
 
 	//로그인 처리 요청은 form의 post로...
 	//그래서 로그인 컨트롤러에는 뷰 요청밖에 없나부다...
+	
+	
+	//로그아웃
 }
