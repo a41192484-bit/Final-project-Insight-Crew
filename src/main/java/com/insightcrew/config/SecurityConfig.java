@@ -55,7 +55,7 @@ public class SecurityConfig {
         								//이래야 로그인 실패 메시지도 확인 가능.
         								//안 쓰면 오류 발생.
         .logout(logout -> logout
-                        .logoutUrl("/auth/logout") // 로그아웃 요청 URL
+                        .logoutUrl("/mypage/logout") // 로그아웃 요청 URL
                         .logoutSuccessUrl("/") // 로그아웃 후 리다이렉트
                         .invalidateHttpSession(true) // 세션 무효화
                         .deleteCookies("JSESSIONID") // JSESSIONID 쿠키 삭제
