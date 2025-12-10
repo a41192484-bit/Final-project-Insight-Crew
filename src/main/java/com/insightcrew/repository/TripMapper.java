@@ -32,4 +32,7 @@ public interface TripMapper {
             @Param("keyword") String keyword,
             @Param("category") String category
     );
+    
+    // 📌 region_id로 여행지 조회 (지역별 랭킹용)
+    List<TripVo> findByRegionId(@Param("regionId") Integer regionId);
 }

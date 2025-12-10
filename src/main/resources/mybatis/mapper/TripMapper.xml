@@ -122,6 +122,18 @@
         </if>
     </select>
     
+    <select id="findByRegionId"
+        	parameterType="int"
+        	resultType="com.insightcrew.domain.trip.vo.TripVo">
+    	SELECT
+        	trip_id    AS tripId,
+        	name,
+        	image_url  AS imageUrl,
+        	region_id  AS regionId
+    	FROM trip
+    	WHERE region_id = #{regionId}
+	</select>
+    
     <!-- 한국관광공사 API 데이터 이어받기 -->
     <select id="getImportStatus" resultType="map">
     	SELECT * FROM trip_import_status WHERE id = 1

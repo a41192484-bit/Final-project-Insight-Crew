@@ -3,7 +3,6 @@ package com.insightcrew.repository;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 import com.insightcrew.domain.trip.dto.TripRankingDto;
 
@@ -15,6 +14,4 @@ public interface TripRankingCacheMapper {
     void insertRanking(TripRankingDto dto);
 
     List<TripRankingDto> findTop5();
-
-    List<TripRankingDto> findTop5ByRegion(@Param("region") String region);
 }

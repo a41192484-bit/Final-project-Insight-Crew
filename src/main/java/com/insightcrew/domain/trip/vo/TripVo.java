@@ -25,6 +25,8 @@ public class TripVo {
     private String tel;
     private String homepage;
     private String description;
+    
+    private Integer regionId;
 
     /** no-image 처리 */
     public String getImageUrl() {

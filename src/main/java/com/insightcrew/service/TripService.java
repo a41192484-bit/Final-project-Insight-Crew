@@ -31,7 +31,7 @@ public class TripService {
         return savedCount;
     }
 
-    /** 기본 조회 */
+    /** 전체 조회 */
     public List<TripVo> findAll() {
         return tripMapper.findAll();
     }
@@ -56,7 +56,7 @@ public class TripService {
         return tripMapper.findTripDetailById(tripId);
     }
 
-    /** 검색 + 카테고리 + 페이징 목록 */
+    /** 검색 + 카테고리 + 페이징 */
     public List<TripVo> searchTrips(String keyword, String category, int page, int size) {
 
         int offset = (page - 1) * size;
@@ -87,16 +87,5 @@ public class TripService {
         } catch (Exception e) {
             return null;
         }
-    }
-
-    /** ⭐ 지역 리스트 (드롭다운 UI용) */
-    public List<String> getRegionList() {
-        return List.of(
-                "서울", "인천", "대전", "대구", "광주", "부산", "울산", "세종",
-                "경기", "강원", "충북", "충남",
-                "전북", "전남",
-                "경북", "경남",
-                "제주"
-        );
     }
 }

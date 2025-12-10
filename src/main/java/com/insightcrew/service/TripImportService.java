@@ -13,6 +13,7 @@ import com.insightcrew.domain.trip.enums.TripCategory;
 import com.insightcrew.domain.trip.vo.TripVo;
 import com.insightcrew.repository.TripImportStatusMapper;
 import com.insightcrew.repository.TripMapper;
+import com.insightcrew.repository.TripRegionMapper;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,6 +25,7 @@ public class TripImportService {
     private final TripMapper tripMapper;
     private final TripImportStatusMapper statusMapper;
     private final ObjectMapper mapper = new ObjectMapper();
+    private final TripRegionMapper regionMapper;
 
     private static final String[] CONTENT_TYPES = { "12", "14", "15", "28", "38" };
     private static final int[] AREA_CODES = {
@@ -138,10 +140,12 @@ public class TripImportService {
         vo.setContentTypeId(item.getContenttypeid());
         vo.setLat(toDouble(item.getMapy()));
         vo.setLon(toDouble(item.getMapx()));
-        vo.setFullAddress(
+
+        String fullAddress =
                 (item.getAddr1() == null ? "" : item.getAddr1()) + " " +
-                (item.getAddr2() == null ? "" : item.getAddr2())
-        );
+                (item.getAddr2() == null ? "" : item.getAddr2());
+        vo.setFullAddress(fullAddress);
+
         vo.setImageUrl(item.getFirstimage());
         vo.setDetailImageUrl(item.getFirstimage2());
         vo.setTel(item.getTel());
@@ -149,9 +153,45 @@ public class TripImportService {
         vo.setDescription(item.getOverview());
         vo.setCategory(TripCategory.fromApi(item.getContenttypeid(), item.getCat1()).name());
 
+        // ★ region_id 매핑
+        vo.setRegionId(extractRegionId(fullAddress));
+
+        // 저장
         tripMapper.insert(vo);
     }
+    
+    private Integer extractRegionId(String fullAddress) {
 
+        if (fullAddress == null || fullAddress.isBlank()) {
+            return null;
+        }
+
+        String[] parts = fullAddress.split(" ");
+
+        if (parts.length < 2) return null;
+
+        // ★ sido 정규화 (핵심!)
+        String sido = normalizeSido(parts[0]);
+
+        // 예: 강남구, 수원시, 해운대구 등
+        String sigungu = parts[1];
+
+        var region = regionMapper.findBySidoAndSigungu(sido, sigungu);
+
+        return (region != null) ? region.getId() : null;
+    }
+    
+    private String normalizeSido(String sido) {
+        if (sido == null) return null;
+
+        return sido.replace("특별시", "")
+                   .replace("광역시", "")
+                   .replace("특별자치시", "")
+                   .replace("특별자치도", "")
+                   .replace("도", "")
+                   .trim();
+    }
+    
     private Double toDouble(String value) {
         try {
             return (value == null || value.isBlank()) ? null : Double.parseDouble(value);
@@ -201,4 +241,5 @@ public class TripImportService {
             return null;
         }
     }
+
 }
