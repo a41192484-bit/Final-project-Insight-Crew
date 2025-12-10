@@ -10,27 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MypageController {
 	
 	//마이페이지 뷰
-	@GetMapping("/mypage")
+	@GetMapping("/view")
 	public String mypage() {
 		return "member/member-mypage";
 	}
-	
-	//회원정보관리
-	@GetMapping("/member")
-	public String memberInfo() {
-		return "member/member-info";
-	}
-	
-	//로그아웃
-	@GetMapping("/logout")
-	public String logout() {
-		return "auth/auth-login";
-	}
-	
-	//회원탈퇴
-	@GetMapping("/inactive")
-	public String inactive() {
-		return new String();
-	}
-	
+
 }

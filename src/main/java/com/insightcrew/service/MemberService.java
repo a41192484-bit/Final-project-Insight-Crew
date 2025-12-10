@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class MemberService {
 	private final MemberRepository memberRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final MemberVo membervo;
 	
 	//아이디 조회
 	public MemberVo findUser(String userid) {
@@ -67,5 +68,11 @@ public class MemberService {
 	public boolean existsByNickname(String nickname) {
         return memberRepository.findByNickname(nickname) != null;
     }
+	
+	
+	//회원조회-아이디 가져오기
+	public MemberVo getMemberByUserid(String userid) {
+		MemberVo getMemberId(String userid);
+	}
 
 }

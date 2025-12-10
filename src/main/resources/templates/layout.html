@@ -228,7 +228,7 @@
 						</li>
 						
 						<!-- 로그인 후 -->
-						<li sec:authorize="isAnonymous()">
+						<li sec:authorize="isAuthenticated()">
                             <a href="./member/member-mypage.html">마이페이지</a>
                         </li>
                     </ul>

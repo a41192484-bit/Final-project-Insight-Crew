@@ -17,4 +17,6 @@ public interface MemberRepository {
 	//회원가입 insert
 	//반환값이 필요 없기 때문에 void 사용
 	void insertMember(MemberVo membervo);
+	
+	MemberVo selectMemberByUserid(String userid);
 }

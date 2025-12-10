@@ -132,8 +132,11 @@
 
         <div id="body">
             <div id="back">
-                <a href="./member-mypage.html">◀ 뒤로가기</a>
+                <a th:href="@{/mypage/view}">◀ 뒤로가기</a>
             </div>
+			
+			
+			<form th:action="@{/mypage/memberinfo}" method="post">
             <div id="joinInfo">
                 <div id="title">
                     <span>◈ 정보 조회 ◈</span>
@@ -147,27 +150,32 @@
                         <li>
                             <span class="label">비밀번호 :</span>
                             <span id="displayPW">Loading...</span>
-                            <button class="editBtn" data-target="PW">수정</button>
+                            <button type="button" class="editBtn" data-target="PW">수정</button>
                         </li>
                         <li>
                             <span class="label">이름 :</span>
                             <span id="displayUsername">Loading...</span>
-                            <button class="editBtn" data-target="Username">수정</button>
+                            <button type="button" class="editBtn" data-target="Username">수정</button>
                         </li>
                         <li>
                             <span class="label">닉네임 :</span>
                             <span id="displayNickname">Loading...</span>
-                            <button class="editBtn" data-target="Nickname">수정</button>
+                            <button type="button" class="editBtn" data-target="Nickname">수정</button>
                         </li>
                     </ul>
                 </div>
             </div>
+			</form>
+			
+			
         </div>
     </div>
 
-
-
-    <script src="menu.js"></script>
+	
+	
+	
+	
+	
     <script>
         document.addEventListener("DOMContentLoaded", function () {
 
@@ -184,7 +192,7 @@
             displayNickname.textContent = user.nickName;
 
             //수정버튼 누를 때
-            document.querySelectorAll("editBtn").forEach(btn => {
+            document.querySelectorAll(".editBtn").forEach(btn => {
                 btn.addEventListener("click", function () {
                     //수정버튼이 있는 것: PW, Username, Nickname
                     const modTarget = btn.dataset.target;
@@ -195,7 +203,7 @@
                     //조건: 버튼명이 수정 이라면?
                     if (btn.textContent === "수정") {
                         //span 아이디명 찾기
-                        spanId = document.getElementById('display${modTarget}');
+                        spanId = document.getElementById(`display${modTarget}`);
                         //초기값
                         if (modTarget === "PW") {
                             original = userData.password
@@ -211,7 +219,7 @@
                         input.value = original;
 
                         //span->input으로 교체
-                        spanElement.replaceWith(input);
+                        spanId.replaceWith(input);
 
                         //버튼 텍스트를 '확인'으로 변경
                         btn.textContent = "저장";
@@ -223,7 +231,7 @@
                         //userData에 저장
                         if (modTarget === "PW") {
                             userData.password = newValue;
-                        } else if (modTarget === "USername") {
+                        } else if (modTarget === "Username") {
                             userData.name = newValue;
                         } else if (modTarget === "Nickname") {
                             userData.nickname = newValue;
@@ -234,7 +242,7 @@
                         newSpan.id = 'display${modTarget}'
 
                         if (modTarget === "PW") {
-                            newSpan.textContent = "*".replace(newValue.length);
+                            newSpan.textContent = "*".repeat(newValue.length);
                         } else {
                             newSpan.textContent = newValue;
                         }
