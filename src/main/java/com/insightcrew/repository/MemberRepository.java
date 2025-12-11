@@ -1,5 +1,7 @@
 package com.insightcrew.repository;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -15,12 +17,18 @@ public interface MemberRepository {
 	//닉네임 조회
 	MemberVo findByNickname(String nickname);
 	
+	
 	//회원가입 insert
 	//반환값이 필요 없기 때문에 void 사용
 	void insertMember(MemberVo membervo);
 	
+	//수정
 	void updateName(@Param("id") String userid, @Param("value") String value);
     void updateNickname(@Param("id") String userid, @Param("value") String value);
     void updatePassword(@Param("id") String userid, @Param("value") String value);
+
+    
+    //전체 정보
+	List<MemberVo> findAll();
 
 }

@@ -224,12 +224,12 @@
 					<ul id="menu2">
 						<!-- 로그인 전 -->
 						<li sec:authorize="isAnonymous()">
-							<a href="/auth/login">로그인/회원가입</a>
+							<a th:href="@{/auth/view}">로그인/회원가입</a>
 						</li>
 
 						<!-- 로그인 후 -->
 						<li sec:authorize="!isAnonymous()">
-							<a href="./member/member-mypage.html">마이페이지</a>
+							<a th:href="@{/member/member-mypage}">마이페이지</a>
 						</li>
 					</ul>
 				</div>

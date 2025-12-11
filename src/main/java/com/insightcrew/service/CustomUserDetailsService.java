@@ -11,6 +11,7 @@ import com.insightcrew.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 
+
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
@@ -21,9 +22,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String userid) throws UsernameNotFoundException {
 		MemberVo membervo = memberRepository.findByUserid(userid);
 		
-		if (membervo == null) {
-			throw new UsernameNotFoundException(userid+" 라는 사용자 없음.");
+		if(membervo == null) {
+			throw new UsernameNotFoundException("사용자를 찾을 수 없습니다.");
 		}
+		
 		return new CustomUserDetails(membervo);
 	}
 }

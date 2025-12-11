@@ -8,189 +8,6 @@
     <title>회원가입</title>
 
     <style>
-        body {
-            /* border: 1px solid; */
-            margin: 10px auto;
-            width: 960px;
-            height: auto;
-        }
-
-        #header {
-            border: 1px solid;
-            border-color: royalblue;
-            margin: 20px auto;
-            width: 960px;
-            display: flex;
-        }
-
-        #logo {
-            /* border: 1px solid; */
-            width: 200px;
-            height: 100px;
-            background-color: #868FEE;
-            /* background-color: #7480FF; */
-
-            /* 가운데 정렬 */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #menu {
-            /* border: 1px solid; */
-            height: 100px;
-            width: 760px;
-
-            /* 가운데 정렬 */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-
-        #menu ul {
-            /* border: 1px solid; */
-            /*기본 들여쓰기 제거*/
-            padding-left: 0;
-        }
-
-        #menu a {
-            position: relative;
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        #menu a::after {
-            content: "⭐";
-            position: absolute;
-            top: -19px;
-            /*글자 바로 위 배치*/
-            left: 50%;
-            /*중앙 배치*/
-            transform: translateX(-50%);
-            /*정확히 중앙에 맞추기*/
-            opacity: 0;
-            transition: 0.2s ease;
-            font-size: 14px;
-        }
-
-        #menu a:hover {
-            /* color: #5C63FF; */
-            color: mediumspringgreen;
-        }
-
-        #menu a:hover::after {
-            opacity: 1;
-        }
-
-        #menu1 {
-            /* border: 1px solid; */
-            height: 100px;
-            width: 570px;
-
-            /* 가운데 정렬 */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-
-        #menu1 li {
-            list-style: none;
-            /*리스트 불릿 제거*/
-            /* border: 1px solid; */
-            height: 90px;
-
-            margin: 0 30px;
-            width: 190px;
-            font-size: 18px;
-            font-weight: bold;
-
-            /* 가운데 정렬 */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-
-        #menu2 {
-            /* border: 1px solid; */
-            height: 100px;
-            width: 190px;
-            background-color: #fffedc;
-
-            /* 가운데 정렬 */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-
-        #menu2 li {
-            list-style: none;
-            /*리스트 불릿 제거*/
-            /* border: 1px solid; */
-            height: 90px;
-
-            margin: 0 30px;
-            width: 210px;
-            font-size: 18px;
-            font-weight: bold;
-
-            /* 가운데 정렬 */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-
-        #footer {
-            /* border: 1px solid; */
-            border-top: 1px solid;
-            border-color: royalblue;
-
-            margin-top: 20px;
-            height: 150px;
-            width: 960px;
-            display: block;
-            background-color: white;
-        }
-
-        #footUp {
-            /* border: 1px solid; */
-            height: 50px;
-            width: 960px;
-            margin: 10px auto;
-            text-align: center;
-            gap: 40px;
-
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #footUp a {
-            color: black;
-            text-decoration: none;
-        }
-
-        #footUp a:hover {
-            /* color: rebeccapurple; */
-            color: mediumspringgreen;
-        }
-
-        #footdown {
-            /* border: 1px solid; */
-            height: 50px;
-            width: 960px;
-            margin: 20px auto;
-
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
         #body {
             /* border: 1px solid; */
             height: 700px;
@@ -330,10 +147,12 @@
     </style>
 </head>
 
+
+
 <body>
-	
+	<form th:action="@{/join/process`}" method="post" onsubmit="return validateJoin(event)">
     <div layout:fragment="content">
-	<form th:action="@{/auth/join}" method="post">
+	
         <div id="body">
 			
             <div id="joinBox">
@@ -376,16 +195,14 @@
 			
         </div>
 	
-	</form>
     </div>
+	</form>
 	
 
 
 
-
-    <script src="menu.js"></script>
     <script>
-		function validateJoin(){
+		function validateJoin(event){
 			const userid = document.getElementById("userid").value;
 			const password = document.getElementById("password").value;
 			const passCheck = document.getElementById("passCheck").value;
@@ -408,7 +225,7 @@
             const userId = document.getElementById("userid").value;
 
             //encodeURIComponent: 특수문자, 공백 등을 깨지지 않게 안전한 형태로 바꾸는 역할 
-            fetch(`/auth/check-id?userid=${encodeURIComponent(userId)}`)
+            fetch(`/check-id?userid=${encodeURIComponent(userId)}`)
                 .then(res => res.json())
                 .then(data => {
                     if (data.exists) {
@@ -423,12 +240,12 @@
         function checkNickBtn() {
             const nickName = document.getElementById("nickname").value.trim();
 			
-			if(!nickname){
+			if(!nickName){
 				alert("닉네임을 입력해주세요.");
 				return;
 			}
 
-            fetch(`/auth/check-nick?nickname=${encodeURIComponent(nickName)}`)
+            fetch(`/check-nick?nickname=${encodeURIComponent(nickName)}`)
                 .then(res => res.json())
                 .then(data => {
                     if (data.exists) {

@@ -26,6 +26,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		AND status = 'ACTIVE';
 	</select>
 	
+	<!-- 모두 -->
+	<select id="findAll" resultMap="memberResultMap">
+		SELECT * 
+		FROM member
+	</select>
+	
 	<!-- 닉네임 찾는 쿼리문 -->
 	<select id="findByNickname" parameterType="string" resultMap="memberResultMap">
 		SELECT *
@@ -39,5 +45,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		INSERT INTO member (login_id, password, name, nickname, role, status, in_date)
 		VALUES (#{userid},#{password},#{name},#{nickname},#{role},#{status},NOW())
 	</insert>
+	
+	
+	<update id="updatePassword">
+		update member
+		set password = #{newPassword}
+		where login_id = #{userid}
+	</update>
 	
 </mapper>

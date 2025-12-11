@@ -18,20 +18,20 @@ import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/member")
+@RequestMapping("/join")
 public class JoinController {
 	
 	private final MemberService memberService;
 
 	//회원가입 화면
-	@GetMapping("/join")
+	@GetMapping("/view")
 	public String joinPage() {
 		System.out.println("회원가입 페이지 입니당");
 		return "auth/auth-join";
 	}
 	
 	//가입하기
-	@PostMapping("/join")
+	@PostMapping("/process")
 	public String join(MemberJoinRequestDto requestdto, Model model) {
 		
 		MemberJoinResponseDto res = memberService.join(requestdto);

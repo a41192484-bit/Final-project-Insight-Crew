@@ -122,8 +122,10 @@
 </head>
 
 <body>
-    <div layout:fragment="content">
-        <form th:action="@{/auth/login-process}" method="post" onsubmit="return validateLogin(event)">
+
+	<div layout:fragment="content">	
+	<form id="loginForm" th:action="@{/auth/login-process}" method="post">
+		
             <div id="body">
                 <div id="loginBox">
                     <div>
@@ -137,45 +139,45 @@
                             <span>비밀번호</span>
                             <input type="password" id="userPass" name="password" placeholder="비밀번호 입력">
                         </div>
+						
                         <div>
                             <button type="submit">로그인</button>
                         </div>
                     </div>
+				
 
                     <div id="boxIN3">
                         <span>계정이 없으신가요?</span>
-                        <a th:href="@{/auth/join}">회원가입 ▶</a>
+                        <a th:href="@{/join/view}">회원가입 ▶</a>
                     </div>
                 </div>
             </div>
-
-            <div th:if="${joinResult != null}">
-                <p th:text="${joinResult.message}" style="color:green;"></p>
-            </div>
-        </form>
-    </div>
-
+	
+	</form>
+	</div>
+	
+	
     <script>
-        // validateLogin 함수 정의
-        function validateLogin(event) {
-            console.log("validateLogin 함수 호출됨");
+		
+		document.addEventListener("DOMContentLoaded", function () {
+				const loginForm = document.getElementById("loginForm");
 
-            // 입력값
-            const userId = document.getElementById("userId").value;
-            const userPass = document.getElementById("userPass").value;
+				if (!loginForm) return;
 
-            // 유효성 검사
-            if (!userId || !userPass) {
-                alert("아이디와 비밀번호를 모두 입력하세요.");
-                event.preventDefault();  // 폼 제출을 막음
-                return false;  // 폼 제출을 막음
-            }
-            return true;  // 유효성 검사 통과 시 폼을 제출
-        }
+				loginForm.addEventListener("submit", function (event) {
+					const userId = document.getElementById("userId").value;
+					const userPass = document.getElementById("userPass").value;
+
+					if (!userId || !userPass) {
+						alert("아이디와 비밀번호를 모두 입력하세요.");
+						event.preventDefault();
+					}
+				});
+
+			});
+
     </script>
-
-    <th:block layout:fragment="script"></th:block>
-
-    <script src="menu.js"></script>
+	<th:block layout:fragment="script"></th:block>
+    
 </body>
 </html>

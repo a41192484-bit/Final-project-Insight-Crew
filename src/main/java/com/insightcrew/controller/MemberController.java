@@ -2,7 +2,6 @@ package com.insightcrew.controller;
 
 import java.util.Map;
 
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,20 +12,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.insightcrew.config.CustomUserDetails;
-import com.insightcrew.domain.member.vo.MemberVo;
 import com.insightcrew.service.MemberService;
 
 import lombok.RequiredArgsConstructor;
 
 @Controller
-@RequestMapping("/mypage")
+@RequestMapping("/member")
 @RequiredArgsConstructor
 public class MemberController {
 	
 	private final MemberService memberservice;
 	
 	//회원정보 조회, 뷰
-	@GetMapping("/memberinfo")
+	@GetMapping("/info")
 	public String memberinfo(Model model,@AuthenticationPrincipal CustomUserDetails user) {
 		//커스텀 유저 디테일이 이미 유저의 모든 정보를 가지고 있음.
 		model.addAttribute("user", user);
@@ -34,7 +32,7 @@ public class MemberController {
 	}
 	
 	//회원정보 수정
-	@PostMapping("/memberupdate")
+	@PostMapping("/update")
 	@ResponseBody
 	public String updateinfo(@AuthenticationPrincipal CustomUserDetails user,
 							@RequestBody Map<String, String> body) {

@@ -41,7 +41,7 @@ public class CustomUserDetails implements UserDetails {
 	
 	@Override
 	public boolean isEnabled() {
-		return membervo.getStatus() == UserStatus.ACTIVE;
+		return UserStatus.ACTIVE.equals(membervo.getStatus());
 	}
 	
 	@Override
