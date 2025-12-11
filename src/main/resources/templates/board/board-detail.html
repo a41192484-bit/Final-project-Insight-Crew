@@ -62,21 +62,23 @@
             <form id="form">
 
                 <div class="row3">
-                    <div>카테고리 : ddddd</div>
-                    <div>여행지ID : ddddd</div>
-                    <div>작성일 : ddddd</div>
+                    <div>카테고리 : <span th:text="${board.category}"></span></div>
+					<br>
+                    <div>여행지ID : <span th:text="${board.tripId}"></span></div>
+					<br>
+                    <div>작성일 : <span th:text="${board.createdAt}"></span></div>
+					<br>
                 </div>
-
                 <div class="info-row">
-                    작성자 : ddddd
+                    작성자 : <span th:text="${board.memberId}"></span>
                 </div>
-
+				<br>
                 <div class="info-row">
-                    제목 : ddddd
+                    제목 : <span th:text="${board.title}"></span>
                 </div>
-
+				<br>
                 <div class="info-row">
-                    <div class="content-box">ddddd</div>
+                    <div class="content-box" th:text="${board.content}"></div>
                 </div>
 
                 <hr style="margin: 30px 0 20px;">
@@ -86,10 +88,23 @@
                 </div>
 
                 <div class="file-box">
-                    등록된 첨부파일이 없습니다.
+					
+                    <div th:if="${!#lists.isEmpty(board.files)}">
+						<div th:each="file : ${board.files}">
+							<a th:href="@{/file/download/{id}(id=${file.id})}"
+							th:text="${file.originalName}"></a>
+						<br>
+						</div>
+					</div>
+					<!--첨부파일 없음-->
+					<div th:if="${#lists.isEmpty(board.files)}">
+						등록된 첨부파일이 없습니다.
+					</div>
+					
+					
+					
                 </div>
-
-                <button class="action-btn">이전으로</button>
+                <button type="button" class="action-btn" onclick="history.back()">이전으로</button>
 
             </form>
         </article>
