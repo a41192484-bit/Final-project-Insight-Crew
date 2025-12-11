@@ -45,7 +45,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated() // 그 외 모든 요청 인증 필요
         )
         .formLogin(login -> login
-                        .loginPage("/auth/login") // 내가 만든 로그인 페이지 경로
+                        .loginPage("/auth/view") // 내가 만든 로그인 페이지 경로
                         .loginProcessingUrl("/auth/login-process") // POST 로그인 처리 URL. 시큐리티가 실제 인증 처리하는url
                         .usernameParameter("userid")  //인풋 값 이름 여기다가 지정
                         .passwordParameter("password") //인풋값 이름 여기다 지정
@@ -55,7 +55,7 @@ public class SecurityConfig {
         								//이래야 로그인 실패 메시지도 확인 가능.
         								//안 쓰면 오류 발생.
         .logout(logout -> logout
-                        .logoutUrl("/mypage/logout") // 로그아웃 요청 URL
+                        .logoutUrl("/auth/logout") // 로그아웃 요청 URL
                         .logoutSuccessUrl("/") // 로그아웃 후 리다이렉트
                         .invalidateHttpSession(true) // 세션 무효화
                         .deleteCookies("JSESSIONID") // JSESSIONID 쿠키 삭제

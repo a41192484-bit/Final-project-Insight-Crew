@@ -1,15 +1,21 @@
 package com.insightcrew.controller;
 
+import java.util.Map;
+
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.insightcrew.config.CustomUserDetails;
 import com.insightcrew.domain.member.vo.MemberVo;
 import com.insightcrew.service.MemberService;
 
-import ch.qos.logback.core.model.Model;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -19,31 +25,30 @@ public class MemberController {
 	
 	private final MemberService memberservice;
 	
-	//회원정보 뷰, 회원정보 조회
+	//회원정보 조회, 뷰
 	@GetMapping("/memberinfo")
-	public String membepage() {
-		return "member/member-info";
-	}
-	
-	//회원정보 조회
-	@PostMapping("/memberinfo")
-	public String memberinfo(Authentication authentication, Model model) {
-		String userid = authentication.getName();
-		MemberVo membervo = memberservice.getMemberByUserid(membervo.getUserid());
-		model.addAttribute("member", membervo);
-		
+	public String memberinfo(Model model,@AuthenticationPrincipal CustomUserDetails user) {
+		//커스텀 유저 디테일이 이미 유저의 모든 정보를 가지고 있음.
+		model.addAttribute("user", user);
 		return "member/member-info";
 	}
 	
 	//회원정보 수정
-	@GetMapping("/membermod")
-	public String membermod() {
-		return
+	@PostMapping("/memberupdate")
+	@ResponseBody
+	public String updateinfo(@AuthenticationPrincipal CustomUserDetails user,
+							@RequestBody Map<String, String> body) {
+		
+		String field = body.get("field");
+		String value = body.get("value");
+		
+		memberservice.updateOneField(user.getUsername(), field, value);
+		return "success";
 	}
 	//회원탈퇴
 	@GetMapping("/inactive")
 	public String inactive() {
-		return new String();
+		return "/";
 	}
 	
 }

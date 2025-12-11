@@ -1,6 +1,7 @@
 package com.insightcrew.repository;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.insightcrew.domain.member.vo.MemberVo;
 
@@ -18,5 +19,8 @@ public interface MemberRepository {
 	//반환값이 필요 없기 때문에 void 사용
 	void insertMember(MemberVo membervo);
 	
-	MemberVo selectMemberByUserid(String userid);
+	void updateName(@Param("id") String userid, @Param("value") String value);
+    void updateNickname(@Param("id") String userid, @Param("value") String value);
+    void updatePassword(@Param("id") String userid, @Param("value") String value);
+
 }

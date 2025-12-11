@@ -18,13 +18,15 @@ import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/auth")
+@RequestMapping("/member")
 public class JoinController {
+	
 	private final MemberService memberService;
 
 	//회원가입 화면
 	@GetMapping("/join")
 	public String joinPage() {
+		System.out.println("회원가입 페이지 입니당");
 		return "auth/auth-join";
 	}
 	
@@ -36,6 +38,7 @@ public class JoinController {
 		model.addAttribute("message", res.getMessage());
 		
 		if(res.isSuccess()) {
+			System.out.println("회원가입 하기");
 			return "redirect:/member/member-mypage";
 		}else {
 			return "auth/auth-join";
@@ -61,6 +64,7 @@ public class JoinController {
 	@ResponseBody
 	public Map<String, Boolean> checkNickname(@RequestParam String nickname){
 		boolean exists = memberService.existsByNickname(nickname);
+		System.out.println("닉네임 중복 체크 눌렀음");
 		return Map.of("exists",exists);
 	}
 	

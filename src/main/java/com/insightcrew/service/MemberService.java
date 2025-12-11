@@ -2,6 +2,7 @@ package com.insightcrew.service;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.insightcrew.domain.member.dto.MemberJoinRequestDto;
 import com.insightcrew.domain.member.dto.MemberJoinResponseDto;
@@ -17,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 public class MemberService {
 	private final MemberRepository memberRepository;
 	private final PasswordEncoder passwordEncoder;
-	private final MemberVo membervo;
 	
 	//아이디 조회
 	public MemberVo findUser(String userid) {
@@ -26,18 +26,25 @@ public class MemberService {
 	
 	
 	//회원가입
+	@Transactional
 	public MemberJoinResponseDto join(MemberJoinRequestDto requestdto) {
-		//서버에서 아이디 중복 체크 
+		//서버에서 아이디 중복 체크
+		if(requestdto.getUserid() == null || requestdto.getUserid().isEmpty()) {
+			return new MemberJoinResponseDto(false, "아이디는 필수로 입력해주세요.");
+		}
 		if(existsByUserid(requestdto.getUserid())) {
-			//응답dto에서 "성공여부"를 묻는 거라. 중복여부 true를 리턴받으면 중복이라 실패.
-			//그래서 여기서는 false로 응답.
 			return new MemberJoinResponseDto(false, "이미 사용 중인 아이디입니다.");
+			//응답dto에서 "성공여부"를 묻는 거라. 중복여부 true를 리턴받으면 중복이라 실패.
+			//그래서 여기서는 false로 응답.	
 		}
 		
 		//서버에서 닉네임 중복 체크
-		if(existsByNickname(requestdto.getNickname())) {
-			return new MemberJoinResponseDto(false, "이미 사용 중인 닉네임입니다.");
+		if(requestdto.getNickname() != null && !requestdto.getNickname().isEmpty()){
+			if(existsByNickname(requestdto.getNickname())) {
+				return new MemberJoinResponseDto(false, "이미 사용 중인 닉네임입니다.");
+			}
 		}
+		
 		
 		//비밀번호 암호화. 감싸기.
 		//스프링 시큐리티에 있는 BCryptPasswordEncoder 암호화 사용.
@@ -68,11 +75,15 @@ public class MemberService {
 	public boolean existsByNickname(String nickname) {
         return memberRepository.findByNickname(nickname) != null;
     }
-	
-	
-	//회원조회-아이디 가져오기
-	public MemberVo getMemberByUserid(String userid) {
-		MemberVo getMemberId(String userid);
+
+	@Transactional
+	public void updateOneField(String userid, String field, String value) {
+
+	    switch (field) {
+	        case "password" -> memberRepository.updatePassword(userid, value);
+	        case "username" -> memberRepository.updateName(userid, value);
+	        case "nickname" -> memberRepository.updateNickname(userid, value);
+	    }
 	}
 
 }
