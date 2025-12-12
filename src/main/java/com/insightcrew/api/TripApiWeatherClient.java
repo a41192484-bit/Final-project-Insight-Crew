@@ -9,14 +9,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import com.insightcrew.domain.weather.dto.WeatherApiResponse;
 import com.insightcrew.domain.weather.dto.WeatherItemDto;
-import com.insightcrew.util.WeatherDateUtil;
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,18 +27,49 @@ public class TripApiWeatherClient {
     @Value("${weather.api.key}")
     private String serviceKey;
 
+    /** ⭐ 단기예보 API (우리 DTO와 100% 호환) */
     private static final String URL =
             "https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst";
 
-    // ===========================
-    //  날씨 조회 (nx, ny)
-    // ===========================
+    /** ===========================
+     *   지역 날씨 조회
+     *  =========================== */
     public List<WeatherItemDto> getWeather(int nx, int ny) {
 
-        String baseDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-        String baseTime = getBaseTime(); // 기상청 발표 시간 로직 적용
+        String baseDate = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE);
+        String baseTime = getBaseTimeForFcst();  // 예보 발표시간 계산
 
-        // 인증키는 반드시 URL 인코딩 적용
+        return callWeatherApi(baseDate, baseTime, nx, ny);
+    }
+
+    /** ===========================
+     *   단기예보 발표시간 계산
+     *  =========================== */
+    private String getBaseTimeForFcst() {
+
+        LocalTime now = LocalTime.now();
+
+        // 발표시각: 02, 05, 08, 11, 14, 17, 20, 23
+        int[][] times = {
+                {2,10}, {5,10}, {8,10}, {11,10},
+                {14,10}, {17,10}, {20,10}, {23,10}
+        };
+        String[] baseTimes = {"2300","0200","0500","0800","1100","1400","1700","2000"};
+
+        for (int i = 0; i < times.length; i++) {
+            if (now.isBefore(LocalTime.of(times[i][0], times[i][1]))) {
+                return baseTimes[i];
+            }
+        }
+
+        return "2300";
+    }
+
+    /** ===========================
+     *   API 공통 호출부
+     *  =========================== */
+    private List<WeatherItemDto> callWeatherApi(String baseDate, String baseTime, int nx, int ny) {
+
         String encodedKey = URLEncoder.encode(serviceKey, StandardCharsets.UTF_8);
 
         StringBuilder sb = new StringBuilder(URL)
@@ -56,11 +85,10 @@ public class TripApiWeatherClient {
         URI uri = URI.create(sb.toString());
 
         WeatherApiResponse response;
-
         try {
             response = restTemplate.getForObject(uri, WeatherApiResponse.class);
         } catch (Exception e) {
-            System.out.println("⚠️ [Weather API Error] 호출 실패 → " + uri);
+            System.out.println("⚠️ [Weather API Error] → " + uri);
             return Collections.emptyList();
         }
 
@@ -70,33 +98,10 @@ public class TripApiWeatherClient {
                 response.getResponse().getBody().getItems() == null ||
                 response.getResponse().getBody().getItems().getItem() == null
         ) {
-            System.out.println("⚠️ [Weather API Warning] 빈 데이터 반환됨");
+            System.out.println("⚠️ [Weather API] 빈 데이터 반환");
             return Collections.emptyList();
         }
 
         return response.getResponse().getBody().getItems().getItem();
     }
-
-    // ===========================
-    //  기상청 단기예보 발표시간 계산
-    // ===========================
-    private String getBaseTime() {
-
-        LocalTime now = LocalTime.now();
-
-        // 발표시간은 매일 02, 05, 08, 11, 14, 17, 20, 23시
-        // 각 발표는 10분 이후부터 조회 가능
-
-        if (now.isBefore(LocalTime.of(2, 10)))  return "2300";
-        if (now.isBefore(LocalTime.of(5, 10)))  return "0200";
-        if (now.isBefore(LocalTime.of(8, 10)))  return "0500";
-        if (now.isBefore(LocalTime.of(11, 10))) return "0800";
-        if (now.isBefore(LocalTime.of(14, 10))) return "1100";
-        if (now.isBefore(LocalTime.of(17, 10))) return "1400";
-        if (now.isBefore(LocalTime.of(20, 10))) return "1700";
-        if (now.isBefore(LocalTime.of(23, 10))) return "2000";
-
-        return "2300";
-    }
-    
 }

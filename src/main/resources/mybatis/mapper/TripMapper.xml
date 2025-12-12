@@ -4,6 +4,10 @@
 
 <mapper namespace="com.insightcrew.repository.TripMapper">
 
+    <!-- ========================================================= -->
+    <!-- 1. 기본 기능 -->
+    <!-- ========================================================= -->
+
     <!-- 중복 체크 -->
     <select id="existsByContentId" resultType="int">
         SELECT COUNT(*)
@@ -15,11 +19,13 @@
     <insert id="insert">
     	INSERT IGNORE INTO trip (
         	content_id, name, region_code, category,
+        	sido, sigungu,
         	content_type_id, lat, lon, full_address,
         	image_url, detail_image_url, tel, homepage,
         	description
     	) VALUES (
         	#{contentId}, #{name}, #{regionCode}, #{category},
+        	#{sido}, #{sigungu},
         	#{contentTypeId}, #{lat}, #{lon}, #{fullAddress},
         	#{imageUrl}, #{detailImageUrl}, #{tel}, #{homepage},
         	#{description}
@@ -28,15 +34,19 @@
 
     <!-- 전체 조회 -->
     <select id="findAll" resultType="com.insightcrew.domain.trip.vo.TripVo">
-        SELECT * FROM trip ORDER BY trip_id DESC
+        SELECT * 
+        FROM trip
+        ORDER BY trip_id DESC
     </select>
 
-    <!-- ID 조회 -->
+    <!-- 여행지 단건 조회 -->
     <select id="findById" resultType="com.insightcrew.domain.trip.vo.TripVo">
-        SELECT * FROM trip WHERE trip_id = #{tripId}
+        SELECT *
+        FROM trip
+        WHERE trip_id = #{tripId}
     </select>
 
-    <!-- 페이징 목록 -->
+    <!-- 페이징 목록 (기본용) -->
     <select id="findPage" resultType="com.insightcrew.domain.trip.vo.TripVo">
         SELECT *
         FROM trip
@@ -68,19 +78,24 @@
     </select>
 
 
-    <!-- 검색 + 카테고리 + 페이징 -->
+    <!-- ========================================================= -->
+    <!-- 2. 검색 + 카테고리 + 지역(sido/sigungu) + 페이징 -->
+    <!-- ========================================================= -->
+
     <select id="searchTrips" resultType="com.insightcrew.domain.trip.vo.TripVo">
         SELECT
             trip_id AS tripId,
             content_id AS contentId,
             name,
             category,
+            sido,
+            sigungu,
             full_address AS fullAddress,
             image_url AS imageUrl,
             detail_image_url AS detailImageUrl,
             lat,
             lon,
-            region_code AS regionCode,
+            region_id AS regionId,
             content_type_id AS contentTypeId,
             tel,
             homepage,
@@ -88,15 +103,25 @@
         FROM trip
         WHERE 1 = 1
 
+        <!-- 🔎 키워드-->
         <if test="keyword != null and keyword.trim() != ''">
-            AND (
-                name LIKE CONCAT('%', #{keyword}, '%')
-                OR full_address LIKE CONCAT('%', #{keyword}, '%')
-            )
+            AND ( name LIKE CONCAT('%', #{keyword}, '%')
+               OR full_address LIKE CONCAT('%', #{keyword}, '%') )
         </if>
 
+        <!-- 🏷 카테고리 -->
         <if test="category != null and category.trim() != '' and category != 'ALL'">
             AND category = #{category}
+        </if>
+
+        <!-- 🗺 시/도 -->
+        <if test="sido != null and sido.trim() != ''">
+            AND sido = #{sido}
+        </if>
+
+        <!-- 🗺 시군구 -->
+        <if test="sigungu != null and sigungu.trim() != ''">
+            AND sigungu = #{sigungu}
         </if>
 
         ORDER BY trip_id DESC
@@ -104,47 +129,85 @@
     </select>
 
 
-    <!-- 검색된 총 개수 (페이징용) -->
+    <!-- 총 개수 (페이징) -->
     <select id="countTrips" resultType="int">
         SELECT COUNT(*)
         FROM trip
         WHERE 1 = 1
-
+        
         <if test="keyword != null and keyword.trim() != ''">
-            AND (
-                name LIKE CONCAT('%', #{keyword}, '%')
-                OR full_address LIKE CONCAT('%', #{keyword}, '%')
-            )
+            AND ( name LIKE CONCAT('%', #{keyword}, '%')
+               OR full_address LIKE CONCAT('%', #{keyword}, '%') )
         </if>
 
         <if test="category != null and category.trim() != '' and category != 'ALL'">
             AND category = #{category}
         </if>
-    </select>
-    
-    <select id="findByRegionId"
-        	parameterType="int"
-        	resultType="com.insightcrew.domain.trip.vo.TripVo">
-    	SELECT
-        	trip_id    AS tripId,
-        	name,
-        	image_url  AS imageUrl,
-        	region_id  AS regionId
-    	FROM trip
-    	WHERE region_id = #{regionId}
-	</select>
-    
-    <!-- 한국관광공사 API 데이터 이어받기 -->
-    <select id="getImportStatus" resultType="map">
-    	SELECT * FROM trip_import_status WHERE id = 1
-	</select>
 
-	<update id="updateImportStatus">
-    	UPDATE trip_import_status
-    	SET content_type_id = #{contentTypeId},
-        	area_code = #{areaCode},
-        	last_page = #{lastPage}
-    	WHERE id = 1
+        <if test="sido != null and sido.trim() != ''">
+            AND sido = #{sido}
+        </if>
+
+        <if test="sigungu != null and sigungu.trim() != ''">
+            AND sigungu = #{sigungu}
+        </if>
+    </select>
+
+
+    <!-- ========================================================= -->
+    <!-- 3. 지역 기반 조회 (랭킹용) -->
+    <!-- ========================================================= -->
+
+    <select id="findByRegionId"
+            resultType="com.insightcrew.domain.trip.vo.TripVo">
+        SELECT
+            trip_id AS tripId,
+            name,
+            image_url AS imageUrl,
+            region_id AS regionId,
+            sido,
+            sigungu
+        FROM trip
+        WHERE region_id = #{regionId}
+    </select>
+
+
+    <!-- ========================================================= -->
+    <!-- 4. 관광공사 API 데이터 이어받기 상태 관리 -->
+    <!-- ========================================================= -->
+
+    <select id="getImportStatus" resultType="map">
+        SELECT *
+        FROM trip_import_status
+        WHERE id = 1
+    </select>
+
+    <update id="updateImportStatus">
+        UPDATE trip_import_status
+        SET content_type_id = #{contentTypeId},
+            area_code = #{areaCode},
+            last_page = #{lastPage}
+        WHERE id = 1
+    </update>
+
+
+    <!-- ========================================================= -->
+    <!-- 5. 여행지 region_id 매핑 -->
+    <!-- ========================================================= -->
+
+    <update id="updateRegionId">
+        UPDATE trip
+        SET region_id = #{regionId}
+        WHERE trip_id = #{tripId}
+    </update>
+    
+    <update id="updateRegionInfo">
+    	UPDATE trip
+    	SET
+        	sido = #{sido},
+        	sigungu = #{sigungu},
+        	region_id = #{regionId}
+    	WHERE trip_id = #{tripId}
 	</update>
 
 </mapper>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{common/layout}">
 
@@ -8,131 +9,181 @@
     <title>TripInsight - 메인</title>
 
     <style>
-        /* ================= 기본 레이아웃 ================= */
+        /* ================= 공통 ================= */
         main {
-            background: #fafafa;
-            padding: 0 0 60px;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f4f6ff;
+            padding-bottom: 60px;
         }
 
-        /* ================= Hero ================= */
+        /* layout이 이미 960px 잡고 있으므로 여기선 width 금지 */
+        .section {
+            padding: 0 20px;
+        }
+
+        /* ================= HERO ================= */
         .hero {
-            width: 100%;
-            background: linear-gradient(135deg, #c7d2ff, #e3dfff);
-            padding: 60px 0;
+            background: linear-gradient(145deg, #b6c0ff, #e3d7ff);
+            padding: 80px 20px 100px;
             text-align: center;
-            border-radius: 25px;
+            border-radius: 0 0 40px 40px;
             margin-bottom: 40px;
         }
 
         .hero-title {
-            font-size: 24px;
-            font-weight: 700;
-            color: #ffffff;
-            margin-bottom: 10px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+            font-size: 30px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 12px;
         }
 
         .hero-sub {
             font-size: 15px;
-            color: white;
-            opacity: .9;
+            color: #fff;
+            opacity: .95;
         }
 
-        /* ================== 드롭다운 ================== */
-        .region-box {
-            background: white;
-            font-size: 14px;
-            display: block;
-            position: relative;
-            z-index: 5;
-        }
-
-        .region-box option {
-            background: white;
-            color: black;
-        }
-
-        /* ================== TOP5 ================== */
-        .top {
-            width: 720px;
-            margin: 0 auto 40px;
+        /* ================= TOP 5 ================= */
+        .top-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #4f54a8;
+            margin-bottom: 20px;
         }
 
         .top-cards {
             display: flex;
+            gap: 16px;
             overflow-x: auto;
-            gap: 15px;
             padding-bottom: 10px;
         }
 
+        .top-cards::-webkit-scrollbar {
+            height: 6px;
+        }
+
         .top-card {
-            flex: 0 0 150px;
-            background: white;
+            flex: 0 0 200px;
+            background: #fff;
             border-radius: 16px;
             padding: 14px;
-            box-shadow: 0 4px 10px rgba(140, 140, 180, 0.20);
+            box-shadow: 0 4px 14px rgba(150,150,200,.15);
+            text-decoration: none;
+            color: inherit;
+            position: relative;
+        }
+
+        .top-number {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #6F73FF;
+            color: #fff;
+            font-weight: 700;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .top-card img {
             width: 100%;
-            height: 110px;
+            height: 120px;
             object-fit: cover;
             border-radius: 12px;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
 
         .top-name {
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 600;
             color: #4f54a8;
-            margin-bottom: 4px;
         }
 
-        .top-score {
-            font-size: 13px;
-            color: #999;
-        }
-
-        .top-more-btn {
-            display: block;
-            margin: 16px auto 0;
-            width: 150px;
-            padding: 8px 18px;
+        .top-more {
             text-align: center;
+            margin-top: 25px;
+        }
+
+        .top-more a {
+            display: inline-block;
+            padding: 10px 28px;
             background: #6F73FF;
-            color: white;
-            border-radius: 18px;
-            font-size: 14px;
-            text-decoration: none;
-        }
-
-        .top-more-btn:hover {
-            opacity: .85;
-        }
-
-        /* ================= 공통 Section ================= */
-        .section {
-            width: 720px;
-            margin: 40px auto;
-            background: white;
+            color: #fff;
             border-radius: 20px;
-            padding: 24px;
-            box-shadow: 0 4px 15px rgba(100, 100, 140, 0.05);
+            text-decoration: none;
+            font-weight: 600;
         }
 
-        .section-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #6F73FF;
-            margin-bottom: 18px;
+        /* ================= WEATHER ================= */
+        .weather-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #4f54a8;
+            margin: 50px 0 18px;
+        }
+
+        .today-weather {
+            background: #fff;
+            border-radius: 20px;
+            padding: 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 14px rgba(150,150,200,.15);
+            margin-bottom: 25px;
+        }
+
+        .today-left {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 16px;
         }
 
-        .section-title span {
-            font-size: 20px;
+        .today-icon {
+            font-size: 40px;
+        }
+
+        .today-temp {
+            font-size: 32px;
+            font-weight: 800;
+            color: #6F73FF;
+        }
+
+        .today-desc {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .week-weather {
+            display: flex;
+            gap: 12px;
+        }
+
+        .week-card {
+            flex: 1;
+            background: #fff;
+            border-radius: 16px;
+            padding: 14px 0;
+            text-align: center;
+            box-shadow: 0 4px 14px rgba(150,150,200,.15);
+        }
+
+        .week-day {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .week-icon {
+            font-size: 24px;
+            margin-bottom: 6px;
+        }
+
+        .week-temp {
+            font-size: 13px;
+            color: #555;
         }
     </style>
 </head>
@@ -143,87 +194,51 @@
     <!-- HERO -->
     <section class="hero">
         <div class="hero-title">오늘 떠나기 좋은 여행지 ✨</div>
-        <div class="hero-sub">당장 떠날 수 있는 여행지 추천을 만나보세요</div>
+        <div class="hero-sub">날씨 기반 전국 여행지 추천 서비스</div>
     </section>
 
-    <!-- ====================== 지역 선택 ====================== -->
-    <section class="section" style="margin-top:0;">
-        <div class="section-title"><span>📍</span> 지역 선택</div>
+    <!-- TOP 5 -->
+    <section class="section">
+        <div class="top-title">오늘의 추천 여행지 TOP 5</div>
 
-        <form action="/" method="get" id="regionForm" style="display:flex; gap:10px;">
-
-            <!-- 시도 -->
-            <select id="sidoSelect" name="sido" class="region-box"
-                    style="flex:1; padding:10px; border-radius:10px; border:1px solid #dad9ff;">
-                <option value="">시/도 선택</option>
-                <option th:each="r : ${sidoList}"
-                        th:value="${r}"
-                        th:text="${r}"
-                        th:selected="${selectedSido == r}">
-                </option>
-            </select>
-
-            <!-- 시군구 -->
-            <select id="sigunguSelect" name="sigungu" class="region-box"
-                    style="flex:1; padding:10px; border-radius:10px; border:1px solid #dad9ff;">
-                <option value="">시/군/구 선택</option>
-                <option th:each="g : ${sigunguList}"
-                        th:value="${g}"
-                        th:text="${g}"
-                        th:selected="${selectedSigungu == g}">
-                </option>
-            </select>
-
-            <!-- 조회 버튼 유지 -->
-            <button type="submit"
-                    style="padding:10px 20px; background:#6F73FF; color:white; border:none;
-                           border-radius:10px; font-weight:600;">
-                조회
-            </button>
-        </form>
-    </section>
-
-    <!-- ====================== TOP 5 ====================== -->
-    <section class="top">
         <div class="top-cards">
-            <div class="top-card" th:each="trip:${topTrips}">
+            <a class="top-card"
+               th:each="trip, iter : ${topTrips}"
+               th:href="@{/trip/detail/{id}(id=${trip.tripId})}">
+                <div class="top-number" th:text="${iter.index + 1}">1</div>
                 <img th:src="${trip.imageUrl}">
-                <div class="top-name" th:text="${trip.title}"></div>
-                <div class="top-score">TOP <span th:text="${trip.rankNo}"></span></div>
-            </div>
+                <div class="top-name" th:text="${trip.title}">여행지</div>
+            </a>
         </div>
 
-        <a href="/trip/list" class="top-more-btn">전체 여행지 보기</a>
+        <div class="top-more">
+            <a href="/trip/list">전체 여행지 보기</a>
+        </div>
     </section>
 
+    <!-- WEATHER -->
+    <section class="section">
+        <div class="weather-title">오늘 & 주간 날씨 ☀️</div>
 
-    <!-- ====================== SCRIPT ====================== -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        <div class="today-weather">
+            <div class="today-left">
+                <div class="today-icon">🌤️</div>
+                <div>
+                    <div class="today-temp">23°C</div>
+                    <div class="today-desc">전국 대체로 맑음</div>
+                </div>
+            </div>
+            <div class="today-desc">풍속 2.1m/s · 강수확률 10%</div>
+        </div>
 
-            const sidoSelect = document.getElementById("sidoSelect");
-            const sigunguSelect = document.getElementById("sigunguSelect");
-
-            // 시도 변경 시 자동 시군구 로딩
-            sidoSelect.addEventListener("change", function () {
-                const sido = this.value;
-
-                sigunguSelect.innerHTML = "<option value=''>시/군/구 선택</option>";
-
-                if (!sido) return;
-
-                fetch(`/api/regions/sigungu?sido=${encodeURIComponent(sido)}`)
-                    .then(res => res.json())
-                    .then(list => {
-                        list.forEach(g => {
-                            sigunguSelect.innerHTML += `<option value="${g}">${g}</option>`;
-                        });
-                    })
-                    .catch(err => console.error("시군구 로딩 실패:", err));
-            });
-
-        });
-    </script>
+        <div class="week-weather">
+            <div class="week-card"><div class="week-day">월</div><div class="week-icon">☀️</div><div class="week-temp">25° / 15°</div></div>
+            <div class="week-card"><div class="week-day">화</div><div class="week-icon">🌤️</div><div class="week-temp">24° / 14°</div></div>
+            <div class="week-card"><div class="week-day">수</div><div class="week-icon">🌦️</div><div class="week-temp">22° / 16°</div></div>
+            <div class="week-card"><div class="week-day">목</div><div class="week-icon">☁️</div><div class="week-temp">21° / 15°</div></div>
+            <div class="week-card"><div class="week-day">금</div><div class="week-icon">☀️</div><div class="week-temp">26° / 17°</div></div>
+        </div>
+    </section>
 
 </main>
 </body>

@@ -1,6 +1,5 @@
 package com.insightcrew.service;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -9,12 +8,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.insightcrew.domain.trip.dto.TripRankingDto;
-import com.insightcrew.domain.trip.vo.RegionVo;
 import com.insightcrew.domain.trip.vo.TripVo;
 import com.insightcrew.domain.weather.vo.WeatherTodayVo;
 import com.insightcrew.repository.TripMapper;
 import com.insightcrew.repository.TripRankingCacheMapper;
-import com.insightcrew.repository.TripRegionMapper;
 import com.insightcrew.repository.TripWeatherTodayMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -29,126 +26,116 @@ public class TripRankingService {
 
     private final TripWeatherTodayMapper weatherMapper;
     private final TripRankingCacheMapper rankingMapper;
-    private final TripRegionMapper regionMapper;
 
-    /** 매일 05시 캐시용 TOP5 생성 */
+    // ================================================================
+    // 1) 매일 05시: 전국 여행지 TOP5 캐싱
+    // ================================================================
     @Scheduled(cron = "0 0 5 * * *")
     public void updateDailyRanking() {
 
-        List<TripVo> trips = tripMapper.findAll();
-        if (trips.isEmpty()) return;
+        System.out.println("⏳ 전국 여행지 랭킹 업데이트 시작...");
 
+        // A. 전체 날씨 업데이트
         rankingWeatherService.updateAllRegionsWeather();
 
-        List<TripRankingDto> top5 = trips.stream()
-                .map(this::createRanking)
-                .sorted(Comparator.comparingInt(TripRankingDto::getScore).reversed())
-                .limit(5)
-                .collect(Collectors.toList());
+        // B. 전국 TOP5 계산
+        List<TripRankingDto> top5 = getTop5();
+        if (top5 == null || top5.isEmpty()) {
+            System.out.println("❌ TOP5 생성 실패: 여행지 또는 날씨 없음");
+            return;
+        }
 
+        // C. 캐시 초기화 후 저장
         rankingMapper.deleteAll();
 
         int rank = 1;
-        for (TripRankingDto dto : top5) {
-            dto.setRankNo(rank++);
-            rankingMapper.insertRanking(dto);
+        for (TripRankingDto r : top5) {
+            r.setRankNo(rank++);
+            rankingMapper.insertRanking(r);
         }
+
+        System.out.println("🌟 전국 TOP5 캐싱 완료");
     }
 
-    /** 전체용 기본 랭킹 계산 */
-    private TripRankingDto createRanking(TripVo trip) {
+    // ================================================================
+    // 2) 전국 여행지 기반 TOP5
+    // ================================================================
+    public List<TripRankingDto> getTop5() {
 
-        TripRankingDto dto = new TripRankingDto();
-        dto.setTripId(trip.getTripId());
-        dto.setTitle(trip.getName());
-        dto.setImageUrl(trip.getImageUrl());
-
-        if (trip.getRegionId() == null) {
-            dto.setScore(0);
-            dto.setWeather("정보 없음");
-            dto.setRegion("기타");
-            dto.setReason("지역 정보 없음");
-            return dto;
+        List<TripVo> trips = tripMapper.findAll();
+        if (trips == null || trips.isEmpty()) {
+            System.out.println("❌ 여행지 데이터 없음");
+            return List.of();
         }
 
-        RegionVo region = regionMapper.findById(trip.getRegionId());
-        dto.setRegion(region != null ? region.getSido() : "기타");
+        // ★ regionId 없는 데이터 제외하기 (날씨 매핑 불가)
+        trips = trips.stream()
+                .filter(t -> t.getRegionId() != null)
+                .collect(Collectors.toList());
 
-        WeatherTodayVo weather = weatherMapper.findByRegionId(trip.getRegionId());
+        if (trips.isEmpty()) {
+            System.out.println("❌ regionId 매핑된 여행지가 없음");
+            return List.of();
+        }
+
+        // 날씨 기반 점수 계산 → TOP5
+        return trips.stream()
+                .map(this::createRankingForTrip)
+                .filter(dto -> dto.getScore() >= 0) // 정상만
+                .sorted(Comparator.comparingInt(TripRankingDto::getScore).reversed())
+                .limit(5)
+                .collect(Collectors.toList());
+    }
+
+    // ================================================================
+    // 3) 개별 여행지 DTO 생성
+    // ================================================================
+    private TripRankingDto createRankingForTrip(TripVo trip) {
+
+        Integer regionId = trip.getRegionId();
+        if (regionId == null) {
+            return emptyRanking(trip);
+        }
+
+        WeatherTodayVo weather = weatherMapper.findByRegionId(regionId);
         if (weather == null) {
-            dto.setScore(0);
-            dto.setWeather("정보 없음");
-            dto.setReason("날씨 정보 없음");
-            return dto;
+            return emptyRanking(trip);
         }
 
         int score = weatherScoreService.calculateScore(weather);
 
-        dto.setScore(score);
-        dto.setTemperature(weather.getTemp());
-        dto.setWeather(makeWeatherText(weather));
-        dto.setReason(makeReason(score));
-        return dto;
-    }
-
-
-    // ======================================================
-    // ⭐⭐⭐ 지역 기반 랭킹 생성 API ⭐⭐⭐
-    // ======================================================
-    public List<TripRankingDto> getRankingByRegion(String sido, String sigungu) {
-
-        // 1) 시도+시군구 → region_id 조회
-        RegionVo region = regionMapper.findBySidoAndSigungu(sido, sigungu);
-        if (region == null) {
-            System.out.println("❌ 지역 없음");
-            return Collections.emptyList();
-        }
-
-        int regionId = region.getId();
-
-        // 2) 해당 지역 날씨 조회
-        WeatherTodayVo weather = weatherMapper.findByRegionId(regionId);
-        if (weather == null) {
-            System.out.println("❌ 날씨 정보 없음");
-            return Collections.emptyList();
-        }
-
-        // 3) regionId 여행지들만 조회
-        List<TripVo> trips = tripMapper.findByRegionId(regionId);
-        if (trips.isEmpty()) {
-            System.out.println("❌ 해당 지역 여행지 없음");
-            return Collections.emptyList();
-        }
-
-        // 4) 지역 날씨 기반으로 점수 계산하여 랭킹 생성
-        return trips.stream()
-                .map(t -> createRankingForRegion(t, weather, region)) 
-                .sorted(Comparator.comparingInt(TripRankingDto::getScore).reversed())
-                .limit(5)
-                .collect(Collectors.toList());
-    }
-
-    /** 지역 날씨 기반 랭킹 DTO 생성 */
-    private TripRankingDto createRankingForRegion(TripVo trip, WeatherTodayVo regionWeather, RegionVo region) {
-
         TripRankingDto dto = new TripRankingDto();
-
         dto.setTripId(trip.getTripId());
         dto.setTitle(trip.getName());
         dto.setImageUrl(trip.getImageUrl());
-        dto.setRegion(region.getSido());
-
-        int score = weatherScoreService.calculateScore(regionWeather);
+        dto.setRegion(trip.getSido() + " " + trip.getSigungu());
         dto.setScore(score);
-        dto.setTemperature(regionWeather.getTemp());
-        dto.setWeather(makeWeatherText(regionWeather));
-        dto.setReason(makeReason(score));
+        dto.setTemperature(weather.getTemp());
+        dto.setWeather(toWeatherText(weather));
+        dto.setReason(toReason(score));
 
         return dto;
     }
 
-    // 공통 util 메서드
-    private String makeWeatherText(WeatherTodayVo w) {
+    private TripRankingDto emptyRanking(TripVo trip) {
+
+        TripRankingDto dto = new TripRankingDto();
+        dto.setTripId(trip.getTripId());
+        dto.setTitle(trip.getName());
+        dto.setImageUrl(trip.getImageUrl());
+        dto.setRegion(
+            (trip.getSido() != null ? trip.getSido() : "") + 
+            (trip.getSigungu() != null ? " " + trip.getSigungu() : "")
+        );
+        dto.setScore(-1); // 점수 없음 = 필터 처리용
+        return dto;
+    }
+
+    // ================================================================
+    // 4) 공통 변환 메서드들
+    // ================================================================
+    private String toWeatherText(WeatherTodayVo w) {
+
         if (w.getPty() != null && w.getPty() != 0) {
             return switch (w.getPty()) {
                 case 1 -> "비";
@@ -167,7 +154,7 @@ public class TripRankingService {
         };
     }
 
-    private String makeReason(int score) {
+    private String toReason(int score) {
         if (score >= 80) return "☀ 최고의 날씨! 지금 바로 떠나보세요.";
         if (score >= 60) return "🌤 여행하기 좋은 날씨예요.";
         if (score >= 40) return "⛅ 무난한 날씨, 가볍게 나들이 어떠세요?";
@@ -175,6 +162,9 @@ public class TripRankingService {
         return "☔ 비가 와요! 실내 여행지를 추천합니다.";
     }
 
+    // ================================================================
+    // 5) 캐시 읽기 (메인 fallback)
+    // ================================================================
     public List<TripRankingDto> getTodayRanking() {
         return rankingMapper.findTop5();
     }

@@ -7,21 +7,18 @@
 
     <!-- 시/도 + 시군구 매핑 조회 -->
     <select id="findBySidoAndSigungu"
-            resultType="com.insightcrew.domain.trip.vo.RegionVo">
-        SELECT 
-            id,
-            sido,
-            sigungu,
-            nx,
-            ny
-        FROM region
-        WHERE sido = #{sido}
-        AND (
-            sigungu = #{sigungu}
-            OR (sigungu IS NULL AND #{sigungu} IS NULL)
-        )
-        LIMIT 1
-    </select>
+        	resultType="com.insightcrew.domain.trip.vo.RegionVo">
+    	SELECT 
+        	id,
+        	sido,
+        	sigungu,
+        	nx,
+        	ny
+    	FROM region
+    	WHERE sido = #{sido}
+      		AND REPLACE(sigungu, ' ', '') LIKE CONCAT('%', REPLACE(#{sigungu}, ' ', ''), '%')
+    	LIMIT 1
+	</select>
 
     <!-- region_id 단일 조회 -->
     <select id="findById"
@@ -65,5 +62,21 @@
         FROM region
         ORDER BY id ASC
     </select>
+    
+    <select id="findByRegionId"
+        	parameterType="int"
+        	resultType="com.insightcrew.domain.trip.vo.TripVo">
+    	SELECT
+        	trip_id AS tripId,
+        	name,
+        	image_url AS imageUrl,
+        	region_id AS regionId,
+        	content_id AS contentId,
+        	category,
+        	full_address AS fullAddress,
+        	lat, lon
+    	FROM trip
+    	WHERE region_id = #{regionId}
+	</select>
 
 </mapper>
