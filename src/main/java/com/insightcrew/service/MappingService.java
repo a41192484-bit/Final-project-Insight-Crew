@@ -46,7 +46,7 @@ public class MappingService {
 		MemberVo vo = new MemberVo();
 		
 		vo.setUserid(dto.getUserid());
-		vo.setPassword(dto.getPassword());
+		vo.setPassword(encodedPassword);
 		vo.setName(dto.getName());
 		vo.setNickname(dto.getNickname());
 		vo.setRole(UserRole.USER);

@@ -39,7 +39,7 @@ public class MemberRepository {
 	}
 	
 	
-	
+	//회원가입
 	public void insertMember(MemberVo membervo) {
 		memberMapper.insertMember(membervo);
 	}
