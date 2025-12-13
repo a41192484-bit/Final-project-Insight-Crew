@@ -3,6 +3,7 @@ package com.insightcrew.controller;
 import java.util.Map;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 public class MemberController {
 	
 	private final MemberService memberservice;
-	private boolean result;
+
 	
 	
 	//회원정보 조회, 뷰
@@ -62,9 +63,14 @@ public class MemberController {
 	@ResponseBody
 		public String updateNickname(@AuthenticationPrincipal CustomUserDetails loginuser,
 									@RequestBody Map<String, String> body) {
-			String newNickname=body.get("nickname");
-			memberservice.updateNickname(loginuser.getUsername(), newNickname);
-			return result ? "OK" : "DUPLICATE";
+			String newNickname = body.get("nickname");
+			try {
+				memberservice.updateNickname(loginuser.getUsername(), newNickname);
+				return "ok";
+			}catch(IllegalArgumentException e) {
+				return "DUPLICATE";
+			}
+
 		}
 		
 		//회원정보 수정-비밀번호
@@ -97,10 +103,19 @@ public class MemberController {
 
 	
 	//회원탈퇴
-	@GetMapping("/inactive")
-	public String inactive(@AuthenticationPrincipal CustomUserDetails loginuser) {
-		memberservice.inactive(loginuser.getUsername());
-		return "redirect:/auth/view";  // 탈퇴 처리 성공 메시지
+	@PostMapping("/inactive")
+	public String inactive(@AuthenticationPrincipal CustomUserDetails loginuser, Model model) {
+		System.out.println("회원탈퇴 컨트롤러 입니당");
+		try {
+			memberservice.inactive(loginuser.getUsername());
+			//탈퇴 후 로그아웃 처리.
+			SecurityContextHolder.clearContext();
+			return "redirect:/auth/view";  // 탈퇴 처리 성공 메시지
+		}catch(IllegalStateException e) {
+			model.addAttribute("error", e.getMessage());
+			return "member/member-mypage";
+		}
+		
 	}
 	
 }

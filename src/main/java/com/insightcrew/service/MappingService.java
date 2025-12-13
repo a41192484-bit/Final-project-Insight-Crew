@@ -25,14 +25,17 @@ public class MappingService {
 		
 		return dto;
 	}
-	public MemberVo toVo(MemberInfoDto dto) {
+	public MemberVo toVo(MemberInfoDto dto, String encodedPassword) {
 		if(dto == null) return null;
 		
 		MemberVo vo = new MemberVo();
+		
 		vo.setUserid(dto.getUserid());
-		vo.setPassword(dto.getPassword());
+		vo.setPassword(encodedPassword);
 		vo.setName(dto.getName());
 		vo.setNickname(dto.getNickname());
+		vo.setRole(UserRole.USER);
+		vo.setStatus(UserStatus.ACTIVE);
 		
 		return vo;
 	}

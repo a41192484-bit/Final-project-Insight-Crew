@@ -1,7 +1,8 @@
 package com.insightcrew.service;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.insightcrew.domain.auth.dto.MemberJoinRequestDto;
 import com.insightcrew.domain.auth.dto.MemberJoinResponseDto;
@@ -16,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class MemberService {
 
 	private final MemberRepository memberRepository;
-	private final BCryptPasswordEncoder passwordEncoder;
+	private final PasswordEncoder passwordEncoder;
 	private final MappingService mappingService;
 	
 	
@@ -131,8 +132,17 @@ public class MemberService {
 	
 	
 	//회원탈퇴
+	@Transactional
 	public void inactive(String userid) {
-        memberRepository.updateStatus(userid);
+		
+		int result = memberRepository.updateStatus(userid);
+		
+		//result값: 1=정상적 탈퇴 처리, 0=해당 유저 아이디 없거나 이미 inactive 상태
+		if(result != 1) {
+			throw new IllegalStateException("회원 탈퇴 실패");
+		}
+		
+		System.out.println("회원탈퇴 서비스 입니당");
     }
 	
 	

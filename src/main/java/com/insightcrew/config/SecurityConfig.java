@@ -24,7 +24,7 @@ public class SecurityConfig {
 	
 	//이거는 passwordEncoderConfig.java로 따로 빼도 됨.
 	@Bean
-	public BCryptPasswordEncoder passwordEncoder() {
+	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 	

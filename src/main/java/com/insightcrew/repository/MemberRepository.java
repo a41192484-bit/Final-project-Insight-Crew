@@ -46,7 +46,7 @@ public class MemberRepository {
 	
 	
 	//탈퇴
-	public void updateStatus(String userid) {
-		memberMapper.updateStatus(userid);
+	public int updateStatus(String userid) {
+		return memberMapper.updateStatus(userid);
 	}
 }

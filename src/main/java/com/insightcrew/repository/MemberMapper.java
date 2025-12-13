@@ -36,6 +36,6 @@ public interface MemberMapper {
 	
 	
 	//회원탈퇴 - 상태 업데이트
-	void updateStatus(@Param("userid") String userid);
+	int updateStatus(@Param("userid") String userid);
 	
 }

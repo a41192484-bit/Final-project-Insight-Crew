@@ -79,7 +79,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 탈퇴 -->
 	<update id="updateStatus">
 	    UPDATE member
-	    SET status = 'INACTIVE'
+	    SET status = 'INACTIVE',
+	    	out_date = now()
 	    WHERE login_id = #{userid}
 	</update>
 	
