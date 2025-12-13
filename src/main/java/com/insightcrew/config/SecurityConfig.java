@@ -24,7 +24,7 @@ public class SecurityConfig {
 	
 	//이거는 passwordEncoderConfig.java로 따로 빼도 됨.
 	@Bean
-	public PasswordEncoder passwordEncoder() {
+	public BCryptPasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 	
@@ -45,27 +45,28 @@ public class SecurityConfig {
         //페이지별 사이트url별로 접근 권한 설정
         .authorizeHttpRequests(auth -> auth
         				//어떤 url이 대상인지. permitAll()은 누구나 접근 허용
-                        .requestMatchers("/auth/**", "/join/**", "/css/**", "/js/**", "/img/**").permitAll()
+                        .requestMatchers("/auth/view","/auth/login-proces", "/auth/**","/join/**", "/css/**", "/js/**", "/img/**").permitAll()
                         .requestMatchers("/member/**").hasRole("USER") // USER 권한 필요
                         .requestMatchers("/mypage/**").hasRole("USER")
                         .requestMatchers("/java").hasRole("ADMIN") // ADMIN 권한 필요
                         .anyRequest().authenticated() // 그 외 모든 요청 인증 필요
         )
         .formLogin(login -> login
-                        .loginPage("/auth") // 내가 만든 로그인 페이지 경로
+                        .loginPage("/auth/view").permitAll() // 내가 만든 로그인 페이지 경로
                         .loginProcessingUrl("/auth/login-process") // POST 로그인 처리 URL. 시큐리티가 실제 인증 처리하는url
                         .usernameParameter("userid")  //인풋 값 이름 여기다가 지정
                         .passwordParameter("password") //인풋값 이름 여기다 지정
-                        .defaultSuccessUrl("/member/member-mypage", true) // 로그인 성공 시 이동
+                        .defaultSuccessUrl("/mypage/view", true) // 로그인 성공 시 이동
                         .failureUrl("/auth/view?error=true") // 로그인 실패 시 이동
-                        .permitAll()) //로그인 실패 후 다시 로그인 페이지로 접근할 수 있도록 하는 것.
+                        ) //로그인 실패 후 다시 로그인 페이지로 접근할 수 있도록 하는 것.
         								//이래야 로그인 실패 메시지도 확인 가능.
         								//안 쓰면 오류 발생.
         .logout(logout -> logout
                         .logoutUrl("/auth/logout") // 로그아웃 요청 URL
                         .logoutSuccessUrl("/auth/view") // 로그아웃 후 리다이렉트
-                        .invalidateHttpSession(true) // 세션 무효화
+                        .invalidateHttpSession(true) // 세션 삭제
                         .deleteCookies("JSESSIONID") // JSESSIONID 쿠키 삭제
+                        .clearAuthentication(true)  //인증 제거
                         .permitAll()
 
         );

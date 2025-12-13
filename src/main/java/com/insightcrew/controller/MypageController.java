@@ -12,6 +12,7 @@ public class MypageController {
 	//마이페이지 뷰
 	@GetMapping("/view")
 	public String mypage() {
+		System.out.println("마이페이지임");
 		return "member/member-mypage";
 	}
 

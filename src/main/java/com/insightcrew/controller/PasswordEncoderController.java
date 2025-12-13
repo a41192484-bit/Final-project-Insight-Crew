@@ -29,14 +29,19 @@ public class PasswordEncoderController {
 		for(MemberVo membervo : memberList) {
 			String oldPW = membervo.getPassword();
 			
-			if(oldPW.startsWith("$2a$") || oldPW.startsWith("$2b$")){
-				continue;
+			// 이미 BCrypt인지 확인 ($2a$ 또는 $2b$)
+			if(!oldPW.startsWith("$2a$") && !oldPW.startsWith("$2b$")){
+				
+				//일반 텍트스 비번을 BCrypt로 암호화
+				String encoded = passwordEncoder.encode(oldPW);
+				memberRepository.updatePassword(membervo.getUserid(), encoded);
+				System.out.println(membervo.getUserid()+"비밀번호 변환 완료");
+			}else {
+				System.out.println("이미 암호화 됨: "+membervo.getUserid());
 			}
 			
-			String encoded = passwordEncoder.encode(oldPW);
-			memberRepository.updatePassword(membervo.getUserid(), encoded);
 		}
-		
+		System.out.println("여기는 패스워드 인코더 클래스");
 		return "비밀번호 변환 완료!";
 	}
 }

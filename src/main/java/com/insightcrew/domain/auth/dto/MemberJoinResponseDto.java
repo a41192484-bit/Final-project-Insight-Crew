@@ -1,4 +1,4 @@
-package com.insightcrew.domain.member.dto;
+package com.insightcrew.domain.auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

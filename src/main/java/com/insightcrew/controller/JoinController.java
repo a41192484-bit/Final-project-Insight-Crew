@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.insightcrew.domain.member.dto.MemberJoinRequestDto;
-import com.insightcrew.domain.member.dto.MemberJoinResponseDto;
+import com.insightcrew.domain.auth.dto.MemberJoinRequestDto;
+import com.insightcrew.domain.auth.dto.MemberJoinResponseDto;
 import com.insightcrew.service.MemberService;
 
 import lombok.RequiredArgsConstructor;
@@ -33,14 +33,16 @@ public class JoinController {
 	//가입하기
 	@PostMapping("/process")
 	public String join(MemberJoinRequestDto requestdto, Model model) {
+		System.out.println("회원가입페이지-항목 작성 후 시작하기 누름!");
 		
 		MemberJoinResponseDto res = memberService.join(requestdto);
 		model.addAttribute("message", res.getMessage());
 		
 		if(res.isSuccess()) {
-			System.out.println("회원가입 하기");
+			System.out.println("회원가입 성공");
 			return "redirect:/member/member-mypage";
 		}else {
+			model.addAttribute("error", "회원가입 실패");
 			return "auth/auth-join";
 		}
 		

@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
-<mapper namespace="com.insightcrew.repository.MemberRepository">
+<mapper namespace="com.insightcrew.repository.MemberMapper">
 
 	<!-- enum 매핑 포함. db테이블 값. -->
 	<resultMap id="memberResultMap" type="com.insightcrew.domain.member.vo.MemberVo">
@@ -26,11 +26,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		AND status = 'ACTIVE';
 	</select>
 	
+	
 	<!-- 모두 -->
 	<select id="findAll" resultMap="memberResultMap">
 		SELECT * 
 		FROM member
 	</select>
+	
 	
 	<!-- 닉네임 찾는 쿼리문 -->
 	<select id="findByNickname" parameterType="string" resultMap="memberResultMap">
@@ -40,6 +42,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		AND status = 'ACTIVE';
 	</select>
 	
+	
 	<!-- 회원가입:가입정보 넣기-->
 	<insert id="insertMember">
 		INSERT INTO member (login_id, password, name, nickname, role, status, in_date)
@@ -47,10 +50,37 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</insert>
 	
 	
+	
+	
+
+	<!-- 비번 수정 -->
 	<update id="updatePassword">
 		update member
-		set password = #{newPassword}
+		set password = #{password}
 		where login_id = #{userid}
+	</update>
+    
+    <!-- 이름 수정 -->
+    <update id="updateName">
+        UPDATE member
+        SET name = #{name}
+        WHERE login_id = #{userid}
+    </update>
+	
+	<!-- 닉네임 수정 -->
+    <update id="updateNickname">
+        UPDATE member
+        SET nickname = #{nickname}
+        WHERE login_id = #{userid}
+    </update>
+	
+	
+	
+	<!-- 탈퇴 -->
+	<update id="updateStatus">
+	    UPDATE member
+	    SET status = 'INACTIVE'
+	    WHERE login_id = #{userid}
 	</update>
 	
 </mapper>

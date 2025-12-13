@@ -5,11 +5,14 @@ import java.time.LocalDateTime;
 import com.insightcrew.domain.member.enums.UserRole;
 import com.insightcrew.domain.member.enums.UserStatus;
 
+import groovy.transform.builder.Builder;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+
+
 
 @Getter
 @Setter

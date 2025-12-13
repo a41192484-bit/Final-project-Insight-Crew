@@ -2,33 +2,51 @@ package com.insightcrew.repository;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import com.insightcrew.domain.member.vo.MemberVo;
 
+import lombok.RequiredArgsConstructor;
 
-@Mapper
-public interface MemberRepository {
-	
-	//아이디 조회
-	MemberVo findByUserid(String userid);
-	
-	//닉네임 조회
-	MemberVo findByNickname(String nickname);
-	
-	
-	//회원가입 insert
-	//반환값이 필요 없기 때문에 void 사용
-	void insertMember(MemberVo membervo);
-	
-	//수정
-	void updateName(@Param("id") String userid, @Param("value") String value);
-    void updateNickname(@Param("id") String userid, @Param("value") String value);
-    void updatePassword(@Param("id") String userid, @Param("value") String value);
 
-    
-    //전체 정보
-	List<MemberVo> findAll();
-
+@Repository
+@RequiredArgsConstructor
+public class MemberRepository {
+	
+	private final MemberMapper memberMapper;
+	
+	public MemberVo findByUserid(String userid) {
+		return memberMapper.findByUserid(userid);
+	}
+	public MemberVo findByNickname(String nickname) {
+		return memberMapper.findByNickname(nickname);
+	}
+	public List<MemberVo> findAll() {
+		return memberMapper.findAll();
+	}
+	
+	
+	public void updateName(String userid, String name) {
+		memberMapper.updateName(userid, name);
+	}
+	
+	public void updateNickname(String userid, String nickname) {
+		memberMapper.updateNickname(userid, nickname);
+	}
+	
+	public void updatePassword(String userid, String encodPassword) {
+		memberMapper.updatePassword(userid, encodPassword);
+	}
+	
+	
+	
+	public void insertMember(MemberVo membervo) {
+		memberMapper.insertMember(membervo);
+	}
+	
+	
+	//탈퇴
+	public void updateStatus(String userid) {
+		memberMapper.updateStatus(userid);
+	}
 }

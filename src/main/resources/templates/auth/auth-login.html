@@ -124,14 +124,16 @@
 <body>
 
 	<div layout:fragment="content">	
-	<form id="loginForm" th:action="@{/auth/login-process}" method="post">
+	
 		
             <div id="body">
+				
                 <div id="loginBox">
                     <div>
                         <h2>◈ 로그인 ◈</h2>
                     </div>
 
+					<form id="loginForm" th:action="@{/auth/login-process}" method="post">
                     <div id="boxIN2">
                         <div>
                             <span>아이디</span>
@@ -144,38 +146,44 @@
                             <button type="submit">로그인</button>
                         </div>
                     </div>
-				
+				</form>
 
                     <div id="boxIN3">
                         <span>계정이 없으신가요?</span>
-                        <a th:href="@{/join/view}">회원가입 ▶</a>
+                        <a href="/join/view">회원가입 ▶</a>
                     </div>
                 </div>
+				
             </div>
 	
-	</form>
+	
 	</div>
 	
 	
     <script>
 		
-		document.addEventListener("DOMContentLoaded", function () {
-				const loginForm = document.getElementById("loginForm");
+		(function(){
+			if (window.hasInitLoginJS) return;
+			window.hasInitLoginJS = true;
+			
+			const loginForm = document.getElementById("loginForm");
+			if (!loginForm) return;
+			
+			loginForm.addEventListener("submit", function (event) {
+				const userId = document.getElementById("userId").value;
+				const userPass = document.getElementById("userPass").value;
 
-				if (!loginForm) return;
-
-				loginForm.addEventListener("submit", function (event) {
-					const userId = document.getElementById("userId").value;
-					const userPass = document.getElementById("userPass").value;
-
-					if (!userId || !userPass) {
-						alert("아이디와 비밀번호를 모두 입력하세요.");
-						event.preventDefault();
-					}
-				});
-
+				if (!userId || !userPass) {
+					alert("아이디와 비밀번호를 모두 입력하세요.");
+					event.preventDefault();
+				}
 			});
+		})();
+		
+		console.log("여기는 로그인 에치티엠알 제이에스");
 
+		
+		
     </script>
 	<th:block layout:fragment="script"></th:block>
     

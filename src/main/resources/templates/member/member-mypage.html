@@ -144,14 +144,16 @@
             align-items: center;
         }
 
-        #logout a {
+        .logout-btn {
+			all: unset;
             color: rgb(92, 92, 92);
-            text-decoration: none;
-            position: relative;
+			font-size: 30px;
+			font-weight: 500;
+			position: relative;
             cursor: pointer;
         }
 
-        #logout a::after {
+        .logout-btn::after {
             content: "⭐";
             position: absolute;
             left: -40px;
@@ -165,78 +167,55 @@
             font-size: 20px;
         }
 
-        #logout a:hover {
+        .logout-btn:hover {
             color: blue;
         }
 
-        #logout a:hover::after {
+        .logout-btn:hover::after {
             opacity: 1;
             /* left: -30px; */
         }
     </style>
 </head>
 
+
+
 <body>
     <div layout:fragment="content">
+		
         <div id="body">
             <div id="mypageMenu">
                 <div id="catego">
                     <ul>
                         <li id="memberInfo">
-                            <a href="./member-info.html">정보 관리</a>
+                            <a th:href="@{/member/info}">정보 관리</a>
                         </li>
                     </ul>
                 </div>
+				
                 <div id="memberOut">
-                    <a href="메인페이지로 가는 링크">회원탈퇴</a>
+					<form th:action="@{/member/inactive}" method="post">
+                    	<a th:href="@{/auth/view}">회원탈퇴</a>
+					</form>
                 </div>
+				
                 <div id="logout">
-                    <a href="메인페이지로 가는 링크">로그아웃</a>
+					<form th:action="@{/auth/logout}" method="post">
+						<button type="submit" class="logout-btn">로그아웃</button>
+					</form>
                 </div>
+				
             </div>
         </div>
     </div>
 
 
-
-    <script src="menu.js"></script>
+	
+	
+	
     <script>
 
-        //로그아웃
-        const logoutBtn = document.querySelector("#logout a");
-
-        logoutBtn.addEventListener("click", (event) => {
-            //preventDefault()브라우저의 기본 동작을 막는 메서드.
-            //페이지 이동하지 말고 내가 작성한 코드를 실행해라.
-            event.preventDefault();
-
-            //로그인상태 초기화
-            user.isLogin = false;
-
-            //메뉴 업데이트
-            updateMenu();
-            alert("로그아웃 되었습니다!");
-        });
-
-
-        //회원탈퇴
-        const memberOutBtn = document.querySelector("#memberOut a");
-
-        memberOutBtn.addEventListener("click", (event) => {
-            //페이지 이동 ㄴㄴ, 내가 작성한 코드 실행ㄱㄱ
-            event.preventDefault();
-
-            //해당 계정의 데이터베이스를 비활성화 하기
-            //지금 로그인한 아이디와 데이터베이스 비교 -> 동일하면 진행
-            if (user.isLogin == true || user.id == data.login_id) {
-                if (confirm("정말 회원탈퇴 하시겠습니까?")) {
-
-                    alert("회원탈퇴 완료. 메인화면으로 돌아갑니다.");
-                } else {
-                    alert("마이페이지로 돌아갑니다.");
-                }
-            }
-        })
+        
     </script>
 </body>
 

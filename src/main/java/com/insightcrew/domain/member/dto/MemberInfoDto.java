@@ -1,17 +1,14 @@
 package com.insightcrew.domain.member.dto;
 
-import com.insightcrew.domain.member.enums.UserRole;
-
 import lombok.Getter;
 import lombok.Setter;
 
-
 @Getter
 @Setter
-public class MemberJoinRequestDto {
+public class MemberInfoDto {
+	//뷰 전용
 	private String userid;
 	private String password;
 	private String name;
 	private String nickname;
-	private UserRole role;
 }
