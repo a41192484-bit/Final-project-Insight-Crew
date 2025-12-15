@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.insightcrew.repository.BoardMapper">
-    <insert id="write" parameterType="com.insightcrew.domain.board.dto.BoardRequest"
+    <insert id="write" parameterType="com.insightcrew.domain.board.dto.BoardRequestDto"
     useGeneratedKeys="true" keyProperty="boardId">
         INSERT INTO board (member_id, trip_id, category, title, content)
         VALUES ( #{memberId}, #{tripId},#{category},#{title},#{content})
@@ -25,7 +25,7 @@
     WHERE b.board_id = #{boardId}
 </select>
 
-<resultMap id="BoardDetailMap" type="com.insightcrew.domain.board.dto.BoardDetailResponse">
+<resultMap id="BoardDetailMap" type="com.insightcrew.domain.board.dto.BoardDetailResponseDto">
     <result property="memberId" column="member_id"/>
     <result property="tripId" column="trip_id"/>
     <result property="category" column="category"/>
@@ -34,7 +34,7 @@
     <result property="createdAt" column="created_at"/>
 
     <!-- 파일 목록 매핑 -->
-    <collection property="files" ofType="com.insightcrew.domain.board.dto.BoardFileResponse">
+    <collection property="files" ofType="com.insightcrew.domain.board.dto.BoardFileResponseDto">
         <id property="id" column="file_id"/>
         <result property="originalName" column="file_original_name"/>
         <result property="savedName" column="file_saved_name"/>
@@ -45,7 +45,7 @@
     <delete id="delete" parameterType="long">
 		DELETE FROM board WHERE board_id = #{boardId}
 	</delete>
-	<select id="findAll" resultType="com.insightcrew.domain.board.dto.BoardListResponse">
+	<select id="findAll" resultType="com.insightcrew.domain.board.dto.BoardListResponseDto">
 	    SELECT
 	        board_id AS boardId,
 	        member_id AS memberId,
@@ -55,7 +55,7 @@
 	    ORDER BY board_id DESC
 	</select>
 	<select id="findById" parameterType="long"
-		resultType="com.insightcrew.domain.board.dto.BoardRequest">
+		resultType="com.insightcrew.domain.board.dto.BoardRequestDto">
 		    SELECT
 		        board_id AS boardId,
 		        member_id AS memberId,
@@ -66,7 +66,7 @@
 		    FROM board
 		    WHERE board_id = #{id}
 	</select>
-	<update id="update" parameterType="com.insightcrew.domain.board.dto.BoardRequest">
+	<update id="update" parameterType="com.insightcrew.domain.board.dto.BoardRequestDto">
 	    UPDATE board
 	    SET
 	        title = #{title},
@@ -76,7 +76,7 @@
 	        category = #{category}
 	    WHERE board_id = #{boardId}
 	</update>
-<select id="findTitle" resultType="com.insightcrew.domain.board.dto.BoardListResponse">
+<select id="findTitle" resultType="com.insightcrew.domain.board.dto.BoardListResponseDto">
 	    SELECT
 	        board_id AS boardId,
 	        member_id AS memberId,
@@ -86,7 +86,7 @@
 	    WHERE title LIKE CONCAT('%', #{keyword}, '%')
 	    ORDER BY board_id DESC
 	</select>
-	<select id="findMember" resultType="com.insightcrew.domain.board.dto.BoardListResponse">
+	<select id="findMember" resultType="com.insightcrew.domain.board.dto.BoardListResponseDto">
     SELECT
         board_id AS boardId,
         member_id AS memberId,
@@ -97,7 +97,7 @@
     ORDER BY board_id DESC
 </select>
 
-<select id="findContent" resultType="com.insightcrew.domain.board.dto.BoardListResponse">
+<select id="findContent" resultType="com.insightcrew.domain.board.dto.BoardListResponseDto">
     SELECT
         board_id AS boardId,
         member_id AS memberId,

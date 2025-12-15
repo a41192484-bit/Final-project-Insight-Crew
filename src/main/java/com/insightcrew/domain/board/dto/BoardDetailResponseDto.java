@@ -3,7 +3,7 @@ package com.insightcrew.domain.board.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.insightcrew.domain.enums.BoardCategory;
+import com.insightcrew.domain.board.enums.BoardCategory;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Data
-public class BoardDetailResponse { // 상세보기용
+public class BoardDetailResponseDto { // 상세보기용
 //	private Long boardId;
 	private Long memberId;
 	private Long tripId;
@@ -23,5 +23,5 @@ public class BoardDetailResponse { // 상세보기용
 	private String content;
 	private LocalDateTime createdAt;
 
-	private List<BoardFileResponse> files; // 첨부파일
+	private List<BoardFileResponseDto> files; // 첨부파일
 }

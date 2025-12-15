@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Data
-public class BoardRequest { // 작성 수정용
+public class BoardRequestDto { // 작성 수정용
 	private Long boardId;
 	private Long memberId;
 	private Long tripId;

@@ -6,7 +6,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @Data
-public class BoardFileResponse {
+public class BoardFileResponseDto {
 
 	private Long id;
 	private Long boardId;

@@ -1,15 +1,15 @@
-package com.insightcrew.domain.board.entity;
+package com.insightcrew.domain.board.vo;
 
 import java.time.LocalDateTime;
 
-import com.insightcrew.domain.enums.BoardCategory;
+import com.insightcrew.domain.board.enums.BoardCategory;
 
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-public class BoardEntity {
+public class BoardVo {
 	private Long boardId;
 	private Long memberId;
 	private Long tripId;

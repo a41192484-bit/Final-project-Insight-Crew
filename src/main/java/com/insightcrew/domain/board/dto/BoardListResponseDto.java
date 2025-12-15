@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import lombok.Data;
 
 @Data
-public class BoardListResponse { // 보기용
+public class BoardListResponseDto { // 보기용
 	private Long boardId;
 	private Long memberId;
 	private String title;

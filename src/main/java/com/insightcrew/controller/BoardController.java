@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.insightcrew.domain.board.dto.BoardDetailResponse;
-import com.insightcrew.domain.board.dto.BoardListResponse;
-import com.insightcrew.domain.board.dto.BoardRequest;
+import com.insightcrew.domain.board.dto.BoardDetailResponseDto;
+import com.insightcrew.domain.board.dto.BoardListResponseDto;
+import com.insightcrew.domain.board.dto.BoardRequestDto;
 import com.insightcrew.service.BoardService;
 
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ public class BoardController {
 	// 리스트
 	@GetMapping("/list")
 	public String boardList(Model model) {
-		List<BoardListResponse> list = boardservice.findAll();
+		List<BoardListResponseDto> list = boardservice.findAll();
 
 		model.addAttribute("boardList", list);
 		return "board/board-list";
@@ -42,7 +42,7 @@ public class BoardController {
 
 	// 글작성
 	@PostMapping("/write")
-	public String BoardWrite(BoardRequest boardRequest, @RequestParam(name="files", required=false) List<MultipartFile> files) throws Exception {
+	public String BoardWrite(BoardRequestDto boardRequest, @RequestParam(name="files", required=false) List<MultipartFile> files) throws Exception {
 		boardservice.write(boardRequest,files);
 		return "redirect:/board/list";
 	}
@@ -50,7 +50,7 @@ public class BoardController {
 	// 상세보기
 	@GetMapping("/detail/{id}")
 	public String BoardDetail(@PathVariable("id") Long BoardId, Model model) {
-		BoardDetailResponse board = boardservice.detail(BoardId);
+		BoardDetailResponseDto board = boardservice.detail(BoardId);
 		model.addAttribute("board", board);
 		return "board/board-detail";
 	}
@@ -65,14 +65,14 @@ public class BoardController {
 	// 수정화면
 	@GetMapping("/update/{id}")
 	public String BoardUpdateForm(@PathVariable("id") Long id, Model model) {
-		BoardRequest boardrequest = boardservice.updatedetail(id);
+		BoardRequestDto boardrequest = boardservice.updatedetail(id);
 		model.addAttribute("boardrequest", boardrequest);
 		return "board/board-update";
 	}
 
 	// 수정저장
 	@PostMapping("/update")
-	public String BoardUpdate(BoardRequest request) throws Exception {
+	public String BoardUpdate(BoardRequestDto request) throws Exception {
 		boardservice.update(request);
 		return "redirect:/board/list";
 	}
@@ -81,7 +81,7 @@ public class BoardController {
 	@GetMapping("/search")
 	public String BoardSearch(@RequestParam("keyword") String keyword, @RequestParam("type") String type, Model model) {
 
-		List<BoardListResponse> search;
+		List<BoardListResponseDto> search;
 
 		switch (type) {
 		case "memberId":

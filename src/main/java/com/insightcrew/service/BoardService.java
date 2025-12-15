@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.insightcrew.domain.board.dto.BoardDetailResponse;
-import com.insightcrew.domain.board.dto.BoardListResponse;
-import com.insightcrew.domain.board.dto.BoardRequest;
+import com.insightcrew.domain.board.dto.BoardDetailResponseDto;
+import com.insightcrew.domain.board.dto.BoardListResponseDto;
+import com.insightcrew.domain.board.dto.BoardRequestDto;
 import com.insightcrew.repository.BoardMapper;
 
 @Service
@@ -21,7 +21,7 @@ public class BoardService {
     private FileService fileService;
     
     @Transactional
-    public void write(BoardRequest boardRequest, List<MultipartFile> files) throws Exception {
+    public void write(BoardRequestDto boardRequest, List<MultipartFile> files) throws Exception {
         boardmapper.write(boardRequest); // 게시글 먼저 저장
         Long boardId = boardRequest.getBoardId(); // insert 후 생성된 PK 가져오기
 
@@ -33,10 +33,10 @@ public class BoardService {
     }
  // 파일 없는 경우 오버로딩
     @Transactional
-    public void write(BoardRequest boardRequest) throws Exception {
+    public void write(BoardRequestDto boardRequest) throws Exception {
         write(boardRequest, null);
     }
-    public BoardDetailResponse detail(Long BoardId) {
+    public BoardDetailResponseDto detail(Long BoardId) {
         return boardmapper.detail(BoardId);
     }
 
@@ -45,39 +45,39 @@ public class BoardService {
         boardmapper.delete(BoardId);
     }
 
-    public List<BoardListResponse> findAll() {
-    	 List<BoardListResponse> list = boardmapper.findAll();
+    public List<BoardListResponseDto> findAll() {
+    	 List<BoardListResponseDto> list = boardmapper.findAll();
     	    ViewOrder(list);
     	    return list;
     }
 
-    public BoardRequest updatedetail(Long id) {
+    public BoardRequestDto updatedetail(Long id) {
         return boardmapper.findById(id);
     }
 
-    public void update(BoardRequest request) {
+    public void update(BoardRequestDto request) {
         boardmapper.update(request);
     }
 
-    public List<BoardListResponse> searchTitle(String keyword) {
-        List<BoardListResponse> list = boardmapper.findTitle(keyword);
+    public List<BoardListResponseDto> searchTitle(String keyword) {
+        List<BoardListResponseDto> list = boardmapper.findTitle(keyword);
         ViewOrder(list);
         return list;
     }
 
-    public List<BoardListResponse> searchMember(String keyword) {
-        List<BoardListResponse> list = boardmapper.findMember(keyword);
+    public List<BoardListResponseDto> searchMember(String keyword) {
+        List<BoardListResponseDto> list = boardmapper.findMember(keyword);
         ViewOrder(list);
         return list;
     }
 
-    public List<BoardListResponse> searchContent(String keyword) {
-        List<BoardListResponse> list = boardmapper.findContent(keyword);
+    public List<BoardListResponseDto> searchContent(String keyword) {
+        List<BoardListResponseDto> list = boardmapper.findContent(keyword);
         ViewOrder(list);
         return list;
     }
 
-    private void ViewOrder(List<BoardListResponse> list) {
+    private void ViewOrder(List<BoardListResponseDto> list) {
         for (int i = 0; i < list.size(); i++) {
             list.get(i).setViewOrder(i + 1);
         }

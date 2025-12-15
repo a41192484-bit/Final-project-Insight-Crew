@@ -5,30 +5,30 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.insightcrew.domain.board.dto.BoardDetailResponse;
-import com.insightcrew.domain.board.dto.BoardListResponse;
-import com.insightcrew.domain.board.dto.BoardRequest;
+import com.insightcrew.domain.board.dto.BoardDetailResponseDto;
+import com.insightcrew.domain.board.dto.BoardListResponseDto;
+import com.insightcrew.domain.board.dto.BoardRequestDto;
 
 @Mapper
 public interface BoardMapper {
 
-	int write(BoardRequest boardrequest);
+	int write(BoardRequestDto boardrequest);
 
-	BoardDetailResponse detail(Long BoardId);
+	BoardDetailResponseDto detail(Long BoardId);
 
 	int delete(Long BoardId);
 
-	List<BoardListResponse> findAll();
+	List<BoardListResponseDto> findAll();
 
-	BoardRequest findById(Long id);
+	BoardRequestDto findById(Long id);
 
-	void update(BoardRequest request);
+	void update(BoardRequestDto request);
 
-	List<BoardListResponse> findTitle(@Param("keyword") String keyword);
+	List<BoardListResponseDto> findTitle(@Param("keyword") String keyword);
 
-	List<BoardListResponse> findMember(@Param("keyword") String keyword);
+	List<BoardListResponseDto> findMember(@Param("keyword") String keyword);
 
-	List<BoardListResponse> findContent(@Param("keyword") String keyword);
+	List<BoardListResponseDto> findContent(@Param("keyword") String keyword);
 
-	void saveBoard(BoardRequest request);
+	void saveBoard(BoardRequestDto request);
 }

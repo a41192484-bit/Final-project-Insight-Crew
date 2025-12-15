@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import com.insightcrew.domain.board.dto.FileDto;
 
 @Mapper
-public interface FileMapper {
+public interface BoardFileMapper {
 
 	void insertFile(FileDto filedto); // 파일 정보를 db에 insert
 
