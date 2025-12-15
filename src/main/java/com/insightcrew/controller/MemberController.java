@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.insightcrew.domain.auth.vo.CustomUserDetails;
 import com.insightcrew.domain.member.dto.MemberInfoDto;
+import com.insightcrew.principal.CustomUserDetails;
 import com.insightcrew.service.MemberService;
 
 import lombok.RequiredArgsConstructor;

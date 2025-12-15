@@ -1,4 +1,4 @@
-package com.insightcrew.domain.auth.vo;
+package com.insightcrew.principal;
 
 import java.util.Collection;
 import java.util.List;

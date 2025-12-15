@@ -8,7 +8,7 @@ import com.insightcrew.domain.auth.dto.MemberJoinRequestDto;
 import com.insightcrew.domain.auth.dto.MemberJoinResponseDto;
 import com.insightcrew.domain.member.dto.MemberInfoDto;
 import com.insightcrew.domain.member.vo.MemberVo;
-import com.insightcrew.repository.MemberRepository;
+import com.insightcrew.repository.CommandMapper;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemberService {
 
-	private final MemberRepository memberRepository;
+	private final CommandMapper memberRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final MappingService mappingService;
 	

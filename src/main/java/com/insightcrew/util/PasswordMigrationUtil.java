@@ -1,4 +1,4 @@
-package com.insightcrew.controller;
+package com.insightcrew.util;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.insightcrew.domain.member.vo.MemberVo;
-import com.insightcrew.repository.MemberRepository;
+import com.insightcrew.repository.CommandMapper;
 
 import lombok.RequiredArgsConstructor;
 
@@ -15,9 +15,9 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-public class PasswordEncoderController {
+public class PasswordMigrationUtil {
 
-	private final MemberRepository memberRepository;
+	private final CommandMapper memberRepository;
 	private final PasswordEncoder passwordEncoder;
 	
 	@GetMapping("/convert-password")

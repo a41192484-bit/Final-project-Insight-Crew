@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class MemberRepository {
+public class CommandMapper {
 	
 	private final MemberMapper memberMapper;
 	

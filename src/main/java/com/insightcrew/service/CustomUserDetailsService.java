@@ -5,8 +5,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.insightcrew.domain.auth.vo.CustomUserDetails;
 import com.insightcrew.domain.member.vo.MemberVo;
+import com.insightcrew.principal.CustomUserDetails;
 import com.insightcrew.repository.MemberMapper;
 
 import lombok.RequiredArgsConstructor;
