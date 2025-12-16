@@ -26,4 +26,7 @@ public interface TripRegionMapper {
 
     // 시도 선택 시 해당 시군구 조회
     List<String> findSigunguBySido(@Param("sido") String sido);
+    
+    // 전지역 중기예보
+    List<String> findDistinctMidRegionCodes();
 }

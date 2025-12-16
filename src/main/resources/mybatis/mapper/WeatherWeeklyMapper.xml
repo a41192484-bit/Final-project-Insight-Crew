@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.insightcrew.repository.WeatherWeeklyMapper">
+
+    <!-- 지역별 주간 날씨 조회 -->
+    <select id="findByRegion"
+            parameterType="string"
+            resultType="com.insightcrew.domain.weather.vo.WeatherWeeklyVo">
+
+        SELECT
+            w_weather_id,
+            region_code,
+            forecast_date,
+            temp_high,
+            temp_low,
+            sky_am,
+            sky_pm,
+            rain_am,
+            rain_pm,
+            updated_at
+        FROM weather_weekly_cache
+        WHERE region_code = #{_parameter}
+        ORDER BY forecast_date ASC
+
+    </select>
+
+    <!-- 지역별 기존 캐시 삭제 -->
+    <delete id="deleteByRegion" parameterType="string">
+        DELETE FROM weather_weekly_cache
+        WHERE region_code = #{_parameter}
+    </delete>
+
+    <!-- 주간 날씨 insert -->
+    <insert id="insert"
+            parameterType="com.insightcrew.domain.weather.vo.WeatherWeeklyVo">
+
+        INSERT INTO weather_weekly_cache (
+            region_code,
+            forecast_date,
+            temp_high,
+            temp_low,
+            sky_am,
+            sky_pm,
+            rain_am,
+            rain_pm
+        ) VALUES (
+            #{regionCode},
+            #{forecastDate},
+            #{tempHigh},
+            #{tempLow},
+            #{skyAm},
+            #{skyPm},
+            #{rainAm},
+            #{rainPm}
+        )
+
+    </insert>
+
+</mapper>

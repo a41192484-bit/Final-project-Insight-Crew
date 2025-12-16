@@ -1,5 +1,7 @@
 package com.insightcrew.domain.weather.vo;
 
+import java.time.LocalDateTime;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,12 +9,29 @@ import lombok.Setter;
 @Setter
 public class WeatherTodayVo {
 
-    private Integer regionId;   // ★ PK: region.id
+    private Integer regionId;   // PK (FK → region.id)
 
-    private Double temp;        // 현재 기온
-    private Integer sky;        // 하늘 상태
-    private Integer pty;        // 강수 형태
-    private Double wind;        // 풍속
+    // 오늘
+    private Double temp;
+    private Integer sky;         // ⭐ 수정
+    private Integer pty;
+    private Double wind;
 
-    private String updatedAt;   // DB에서 문자열로 받을 때
+    private LocalDateTime updatedAt;   // ⭐ 수정
+
+    // 단기예보
+    private Integer tomorrowHigh;
+    private Integer tomorrowLow;
+    private String tomorrowSky;
+    private Integer tomorrowRain;
+
+    private Integer day2High;
+    private Integer day2Low;
+    private String day2Sky;
+    private Integer day2Rain;
+
+    private Integer day3High;
+    private Integer day3Low;
+    private String day3Sky;
+    private Integer day3Rain;
 }

@@ -10,181 +10,283 @@
 
     <style>
         /* ================= 공통 ================= */
-        main {
-            background: #f4f6ff;
-            padding-bottom: 60px;
-        }
-
-        /* layout이 이미 960px 잡고 있으므로 여기선 width 금지 */
-        .section {
-            padding: 0 20px;
-        }
+        main { background:#f4f6ff; padding-bottom:60px; }
+		.section {
+		    padding: 0 20px;
+		    margin-bottom: 60px;
+		}
 
         /* ================= HERO ================= */
-        .hero {
-            background: linear-gradient(145deg, #b6c0ff, #e3d7ff);
-            padding: 80px 20px 100px;
-            text-align: center;
-            border-radius: 0 0 40px 40px;
-            margin-bottom: 40px;
-        }
+		.hero {
+			overflow-x: hidden;
+		    position: relative;
+		    text-align: center;
+		    padding: 72px 20px 80px;
 
-        .hero-title {
-            font-size: 30px;
-            font-weight: 800;
-            color: #fff;
-            margin-bottom: 12px;
-        }
+		    background: linear-gradient(
+		        120deg,
+		        #d7dcff 0%,
+		        #c9d0ff 35%,
+		        #eef0ff 55%,
+		        #c9d0ff 75%,
+		        #d7dcff 100%
+		    );
+		    background-size: 300% 300%;
+		    animation: heroShimmer 5s ease-in-out infinite;
+		}
+		
+		@keyframes heroShimmer {
+		    0%   { background-position: 0% 50%; }
+		    50%  { background-position: 100% 50%; }
+		    100% { background-position: 0% 50%; }
+		}
+		
+		.hero::after {
+		    content: "";
+		    position: absolute;
+		    top: 0;
+		    left: -80%;
+		    width: 80%;
+		    height: 100%;
 
-        .hero-sub {
-            font-size: 15px;
-            color: #fff;
-            opacity: .95;
-        }
+		    background: linear-gradient(
+		        120deg,
+		        transparent 0%,
+		        rgba(255,255,255,0.55) 50%,
+		        transparent 100%
+		    );
 
-        /* ================= TOP 5 ================= */
-        .top-title {
-            font-size: 22px;
-            font-weight: 700;
-            color: #4f54a8;
-            margin-bottom: 20px;
-        }
+		    animation: heroLight 6s ease-in-out infinite;
+		    pointer-events: none;
+		}
+		
+		@keyframes heroLight {
+		    0%   { left: -80%; opacity: 0; }
+		    20%  { opacity: 1; }
+		    45%  { left: 120%; opacity: 0; }
+		    100% { left: 120%; opacity: 0; }
+		}
+		
+		.hero-title {
+		    font-size: 30px;
+		    font-weight: 800;
+		    color: #3f45a6;
+		    letter-spacing: -0.3px;
+		}
 
-        .top-cards {
-            display: flex;
-            gap: 16px;
-            overflow-x: auto;
-            padding-bottom: 10px;
-        }
+		.hero-sub {
+		    margin-top: 8px;
+		    font-size: 15px;
+		    color: #555aa8;
+		}
 
-        .top-cards::-webkit-scrollbar {
-            height: 6px;
-        }
+		.sparkle {
+		    display: inline-block;
+		    margin-left: 6px;
+		    animation: sparkle 2s infinite ease-in-out;
+		    transform-origin: center;
+		}
 
-        .top-card {
-            flex: 0 0 200px;
-            background: #fff;
-            border-radius: 16px;
-            padding: 14px;
-            box-shadow: 0 4px 14px rgba(150,150,200,.15);
-            text-decoration: none;
-            color: inherit;
-            position: relative;
-        }
+		@keyframes sparkle {
+		    0%   { transform: scale(1) rotate(0deg); opacity: 0.6; }
+		    50%  { transform: scale(1.25) rotate(10deg); opacity: 1; }
+		    100% { transform: scale(1) rotate(0deg); opacity: 0.6; }
+		}
+		
+		.hero-divider {
+		    width: 60px;
+		    height: 3px;
+		    background: #6F73FF;
+		    margin: 24px auto 0;
+		    border-radius: 999px;
+		}
+		
+		/* ================= RANKING ================= */
 
-        .top-number {
-            position: absolute;
-            top: -10px;
-            left: -10px;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: #6F73FF;
-            color: #fff;
-            font-weight: 700;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+		.ranking-grid {
+		    display: grid;
+		    grid-template-columns: repeat(5, 1fr);
+		    gap: 16px;
+		}
 
-        .top-card img {
-            width: 100%;
-            height: 120px;
-            object-fit: cover;
-            border-radius: 12px;
-            margin-bottom: 10px;
-        }
+		.ranking-card {
+		    background: #fff;
+		    border-radius: 18px;
+		    box-shadow: 0 4px 14px rgba(150,150,200,.15);
+		    overflow: hidden;
+		    text-align: center;
+			transition: transform .25s ease, box-shadow .25s ease;
 
-        .top-name {
-            font-size: 15px;
-            font-weight: 600;
-            color: #4f54a8;
-        }
+		}
+		
+		.ranking-card:hover {
+		    transform: translateY(-6px);
+		    box-shadow: 0 10px 26px rgba(111,115,255,.25);
+		}
 
-        .top-more {
-            text-align: center;
-            margin-top: 25px;
-        }
+		/* 이미지 영역 */
+		.ranking-image {
+		    position: relative;
+		    height: 120px;
+		    overflow: hidden;
+		}
 
-        .top-more a {
-            display: inline-block;
-            padding: 10px 28px;
-            background: #6F73FF;
-            color: #fff;
-            border-radius: 20px;
-            text-decoration: none;
-            font-weight: 600;
+		.ranking-image img {
+		    width: 100%;
+		    height: 100%;
+		    object-fit: cover;
+		}
+		
+		.ranking-link {
+		    text-decoration: none;
+		    color: inherit;
+		}
+
+		/* 🔥 추천 번호 뱃지 */
+		.recommend-badge {
+		    position: absolute;
+		    top: 10px;
+		    left: 10px;
+
+		    width: 26px;
+		    height: 26px;
+		    border-radius: 50%;
+
+		    background: #6F73FF;
+		    color: #fff;
+		    font-size: 13px;
+		    font-weight: 700;
+
+		    display: flex;
+		    align-items: center;
+		    justify-content: center;
+
+		    box-shadow: 0 3px 8px rgba(111,115,255,.35);
+		    z-index: 2;
+		}
+
+		/* 카드 하단 정보 */
+		.ranking-info {
+		    padding: 12px 10px 14px;
+		    min-height: 56px;   /* ⭐ 핵심 */
+		    display: flex;
+		    align-items: center;
+		    justify-content: center;
+		}
+
+		.ranking-title {
+		    font-weight: 700;
+		    font-size: 14px;
+		    color: #333;
+		    line-height: 1.4;
+
+		    display: -webkit-box;
+		    -webkit-line-clamp: 2;   /* 최대 2줄 */
+		    -webkit-box-orient: vertical;
+		    overflow: hidden;
+		}
+
+        /* ================= REGION SEARCH ================= */
+        .region-search {
+            display:flex;
+            gap:10px;
+            margin:10px 0 26px;
+        }
+        .region-search select,
+        .region-search button {
+            padding:10px 12px;
+            border-radius:12px;
+            border:1px solid #ccc;
+            font-size:14px;
+        }
+        .region-search button {
+            background:#6F73FF;
+            color:#fff;
+            font-weight:700;
+            border:none;
+            cursor:pointer;
         }
 
         /* ================= WEATHER ================= */
         .weather-title {
-            font-size: 22px;
-            font-weight: 700;
-            color: #4f54a8;
-            margin: 50px 0 18px;
+            font-size:22px;
+            font-weight:700;
+            color:#4f54a8;
+            margin:10px 0 18px;
         }
-
         .today-weather {
-            background: #fff;
-            border-radius: 20px;
-            padding: 22px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 14px rgba(150,150,200,.15);
-            margin-bottom: 25px;
+            background:linear-gradient(145deg,#eef0ff,#fff);
+            border:2px solid #6F73FF;
+            border-radius:20px;
+            padding:22px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            box-shadow:0 4px 14px rgba(150,150,200,.15);
+            margin-bottom:25px;
         }
+        .today-temp { font-size:32px; font-weight:800; color:#6F73FF; }
 
-        .today-left {
-            display: flex;
-            align-items: center;
-            gap: 16px;
+		.week-weather{
+		    display:grid;
+		    grid-template-columns: repeat(6, 1fr);
+		    gap:12px;
+		}
+		
+		.week-card{
+		    background:#fff;
+		    border-radius:16px;
+		    padding:14px 0;
+		    text-align:center;
+		    box-shadow:0 4px 14px rgba(150,150,200,.15);
+		}
+		
+        .week-card.today {
+            background:linear-gradient(145deg,#eef0ff,#fff);
+            border:2px solid #6F73FF;
         }
+		
+		/* ================= BOARD ================= */
 
-        .today-icon {
-            font-size: 40px;
-        }
+		.board-list {
+		    background: #fff;
+		    border-radius: 18px;
+		    box-shadow: 0 4px 14px rgba(150,150,200,.15);
+		    overflow: hidden;
+		}
 
-        .today-temp {
-            font-size: 32px;
-            font-weight: 800;
-            color: #6F73FF;
-        }
+		.board-item {
+		    display: flex;
+		    align-items: center;
+		    gap: 10px;
 
-        .today-desc {
-            font-size: 14px;
-            color: #666;
-        }
+		    padding: 14px 18px;
+		    border-bottom: 1px solid #eee;
+		    font-size: 14px;
+		}
 
-        .week-weather {
-            display: flex;
-            gap: 12px;
-        }
+		.board-item:last-child {
+		    border-bottom: none;
+		}
 
-        .week-card {
-            flex: 1;
-            background: #fff;
-            border-radius: 16px;
-            padding: 14px 0;
-            text-align: center;
-            box-shadow: 0 4px 14px rgba(150,150,200,.15);
-        }
+		.board-category {
+		    font-size: 12px;
+		    color: #6F73FF;
+		    font-weight: 700;
+		}
 
-        .week-day {
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 6px;
-        }
+		.board-title {
+		    flex: 1;
+		    color: #333;
+		    white-space: nowrap;
+		    overflow: hidden;
+		    text-overflow: ellipsis;
+		}
 
-        .week-icon {
-            font-size: 24px;
-            margin-bottom: 6px;
-        }
-
-        .week-temp {
-            font-size: 13px;
-            color: #555;
-        }
+		.board-date {
+		    font-size: 12px;
+		    color: #999;
+		}
     </style>
 </head>
 
@@ -193,53 +295,197 @@
 
     <!-- HERO -->
     <section class="hero">
-        <div class="hero-title">오늘 떠나기 좋은 여행지 ✨</div>
-        <div class="hero-sub">날씨 기반 전국 여행지 추천 서비스</div>
+		<div class="hero-title">
+		    오늘, 떠나기 좋은 여행지
+		    <span class="sparkle">✨</span>
+		</div>
+		<div class="hero-sub">날씨 기반 전국 여행지 추천 서비스</div>
+		
+		<div class="hero-divider"></div>
     </section>
+	
+	<!-- ================= RANKING ================= -->
+	<section class="section ranking-section">
+	    <div class="weather-title">🔥 오늘의 여행지 추천</div>
 
-    <!-- TOP 5 -->
-    <section class="section">
-        <div class="top-title">오늘의 추천 여행지 TOP 5</div>
+	    <div class="ranking-grid">
+			<th:block th:each="trip, stat : ${rankingList}">
+			    <a th:href="@{/trip/detail/{id}(id=${trip.tripId})}"
+			       class="ranking-link">
 
-        <div class="top-cards">
-            <a class="top-card"
-               th:each="trip, iter : ${topTrips}"
-               th:href="@{/trip/detail/{id}(id=${trip.tripId})}">
-                <div class="top-number" th:text="${iter.index + 1}">1</div>
-                <img th:src="${trip.imageUrl}">
-                <div class="top-name" th:text="${trip.title}">여행지</div>
-            </a>
-        </div>
+			        <div class="ranking-card">
+			            <div class="ranking-image">
+			                <div class="recommend-badge"
+			                     th:text="${stat.index + 1}"></div>
 
-        <div class="top-more">
-            <a href="/trip/list">전체 여행지 보기</a>
-        </div>
-    </section>
+								 <img th:src="${#strings.isEmpty(trip.imageUrl) ? '/img/no-image.png' : trip.imageUrl}"
+								      th:classappend="${#strings.isEmpty(trip.imageUrl)} ? 'no-img' : ''"
+								      onerror="this.onerror=null; this.src='/img/no-image.png'"
+								      alt="여행지 이미지">
+			            </div>
+
+			            <div class="ranking-info">
+			                <div class="ranking-title"
+			                     th:text="${trip.title}">여행지명</div>
+			            </div>
+			        </div>
+
+			    </a>
+			</th:block>
+	    </div>
+	</section>
 
     <!-- WEATHER -->
     <section class="section">
-        <div class="weather-title">오늘 & 주간 날씨 ☀️</div>
+        <div class="weather-title">☀️ 오늘 & 주간 날씨</div>
 
+        <!-- REGION SEARCH -->
+        <div class="region-search">
+            <select id="sidoSelect">
+                <option value="">시/도 선택</option>
+                <option th:each="sido : ${sidoList}"
+                        th:value="${sido}"
+                        th:text="${sido}"
+                        th:selected="${sido == selectedSido}">
+                </option>
+            </select>
+
+            <select id="sigunguSelect">
+                <option value="">시/군/구 선택</option>
+            </select>
+
+            <button type="button" id="searchWeatherBtn">검색</button>
+        </div>
+
+        <!-- TODAY -->
         <div class="today-weather">
-            <div class="today-left">
-                <div class="today-icon">🌤️</div>
-                <div>
-                    <div class="today-temp">23°C</div>
-                    <div class="today-desc">전국 대체로 맑음</div>
-                </div>
+            <div class="today-temp"
+                 th:text="${todayWeather.temp + '°C'}">--°C</div>
+            <div>
+                <span th:switch="${todayWeather.sky}">
+                    <span th:case="'맑음'">☀️</span>
+                    <span th:case="'구름많음'">🌤️</span>
+                    <span th:case="'흐림'">☁️</span>
+                    <span th:case="'눈'">❄️</span>
+                    <span th:case="*">🌧️</span>
+                </span>
+                <span th:text="' 풍속 ' + ${todayWeather.wind} + 'm/s · 강수 ' + ${todayWeather.rain} + '%'"></span>
             </div>
-            <div class="today-desc">풍속 2.1m/s · 강수확률 10%</div>
         </div>
 
-        <div class="week-weather">
-            <div class="week-card"><div class="week-day">월</div><div class="week-icon">☀️</div><div class="week-temp">25° / 15°</div></div>
-            <div class="week-card"><div class="week-day">화</div><div class="week-icon">🌤️</div><div class="week-temp">24° / 14°</div></div>
-            <div class="week-card"><div class="week-day">수</div><div class="week-icon">🌦️</div><div class="week-temp">22° / 16°</div></div>
-            <div class="week-card"><div class="week-day">목</div><div class="week-icon">☁️</div><div class="week-temp">21° / 15°</div></div>
-            <div class="week-card"><div class="week-day">금</div><div class="week-icon">☀️</div><div class="week-temp">26° / 17°</div></div>
-        </div>
+		<!-- WEEKLY -->
+		<!-- SHORT TERM (내일 · 모레) -->
+		<div class="week-weather">
+
+		    <div class="week-card" th:each="w : ${weeklyWeather}">
+
+		        <!-- 요일 -->
+		        <div style="font-weight:700;"
+		             th:text="${#temporals.format(w.date,'E')}"></div>
+
+		        <!-- 아이콘 -->
+		        <div style="font-size:18px;margin:4px 0;">
+		            <span th:switch="${w.sky}">
+		                <span th:case="'맑음'">☀️</span>
+		                <span th:case="'구름많음'">🌤️</span>
+		                <span th:case="'흐림'">☁️</span>
+		                <span th:case="'눈'">❄️</span>
+		                <span th:case="*">🌧️</span>
+		            </span>
+		        </div>
+
+		        <!-- 하늘 상태 -->
+		        <div style="font-size:13px;color:#666;"
+		             th:text="${w.sky}"></div>
+
+		        <!-- 최고 / 최저 -->
+		        <div style="margin-top:6px;font-weight:600;">
+		            <span style="color:#ff5a5a;"
+		                  th:text="${w.tempHigh != null ? w.tempHigh + '°' : '--'}"></span>
+		            /
+		            <span style="color:#4a6cff;"
+		                  th:text="${w.tempLow != null ? w.tempLow + '°' : '--'}"></span>
+		        </div>
+
+		        <!-- 강수 -->
+		        <div style="margin-top:4px;font-size:12px;color:#888;"
+		             th:text="'강수 ' + ${w.rain} + '%'"></div>
+
+		    </div>
+
+		</div>
     </section>
 
+	<!-- ================= BOARD ================= -->
+	<section class="section">
+	    <div class="weather-title">📝 커뮤니티 최신글</div>
+
+	    <div class="board-list">
+	        <th:block th:each="board : ${latestBoards}">
+	            <div class="board-item">
+	                <span class="board-category"
+	                      th:text="${board.category}">공지</span>
+
+	                <span class="board-title"
+	                      th:text="${board.title}">
+	                    게시글 제목
+	                </span>
+
+	                <span class="board-date"
+	                      th:text="${#temporals.format(board.createdAt,'MM.dd')}">
+	                    12.15
+	                </span>
+	            </div>
+	        </th:block>
+	    </div>
+	</section>
+
+<!-- ================= JS ================= -->
+<script>
+document.getElementById("sidoSelect").addEventListener("change", function () {
+    const sido = this.value;
+    const sigunguSelect = document.getElementById("sigunguSelect");
+
+    sigunguSelect.innerHTML = '<option value="">시/군/구 선택</option>';
+    if (!sido) return;
+
+    fetch(`/api/regions/sigungu?sido=${encodeURIComponent(sido)}`)
+        .then(res => res.json())
+        .then(data => {
+            data.forEach(sigungu => {
+                const opt = document.createElement("option");
+                opt.value = sigungu;
+                opt.textContent = sigungu;
+                if (sigungu === "[[${selectedSigungu}]]") {
+                    opt.selected = true;
+                }
+                sigunguSelect.appendChild(opt);
+            });
+        });
+});
+
+// 최초 로딩 시 시군구 자동 세팅 (선택 유지)
+window.addEventListener("DOMContentLoaded", () => {
+    const sido = document.getElementById("sidoSelect").value;
+    if (sido) {
+        document.getElementById("sidoSelect").dispatchEvent(new Event("change"));
+    }
+});
+
+document.getElementById("searchWeatherBtn").addEventListener("click", () => {
+    const sido = document.getElementById("sidoSelect").value;
+    const sigungu = document.getElementById("sigunguSelect").value;
+
+    if (!sido || !sigungu) {
+        alert("지역을 선택해주세요");
+        return;
+    }
+
+    location.href = `/?sido=${encodeURIComponent(sido)}&sigungu=${encodeURIComponent(sigungu)}`;
+});
+</script>
+
 </main>
+
 </body>
 </html>

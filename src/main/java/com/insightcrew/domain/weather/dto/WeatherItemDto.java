@@ -13,6 +13,8 @@ public class WeatherItemDto {
 
     // 단기예보용
     private String fcstValue;
+    private String fcstDate;
+    private String fcstTime;
 
     // 초단기 실황용
     private String obsrValue;

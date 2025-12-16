@@ -176,7 +176,7 @@
     <!-- 4. 관광공사 API 데이터 이어받기 상태 관리 -->
     <!-- ========================================================= -->
 
-    <select id="getImportStatus" resultType="map">
+    <!-- <select id="getImportStatus" resultType="map">
         SELECT *
         FROM trip_import_status
         WHERE id = 1
@@ -188,7 +188,7 @@
             area_code = #{areaCode},
             last_page = #{lastPage}
         WHERE id = 1
-    </update>
+    </update> -->
 
 
     <!-- ========================================================= -->

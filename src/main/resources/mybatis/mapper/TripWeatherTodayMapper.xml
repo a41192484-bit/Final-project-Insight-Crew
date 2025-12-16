@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
@@ -6,28 +6,46 @@
 <mapper namespace="com.insightcrew.repository.TripWeatherTodayMapper">
 
     <!-- UPSERT -->
-    <insert id="upsertTodayWeather">
+    <insert id="upsertTodayWeather"
+            parameterType="com.insightcrew.domain.weather.vo.WeatherTodayVo">
         INSERT INTO weather_today_cache (
-            region_id,
-            temp,
-            sky,
-            pty,
-            wind,
-            updated_at
-        ) VALUES (
-            #{regionId},
-            #{temp},
-            #{sky},
-            #{pty},
-            #{wind},
-            NOW()
-        )
+    		region_id,
+    		temp, sky, pty, wind,
+    		tomorrow_high, tomorrow_low, tomorrow_sky, tomorrow_rain,
+    		day2_high, day2_low, day2_sky, day2_rain,
+    		day3_high, day3_low, day3_sky, day3_rain,
+    		updated_at
+		)
+		VALUES (
+    		#{regionId},
+    		#{temp}, #{sky}, #{pty}, #{wind},
+    		#{tomorrowHigh}, #{tomorrowLow}, #{tomorrowSky}, #{tomorrowRain},
+    		#{day2High}, #{day2Low}, #{day2Sky}, #{day2Rain},
+    		#{day3High}, #{day3Low}, #{day3Sky}, #{day3Rain},
+    		NOW()
+		)
         ON DUPLICATE KEY UPDATE
-            temp = VALUES(temp),
-            sky = VALUES(sky),
-            pty = VALUES(pty),
-            wind = VALUES(wind),
-            updated_at = NOW()
+    		temp = VALUES(temp),
+    		sky = VALUES(sky),
+    		pty = VALUES(pty),
+    		wind = VALUES(wind),
+
+    		tomorrow_high = VALUES(tomorrow_high),
+    		tomorrow_low  = VALUES(tomorrow_low),
+    		tomorrow_sky  = VALUES(tomorrow_sky),
+    		tomorrow_rain = VALUES(tomorrow_rain),
+
+    		day2_high = VALUES(day2_high),
+    		day2_low  = VALUES(day2_low),
+    		day2_sky  = VALUES(day2_sky),
+    		day2_rain = VALUES(day2_rain),
+
+    		day3_high = VALUES(day3_high),
+    		day3_low  = VALUES(day3_low),
+    		day3_sky  = VALUES(day3_sky),
+    		day3_rain = VALUES(day3_rain),
+
+    		updated_at = NOW()
     </insert>
 
     <!-- 단일 조회 -->

@@ -1,242 +1,251 @@
 <!DOCTYPE html>
-<html lang="ko"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{common/layout}">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <head>
     <meta charset="UTF-8">
-    <title>TripInsight - 메인</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title layout:title-pattern="$CONTENT_TITLE - TripInsight">공통 템플릿</title>
 
     <style>
-        /* ================= 공통 ================= */
-        main {
-            background: #f4f6ff;
-            padding-bottom: 60px;
-        }
-
-        .section {
-            padding: 0 20px;
-        }
-
-        /* ================= HERO ================= */
-        .hero {
-            background: linear-gradient(145deg, #b6c0ff, #e3d7ff);
-            padding: 80px 20px 100px;
-            text-align: center;
-            border-radius: 0 0 40px 40px;
-            margin-bottom: 40px;
-        }
-
-        .hero-title {
-            font-size: 30px;
-            font-weight: 800;
-            color: #fff;
-            margin-bottom: 12px;
-        }
-
-        .hero-sub {
-            font-size: 15px;
-            color: #fff;
-            opacity: .95;
-        }
-
-        /* ================= TOP 5 ================= */
-        .top-title {
-            font-size: 22px;
-            font-weight: 700;
-            color: #4f54a8;
-            margin-bottom: 20px;
-        }
-
-        .top-cards {
+        body {
+            margin: 0;
+            width: 100%;
             display: flex;
-            gap: 16px;
-            overflow-x: auto;
-            padding-bottom: 10px;
+            justify-content: center;
         }
 
-        .top-card {
-            flex: 0 0 200px;
-            background: #fff;
-            border-radius: 16px;
-            padding: 14px;
-            box-shadow: 0 4px 14px rgba(150,150,200,.15);
-            text-decoration: none;
-            color: inherit;
-            position: relative;
+        #layout-container {
+            width: 960px;
+            margin: 0 auto;
         }
 
-        .top-number {
-            position: absolute;
-            top: -10px;
-            left: -10px;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: #6F73FF;
-            color: #fff;
-            font-weight: 700;
+        #header {
+            border: 1px solid;
+            border-color: royalblue;
+            margin: 20px auto;
+            width: 960px;
+            display: flex;
+        }
+
+        #logo {
+            /* border: 1px solid; */
+            width: 200px;
+            height: 100px;
+            background-color: #868FEE;
+            /* background-color: #7480FF; */
+
+            /* 가운데 정렬 */
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        .top-card img {
-            width: 100%;
-            height: 120px;
-            object-fit: cover;
-            border-radius: 12px;
-            margin-bottom: 10px;
-        }
+        #menu {
+            /* border: 1px solid; */
+            height: 100px;
+            width: 760px;
 
-        .top-name {
-            font-size: 15px;
-            font-weight: 600;
-            color: #4f54a8;
-        }
-
-        .top-more {
+            /* 가운데 정렬 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
             text-align: center;
-            margin-top: 25px;
         }
 
-        .top-more a,
-        .top-more button {
-            display: inline-block;
-            padding: 10px 28px;
-            background: #6F73FF;
-            color: #fff;
-            border-radius: 20px;
+        #menu ul {
+            /* border: 1px solid; */
+            padding-left: 0;
+            /*기본 들여쓰기 제거*/
+        }
+
+        #menu a {
+            position: relative;
+            color: black;
             text-decoration: none;
-            font-weight: 600;
-            border: none;
             cursor: pointer;
         }
 
-        /* ================= WEATHER ================= */
-        .weather-title {
-            font-size: 22px;
-            font-weight: 700;
-            color: #4f54a8;
-            margin: 50px 0 18px;
+        #menu a::after {
+            content: "⭐";
+            position: absolute;
+            top: -19px;
+            /*글자 바로 위 배치*/
+            left: 50%;
+            /*중앙 배치*/
+            transform: translateX(-50%);
+            /*정확히 중앙에 맞추기*/
+            opacity: 0;
+            transition: 0.2s ease;
+            font-size: 14px;
         }
 
-        .today-weather {
-            background: #fff;
-            border-radius: 20px;
-            padding: 22px;
+        #menu a:hover {
+            /* color: #5C63FF; */
+            color: mediumspringgreen;
+        }
+
+        #menu a:hover::after {
+            opacity: 1;
+        }
+
+        #menu1 {
+            /* border: 1px solid; */
+            height: 100px;
+            width: 570px;
+
+            /* 가운데 정렬 */
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            box-shadow: 0 4px 14px rgba(150,150,200,.15);
-            margin-bottom: 25px;
-        }
-
-        .today-left {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .today-temp {
-            font-size: 32px;
-            font-weight: 800;
-            color: #6F73FF;
-        }
-
-        .week-weather {
-            display: flex;
-            gap: 12px;
-        }
-
-        .week-card {
-            flex: 1;
-            background: #fff;
-            border-radius: 16px;
-            padding: 14px 0;
             text-align: center;
-            box-shadow: 0 4px 14px rgba(150,150,200,.15);
+        }
+
+        #menu1 li {
+            list-style: none;
+            /*리스트 불릿 제거*/
+            /* border: 1px solid; */
+            height: 90px;
+
+            margin: 0 30px;
+            width: 190px;
+            font-size: 18px;
+            font-weight: bold;
+
+            /* 가운데 정렬 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        #menu2 {
+            /* border: 1px solid; */
+            height: 100px;
+            width: 190px;
+            background-color: #fffedc;
+
+            /* 가운데 정렬 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        #menu2 li {
+            list-style: none;
+            /*리스트 불릿 제거*/
+            /* border: 1px solid; */
+            height: 90px;
+
+            margin: 0 30px;
+            width: 210px;
+            font-size: 18px;
+            font-weight: bold;
+
+            /* 가운데 정렬 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        #footer {
+            /* border: 1px solid; */
+            border-top: 1px solid;
+            border-color: royalblue;
+
+            margin-top: 20px auto;
+            height: 150px;
+            width: 960px;
+            display: block;
+            background-color: white;
+        }
+
+        #footUp {
+            /* border: 1px solid; */
+            height: 50px;
+            width: 960px;
+            margin: 10px auto;
+            text-align: center;
+            gap: 40px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #footUp a {
+            color: black;
+            text-decoration: none;
+        }
+
+        #footUp a:hover {
+            /* color: rebeccapurple; */
+            color: mediumspringgreen;
+        }
+
+        #footdown {
+            /* border: 1px solid; */
+            height: 50px;
+            width: 960px;
+            margin: 20px auto;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
     </style>
 </head>
 
 <body>
-<main layout:fragment="content">
 
-    <!-- HERO -->
-    <section class="hero">
-        <div class="hero-title">오늘 떠나기 좋은 여행지 ✨</div>
-        <div class="hero-sub">날씨 기반 전국 여행지 추천 서비스</div>
-    </section>
+    <div id="layout-container">
+        <!-- 🔵 공통 Header -->
+        <header>
+            <div id="header">
+                <div id="logo">
+                    <img src="/img/headerLogo.PNG" alt="헤더 로고">
+                </div>
 
-    <!-- TOP 5 -->
-    <section class="section">
-        <div class="top-title">오늘의 추천 여행지 TOP 5</div>
-
-        <!-- 🔥 버튼 -->
-        <div class="top-more">
-            <button id="loadRankingBtn">추천 여행지 보기 ✨</button>
-        </div>
-
-        <!-- 🔥 비어있는 영역 -->
-        <div id="rankingArea" style="display:none; margin-top:20px;">
-            <div class="top-cards" id="rankingList"></div>
-
-            <div class="top-more">
-                <a href="/trip/list">전체 여행지 보기</a>
+                <div id="menu">
+                    <ul id="menu1">
+                        <li><a th:href="@{/}">홈</a></li>
+                        <li><a th:href="@{/trip/list}">여행지</a></li>
+                        <li><a href="@{}">자유게시판</a></li>
+                    </ul>
+                    <ul id="menu2">
+                        <li id="member">
+                            <a id="goLogin" href="@{}">로그인/회원가입</a>
+                            <a id="myPage" href="@{}" style="display:none;">마이페이지</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
-        </div>
-    </section>
+        </header>
 
-    <!-- WEATHER -->
-    <section class="section">
-        <div class="weather-title">오늘 & 주간 날씨 ☀️</div>
 
-        <div class="today-weather">
-            <div class="today-left">
-                <div class="today-temp">23°C</div>
+        <!-- 🟢 여기로 자식 페이지 내용이 들어옴 -->
+        <main layout:fragment="content">
+            <!-- 비워둠 -->
+        </main>
+
+
+        <!-- 🔵 공통 Footer -->
+        <footer>
+            <div id="footer">
+                <div id="footUp">
+                    <a href="@{/inquiry/inquiry-list}">1:1문의</a>
+                    <a href="@{/}">공지사항</a>
+                    <a href="@{/inquiry/inquiry-qna}">Q&A</a>
+                    <a href="@{/}">사이트 소개</a>
+                </div>
+                <div id="footdown">
+                    <img src="/img/footerLogo.PNG" alt="푸터 로고">
+                </div>
             </div>
-            <div>풍속 2.1m/s · 강수확률 10%</div>
-        </div>
+        </footer>
+    </div>
 
-        <div class="week-weather">
-            <div class="week-card">월 ☀️ 25° / 15°</div>
-            <div class="week-card">화 🌤️ 24° / 14°</div>
-            <div class="week-card">수 🌦️ 22° / 16°</div>
-            <div class="week-card">목 ☁️ 21° / 15°</div>
-            <div class="week-card">금 ☀️ 26° / 17°</div>
-        </div>
-    </section>
-
-    <script>
-        document.getElementById("loadRankingBtn").addEventListener("click", function () {
-
-            fetch("/api/ranking/top5")
-                .then(res => res.json())
-                .then(list => {
-
-                    const box = document.getElementById("rankingList");
-                    const area = document.getElementById("rankingArea");
-
-                    box.innerHTML = "";
-
-                    list.forEach((t, idx) => {
-                        box.innerHTML += `
-                            <a class="top-card" href="/trip/detail/${t.tripId}">
-                                <div class="top-number">${idx + 1}</div>
-                                <img src="${t.imageUrl || '/img/no-image.png'}">
-                                <div class="top-name">${t.title}</div>
-                            </a>
-                        `;
-                    });
-
-                    area.style.display = "block";
-                    this.style.display = "none";
-                });
-        });
-    </script>
-
-</main>
 </body>
+
 </html>

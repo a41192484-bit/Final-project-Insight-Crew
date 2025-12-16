@@ -10,4 +10,5 @@ public class RegionVo {
     private String sigungu;
     private Integer nx;
     private Integer ny;
+    private String midRegionCode;
 }

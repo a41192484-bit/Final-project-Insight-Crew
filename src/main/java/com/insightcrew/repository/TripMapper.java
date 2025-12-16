@@ -44,12 +44,12 @@ public interface TripMapper {
     void updateRegionId(@Param("tripId") Long tripId, @Param("regionId") Integer regionId);
 
     // 여행지 전체 import 이어받기 관리
-    Object getImportStatus();
-    void updateImportStatus(
-            @Param("contentTypeId") String contentTypeId,
-            @Param("areaCode") String areaCode,
-            @Param("lastPage") Integer lastPage
-    );
+//    Object getImportStatus();
+//    void updateImportStatus(
+//            @Param("contentTypeId") String contentTypeId,
+//            @Param("areaCode") String areaCode,
+//            @Param("lastPage") Integer lastPage
+//    );
     
     void updateRegionInfo(
     	    @Param("tripId") Long tripId,
