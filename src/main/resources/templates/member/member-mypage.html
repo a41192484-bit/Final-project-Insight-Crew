@@ -1,243 +1,227 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    layout:decorate="~{common/layout}">
+	layout:decorate="~{common/layout}">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>마이페이지</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>마이페이지</title>
 
-    <style>
-        #body {
-            /* border: 1px solid; */
-            /* 가운데 정렬 */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+	<style>
+		#body {
+			/* border: 1px solid; */
+			/* 가운데 정렬 */
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
 
-        #mypageMenu {
-            border: 1px solid;
-            height: auto;
-            border-color: royalblue;
-            border-radius: 10px;
-            background-color: white;
-        }
+		#mypageMenu {
+			border: 1px solid;
+			height: auto;
+			border-color: royalblue;
+			border-radius: 10px;
+			background-color: white;
+		}
 
-        #catego {
-            /* border: 1px solid; */
-            height: 500px;
-            /* height: auto; */
-            /* 항목이 많아지면 위에 height는 지우고 이 auto를 주석 해제하기 */
-            width: 480px;
+		#catego {
+			/* border: 1px solid; */
+			height: 500px;
+			/* height: auto; */
+			/* 항목이 많아지면 위에 height는 지우고 이 auto를 주석 해제하기 */
+			width: 480px;
 
-            display: flex;
-            /*위에서 아래로 세로 배치.*/
-            flex-direction: column;
-            /*가로 가운데 정렬*/
-            align-items: center;
-            text-align: center;
-            /* justify-content: center; */
-        }
+			display: flex;
+			/*위에서 아래로 세로 배치.*/
+			flex-direction: column;
+			/*가로 가운데 정렬*/
+			align-items: center;
+			text-align: center;
+			/* justify-content: center; */
+		}
 
-        #catego ul {
-            /* border: 1px solid; */
-            /*기본 들여쓰기 제거*/
-            padding-left: 0;
-            /*리스트 불릿 제거*/
-            list-style: none;
+		#catego ul {
+			/* border: 1px solid; */
+			/*기본 들여쓰기 제거*/
+			padding-left: 0;
+			/*리스트 불릿 제거*/
+			list-style: none;
 
-            font-size: 30px;
-            font-weight: 500;
-        }
+			font-size: 30px;
+			font-weight: 500;
+		}
 
-        #catego li {
-            padding: 10px 0;
-        }
+		#catego li {
+			padding: 10px 0;
+		}
 
-        #catego a {
-            /* border: 1px solid; */
-            color: royalblue;
-            position: relative;
-            cursor: pointer;
-            text-decoration: none;
-        }
+		#catego a {
+			/* border: 1px solid; */
+			color: royalblue;
+			position: relative;
+			cursor: pointer;
+			text-decoration: none;
+		}
 
-        #catego a::after {
-            content: "⭐";
-            position: absolute;
+		#catego a::after {
+			content: "⭐";
+			position: absolute;
 
-            left: -40px;
-            /*글자 왼쪽에 배치*/
-            top: 50%;
-            /*중앙 배치*/
-            transform: translateY(-50%);
-            /*정확히 중앙에 맞추기*/
-            opacity: 0;
-            transition: opacity 0.3s, right 0.3s;
-            font-size: 20px;
-        }
+			left: -40px;
+			/*글자 왼쪽에 배치*/
+			top: 50%;
+			/*중앙 배치*/
+			transform: translateY(-50%);
+			/*정확히 중앙에 맞추기*/
+			opacity: 0;
+			transition: opacity 0.3s, right 0.3s;
+			font-size: 20px;
+		}
 
-        #catego a:hover {
-            color: aqua;
-        }
+		#catego a:hover {
+			color: aqua;
+		}
 
-        #catego a:hover::after {
-            opacity: 1;
-            color: aqua;
-        }
+		#catego a:hover::after {
+			opacity: 1;
+			color: aqua;
+		}
 
-        #memberOut {
-            /* border: 1px solid; */
-            font-size: 30px;
-            font-weight: 500;
+		#memberOut {
+			/* border: 1px solid; */
+			font-size: 30px;
+			font-weight: 500;
 
-            /* 가운데 정렬 */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 10px 0;
-        }
+			/* 가운데 정렬 */
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			padding: 10px 0;
+		}
 
-        #memberOut a {
-            text-decoration: none;
-            color: rgb(167, 167, 167);
-            position: relative;
-            cursor: pointer;
-        }
+		.memberOutBtn {
+			all: unset;
+			/* 버튼 기본 스타일 제거 */
+			text-decoration: none;
+			color: rgb(167, 167, 167);
+			position: relative;
+			cursor: pointer;
 
-        #memberOut a::after {
-            content: "⭐";
-            position: absolute;
-            left: -40px;
-            /*글자 왼쪽에 배치*/
-            top: 50%;
-            /*중앙 배치*/
-            transform: translateY(-50%);
-            /*정확히 중앙에 맞추기*/
-            opacity: 0;
-            transition: opacity 0.3s, right 0.3s;
-            font-size: 20px;
-        }
+			font-size: 30px;
+			font-weight: 500;
+		}
 
-        #memberOut a:hover {
-            color: crimson;
-        }
+		.memberOutBtn::after {
+			content: "⭐";
+			position: absolute;
+			left: -40px;
+			/*글자 왼쪽에 배치*/
+			top: 50%;
+			/*중앙 배치*/
+			transform: translateY(-50%);
+			/*정확히 중앙에 맞추기*/
+			opacity: 0;
+			transition: opacity 0.3s, right 0.3s;
+			font-size: 20px;
+		}
 
-        #memberOut a:hover::after {
-            opacity: 1;
-            /* left: -30px; */
-        }
+		.memberOutBtn:hover {
+			color: crimson;
+		}
 
-        #logout {
-            /* border: 1px solid; */
-            border-top: royalblue 1px solid;
-            height: 100px;
-            width: 480px;
+		.memberOutBtn:hover::after {
+			opacity: 1;
+			/* left: -30px; */
+		}
 
-            font-size: 30px;
-            font-weight: 500;
+		#logout {
+			/* border: 1px solid; */
+			border-top: royalblue 1px solid;
+			height: 100px;
+			width: 480px;
 
-            /* 가운데 정렬 */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+			font-size: 30px;
+			font-weight: 500;
 
-        #logout a {
-            color: rgb(92, 92, 92);
-            text-decoration: none;
-            position: relative;
-            cursor: pointer;
-        }
+			/* 가운데 정렬 */
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
 
-        #logout a::after {
-            content: "⭐";
-            position: absolute;
-            left: -40px;
-            /*글자 왼쪽에 배치*/
-            top: 50%;
-            /*중앙 배치*/
-            transform: translateY(-50%);
-            /*정확히 중앙에 맞추기*/
-            opacity: 0;
-            transition: opacity 0.3s, right 0.3s;
-            font-size: 20px;
-        }
+		.logout-btn {
+			all: unset;
+			color: rgb(92, 92, 92);
+			font-size: 30px;
+			font-weight: 500;
+			position: relative;
+			cursor: pointer;
+		}
 
-        #logout a:hover {
-            color: blue;
-        }
+		.logout-btn::after {
+			content: "⭐";
+			position: absolute;
+			left: -40px;
+			/*글자 왼쪽에 배치*/
+			top: 50%;
+			/*중앙 배치*/
+			transform: translateY(-50%);
+			/*정확히 중앙에 맞추기*/
+			opacity: 0;
+			transition: opacity 0.3s, right 0.3s;
+			font-size: 20px;
+		}
 
-        #logout a:hover::after {
-            opacity: 1;
-            /* left: -30px; */
-        }
-    </style>
+		.logout-btn:hover {
+			color: blue;
+		}
+
+		.logout-btn:hover::after {
+			opacity: 1;
+			/* left: -30px; */
+		}
+	</style>
 </head>
 
+
+
 <body>
-    <div layout:fragment="content">
-        <div id="body">
-            <div id="mypageMenu">
-                <div id="catego">
-                    <ul>
-                        <li id="memberInfo">
-                            <a href="./member-info.html">정보 관리</a>
-                        </li>
-                    </ul>
-                </div>
-                <div id="memberOut">
-                    <a href="메인페이지로 가는 링크">회원탈퇴</a>
-                </div>
-                <div id="logout">
-                    <a href="메인페이지로 가는 링크">로그아웃</a>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div layout:fragment="content">
+
+		<div id="body">
+			<div id="mypageMenu">
+				<div id="catego">
+					<ul>
+						<li id="memberInfo">
+							<a th:href="@{/member/info}">정보 관리</a>
+						</li>
+					</ul>
+				</div>
+
+				<div id="memberOut">
+					<form th:action="@{/member/inactive}" method="post">
+						<button	type="submit" class="memberOutBtn">회원탈퇴</button>
+					</form>
+				</div>
+
+				<div id="logout">
+					<form th:action="@{/auth/logout}" method="post">
+						<button type="submit" class="logout-btn">로그아웃</button>
+					</form>
+				</div>
+
+			</div>
+		</div>
+	</div>
 
 
 
-    <script src="menu.js"></script>
-    <script>
-
-        //로그아웃
-        const logoutBtn = document.querySelector("#logout a");
-
-        logoutBtn.addEventListener("click", (event) => {
-            //preventDefault()브라우저의 기본 동작을 막는 메서드.
-            //페이지 이동하지 말고 내가 작성한 코드를 실행해라.
-            event.preventDefault();
-
-            //로그인상태 초기화
-            user.isLogin = false;
-
-            //메뉴 업데이트
-            updateMenu();
-            alert("로그아웃 되었습니다!");
-        });
 
 
-        //회원탈퇴
-        const memberOutBtn = document.querySelector("#memberOut a");
+	<script>
 
-        memberOutBtn.addEventListener("click", (event) => {
-            //페이지 이동 ㄴㄴ, 내가 작성한 코드 실행ㄱㄱ
-            event.preventDefault();
 
-            //해당 계정의 데이터베이스를 비활성화 하기
-            //지금 로그인한 아이디와 데이터베이스 비교 -> 동일하면 진행
-            if (user.isLogin == true || user.id == data.login_id) {
-                if (confirm("정말 회원탈퇴 하시겠습니까?")) {
-
-                    alert("회원탈퇴 완료. 메인화면으로 돌아갑니다.");
-                } else {
-                    alert("마이페이지로 돌아갑니다.");
-                }
-            }
-        })
-    </script>
+	</script>
 </body>
 
 </html>

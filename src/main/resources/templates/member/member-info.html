@@ -132,8 +132,10 @@
 
         <div id="body">
             <div id="back">
-                <a href="./member-mypage.html">◀ 뒤로가기</a>
+                <a th:href="@{/mypage/view}">◀ 뒤로가기</a>
             </div>
+			
+			
             <div id="joinInfo">
                 <div id="title">
                     <span>◈ 정보 조회 ◈</span>
@@ -142,113 +144,82 @@
                     <ul>
                         <li>
                             <span class="label">아이디 :</span>
-                            <span id="displayId">Loading...</span>
+                            <span id="displayUserid" th:text="${loginuser.userid}">Loading...</span>
                         </li>
+						<li>
+							<span class="label">비밀번호 :</span>
+							<span id="displayPassword">*******</span>
+							
+							<form id="editPasswordForm" action="/member/update/password" method="post" style="display:none;">
+								<input type="text" name="password" placeholder="새 비밀번호 입력">
+								<button type="submit">저장</button>
+								<button type="button" onclick="cancelEdit('password')">취소</button>
+							</form>
+							
+							<button id="editPasswordBtn" type="button" onclick="editField('Password')">변경</button>
+						</li>
                         <li>
-                            <span class="label">비밀번호 :</span>
-                            <span id="displayPW">Loading...</span>
-                            <button class="editBtn" data-target="PW">수정</button>
+							<!-- 조회모드 -->
+							<span class="label">이름 :</span>
+							<span id="displayName" th:text="${loginuser.name}">Loading...</span>
+							<!-- 수정모드 -->
+							<form id="editNameForm" action="/member/update/name" method="post" style="display:none;">	
+								<input type="text" name="name" th:value="${loginuser.name}">
+								<button type="submit">저장</button>
+								<button type="button" onclick="cancelEdit('name')">취소</button>
+							</form>
+							
+							<!-- 수정버튼 -->
+							<button id="editNameBtn" type="button" onclick="editField('Name')">수정</button>
                         </li>
-                        <li>
-                            <span class="label">이름 :</span>
-                            <span id="displayUsername">Loading...</span>
-                            <button class="editBtn" data-target="Username">수정</button>
-                        </li>
+						
                         <li>
                             <span class="label">닉네임 :</span>
-                            <span id="displayNickname">Loading...</span>
-                            <button class="editBtn" data-target="Nickname">수정</button>
+                            <span id="displayNickname" th:text="${loginuser.nickname}">Loading...</span>
+							
+							<form id="editNicknameForm" action="/member/update/nickname" method="post" style="display:none;">
+								<input type="text" name="nickname" th:value="${loginuser.nickname}">
+								<button type="submit">저장</button>
+								<button type="button" onclick="cancelEdit('nickname')">취소</button>
+                            </form>
+							
+							<button id="editNicknameBtn" type="button" onclick="editField('Nickname')">수정</button>
                         </li>
+						
                     </ul>
                 </div>
             </div>
+
+			
         </div>
-    </div>
+    
 
+	
+	
+	<!-- 서버 dto를 js에서 사용할 수 있도록 제이슨(js객체)으로 변환 -->
+	<script th:inline="javascript">
+	    let userData = /*[[${memberInfoDto}]]*/{};
+	</script>
+	
+	
+	
+	<script>
+		
+		//조회모드 -> 수정모드 전환
+		function editField(field) {
+			document.getElementById('display' + field).style.display = "none";
+			document.getElementById('edit' + field + "Form").style.display = "inline";
+			document.getElementById('edit' + field + "Btn").style.display = "none";
+		}
 
-
-    <script src="menu.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-
-            //html에서 찾아서 js 변수에 가져온다
-            const displayId = document.getElementById("displayId");
-            const displayPW = document.getElementById("displayPW");
-            const displayUsername = document.getElementById("displayUsername");
-            const displayNickname = document.getElementById("displayNickname");
-
-            //각각의 textContent에 데이터를 넣어서 초기화면 셋팅
-            displayId.textContent = user.id;
-            displayPW.textContent = "*".repeat(user.password.length);
-            displayUsername.textContent = user.name;
-            displayNickname.textContent = user.nickName;
-
-            //수정버튼 누를 때
-            document.querySelectorAll("editBtn").forEach(btn => {
-                btn.addEventListener("click", function () {
-                    //수정버튼이 있는 것: PW, Username, Nickname
-                    const modTarget = btn.dataset.target;
-
-                    let spanId; //span 변수
-                    let original;  //원래 화면에 있던 텍스트 변수
-
-                    //조건: 버튼명이 수정 이라면?
-                    if (btn.textContent === "수정") {
-                        //span 아이디명 찾기
-                        spanId = document.getElementById('display${modTarget}');
-                        //초기값
-                        if (modTarget === "PW") {
-                            original = userData.password
-                        } else {
-                            original = spanId.textContent
-                        };
-
-                        //input 생성
-                        const input = document.createElement("input");
-                        //조건 ? "참":"거짓"
-                        input.type = modTarget === "PW" ? "password" : "text";
-                        //유저가 수정할 값
-                        input.value = original;
-
-                        //span->input으로 교체
-                        spanElement.replaceWith(input);
-
-                        //버튼 텍스트를 '확인'으로 변경
-                        btn.textContent = "저장";
-                    } else if (btn.textContent === "저장") {
-                        //버튼의 부모속성에서 input요소 첫번째 한 개를 찾기
-                        const input = btn.parentElement.querySelector("input");
-                        const newValue = input.value;
-
-                        //userData에 저장
-                        if (modTarget === "PW") {
-                            userData.password = newValue;
-                        } else if (modTarget === "USername") {
-                            userData.name = newValue;
-                        } else if (modTarget === "Nickname") {
-                            userData.nickname = newValue;
-                        }
-
-                        //span 복원
-                        const newSpan = document.createElement("span");
-                        newSpan.id = 'display${modTarget}'
-
-                        if (modTarget === "PW") {
-                            newSpan.textContent = "*".replace(newValue.length);
-                        } else {
-                            newSpan.textContent = newValue;
-                        }
-
-                        input.replaceWith(newSpan);
-
-                        //버튼 원래대로
-                        btn.textContent = "수정";
-                    }
-                });
-            });
-        });
-    </script>
-
+		//수정모드 -> 조회모드 전환
+		function cancelEdit(field) {
+			document.getElementById('display' + field).style.display = "inline";
+			document.getElementById('edit' + field + "Form").style.display = "none";
+			document.getElementById('edit' + field + "Btn").style.display = "inline";
+		}
+		
+	</script>
+	
 </body>
-
 </html>
