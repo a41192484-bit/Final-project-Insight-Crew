@@ -6,5 +6,5 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @MapperScan(basePackages = "com.insightcrew.repository")
 public class MyBatisConfig {
- 
+
 }
