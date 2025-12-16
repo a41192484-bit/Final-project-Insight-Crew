@@ -1,0 +1,73 @@
+package com.insightcrew.controller;
+
+import java.util.Map;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.insightcrew.domain.auth.dto.MemberJoinRequestDto;
+import com.insightcrew.domain.auth.dto.MemberJoinResponseDto;
+import com.insightcrew.service.MemberService;
+
+import lombok.RequiredArgsConstructor;
+
+@Controller
+@RequiredArgsConstructor
+@RequestMapping("/join")
+public class JoinController {
+	
+	private final MemberService memberService;
+
+	//회원가입 화면
+	@GetMapping("/view")
+	public String joinPage() {
+		System.out.println("회원가입 페이지 입니당");
+		return "auth/auth-join";
+	}
+	
+	//가입하기
+	@PostMapping("/process")
+	public String join(MemberJoinRequestDto requestdto, Model model) {
+		System.out.println("회원가입페이지-항목 작성 후 시작하기 누름!");
+		
+		MemberJoinResponseDto res = memberService.join(requestdto);
+		model.addAttribute("message", res.getMessage());
+		
+		if(res.isSuccess()) {
+			System.out.println("회원가입 성공");
+			return "redirect:/member/member-mypage";
+		}else {
+			model.addAttribute("error", "회원가입 실패");
+			return "auth/auth-join";
+		}
+		
+		//바로 auth-login을 리턴하면 여전히 post 상태이기 때문에 브라우저 새로고침 시 post 재전송 경고 발생.
+		//새로고침 안전하게 하기 위해서 redirect 사용.
+	}
+	
+	//아이디 중복체크
+	@GetMapping("/check-id")
+	@ResponseBody  //리턴값을 json으로 변환해서 브라우저에 보내라 -> 이런 이유로 Map<String, Boolean> 사용
+	public Map<String, Boolean> checkId(@RequestParam String userid){
+		boolean exists = memberService.existsByUserid(userid);
+		System.out.println("아이디 중복 체크 버튼 눌렀음");
+		//Map.of는 브라우저에게 줄 json 데이터를 만드는 역할
+		//json: {"exists",true} 아니면 {"exists",false}
+		return Map.of("exists",exists);
+	}
+	
+	//닉네임 중복체크
+	@GetMapping("/check-nick")
+	@ResponseBody
+	public Map<String, Boolean> checkNickname(@RequestParam String nickname){
+		boolean exists = memberService.existsByNickname(nickname);
+		System.out.println("닉네임 중복 체크 눌렀음");
+		return Map.of("exists",exists);
+	}
+	
+}

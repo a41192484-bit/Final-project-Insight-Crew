@@ -8,189 +8,6 @@
     <title>회원가입</title>
 
     <style>
-        body {
-            /* border: 1px solid; */
-            margin: 10px auto;
-            width: 960px;
-            height: auto;
-        }
-
-        #header {
-            border: 1px solid;
-            border-color: royalblue;
-            margin: 20px auto;
-            width: 960px;
-            display: flex;
-        }
-
-        #logo {
-            /* border: 1px solid; */
-            width: 200px;
-            height: 100px;
-            background-color: #868FEE;
-            /* background-color: #7480FF; */
-
-            /* 가운데 정렬 */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #menu {
-            /* border: 1px solid; */
-            height: 100px;
-            width: 760px;
-
-            /* 가운데 정렬 */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-
-        #menu ul {
-            /* border: 1px solid; */
-            /*기본 들여쓰기 제거*/
-            padding-left: 0;
-        }
-
-        #menu a {
-            position: relative;
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        #menu a::after {
-            content: "⭐";
-            position: absolute;
-            top: -19px;
-            /*글자 바로 위 배치*/
-            left: 50%;
-            /*중앙 배치*/
-            transform: translateX(-50%);
-            /*정확히 중앙에 맞추기*/
-            opacity: 0;
-            transition: 0.2s ease;
-            font-size: 14px;
-        }
-
-        #menu a:hover {
-            /* color: #5C63FF; */
-            color: mediumspringgreen;
-        }
-
-        #menu a:hover::after {
-            opacity: 1;
-        }
-
-        #menu1 {
-            /* border: 1px solid; */
-            height: 100px;
-            width: 570px;
-
-            /* 가운데 정렬 */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-
-        #menu1 li {
-            list-style: none;
-            /*리스트 불릿 제거*/
-            /* border: 1px solid; */
-            height: 90px;
-
-            margin: 0 30px;
-            width: 190px;
-            font-size: 18px;
-            font-weight: bold;
-
-            /* 가운데 정렬 */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-
-        #menu2 {
-            /* border: 1px solid; */
-            height: 100px;
-            width: 190px;
-            background-color: #fffedc;
-
-            /* 가운데 정렬 */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-
-        #menu2 li {
-            list-style: none;
-            /*리스트 불릿 제거*/
-            /* border: 1px solid; */
-            height: 90px;
-
-            margin: 0 30px;
-            width: 210px;
-            font-size: 18px;
-            font-weight: bold;
-
-            /* 가운데 정렬 */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-
-        #footer {
-            /* border: 1px solid; */
-            border-top: 1px solid;
-            border-color: royalblue;
-
-            margin-top: 20px;
-            height: 150px;
-            width: 960px;
-            display: block;
-            background-color: white;
-        }
-
-        #footUp {
-            /* border: 1px solid; */
-            height: 50px;
-            width: 960px;
-            margin: 10px auto;
-            text-align: center;
-            gap: 40px;
-
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #footUp a {
-            color: black;
-            text-decoration: none;
-        }
-
-        #footUp a:hover {
-            /* color: rebeccapurple; */
-            color: mediumspringgreen;
-        }
-
-        #footdown {
-            /* border: 1px solid; */
-            height: 50px;
-            width: 960px;
-            margin: 20px auto;
-
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
         #body {
             /* border: 1px solid; */
             height: 700px;
@@ -330,137 +147,112 @@
     </style>
 </head>
 
-<body>
-    <div layout:fragment="content">
 
+
+<body>
+	
+    <div layout:fragment="content">
+		<form th:action="@{/join/process}" method="post" id="joinform">
         <div id="body">
+			
             <div id="joinBox">
                 <div id="joinTitle">
                     <span>◈ 회원가입 ◈</span>
                 </div>
+				
                 <div id="joinList">
                     <div id="inputInfo">
                         <ul>
                             <li>
-                                <label for="id">아이디 :</label>
-                                <input type="text" id="id" placeholder="이메일 형식으로 입력">
-                                <button onclick="checkIdBtn()">중복확인</button>
+                                <label for="userid">아이디 :</label>
+                                <input type="text" id="userid" name="userid" placeholder="이메일 형식으로 입력">
+                                <button type="button" id="checkIdBtn">중복확인</button>
                             </li>
                             <li>
                                 <label for="password">비밀번호 :</label>
-                                <input type="text" id="password" placeholder="비밀번호 입력">
+                                <input type="password" id="password" name="password" placeholder="비밀번호 입력">
                             </li>
                             <li>
                                 <label for="passCheck">비밀번호 확인 :</label>
-                                <input type="text" id="passCheck" placeholder="비밀번호 확인">
+                                <input type="password" id="passCheck" placeholder="비밀번호 확인">
                             </li>
                             <li>
-                                <label for="username">이름 :</label>
-                                <input type="text" id="username" placeholder="이름 입력">
+                                <label for="name">이름 :</label>
+                                <input type="text" id="name" name="name" placeholder="이름 입력">
                             </li>
                             <li>
-                                <label for="nickName">닉네임 :</label>
-                                <input type="text" id="nickName" placeholder="닉네임 입력">
-                                <button onclick="checkNickBtn()">중복확인</button>
+                                <label for="nickname">닉네임 :</label>
+                                <input type="text" id="nickname" name="nickname" placeholder="닉네임 입력">
+                                <button type="button" id="checkNickBtn">중복확인</button>
                             </li>
                         </ul>
                     </div>
                 </div>
                 <div id="joinBtn">
-                    <button onclick="">시작하기</button>
+                    <button type="submit">시작하기</button>
                 </div>
             </div>
+			
         </div>
-
+	
+	</form>
     </div>
+	
+	
 
 
 
-
-    <script src="menu.js"></script>
     <script>
-        //중복확인
-        function checkIdBtn() {
-            const userId = document.getElementById("id").value;
+		
+		(function(){
+			const checkIdBtn = document.getElementById("checkIdBtn");
+			const checkNickBtn = document.getElementById("checkNickBtn");
+			
+			// id 중복 확인
+			if (checkIdBtn) {
+				checkIdBtn.addEventListener("click", function () {
+					const userId = document.getElementById("userid").value.trim();
+					if (!userId) {
+						alert("아이디를 입력해주세요.");
+						return;
+					}
 
-            if (!userId) {
-                alert("아이디를 입력하세요.")
-                return;
-            }
-            //encodeURIComponent: 특수문자, 공백 등을 깨지지 않게 안전한 형태로 바꾸는 역할 
-            fetch(`스프링툴 path넣기 ? userId=${encodeURIComponent(userId)}`)
-                .then(res => res.json())
-                .then(data => {
-                    if (data.exists) {
-                        alert("이미 사용 중인 아이디입니다.");
-                    } else {
-                        alert("사용 가능한 아이디입니다.");
-                    }
-                })
-                .catch(err => console.error(err));
-        }
+					fetch(`/join/check-id?userid=${encodeURIComponent(userId)}`)
+						.then(res => res.json())
+						.then(data => {
+							if (data.exists) {
+								alert("이미 사용 중인 아이디입니다.");
+							} else {
+								alert("사용 가능한 아이디입니다.");
+							}
+						});
+				});
+			}
 
-        function checkNickBtn() {
-            const nickName = document.getElementById("nickName").value;
+			
+			// 닉네임 중복 확인
+			if (checkNickBtn) {
+				checkNickBtn.addEventListener("click", function () {
+					const nickName = document.getElementById("nickname").value.trim();
+					if (!nickName) {
+						alert("닉네임을 입력해주세요.");
+						return;
+					}
 
-            // if (!nickName) {
-            //     alert("닉네임을 입력하세요.");
-            //     return;
-            // }
+					fetch(`/join/check-nick?nickname=${encodeURIComponent(nickName)}`)
+						.then(res => res.json())
+						.then(data => {
+							if (data.exists) {
+								alert("이미 사용 중인 닉네임입니다.");
+							} else {
+								alert("사용 가능한 닉네임입니다.");
+							}
+						});
+				});
+			}
+		})();
+		
 
-            fetch(`스프링툴 path넣기 ? nickName=${encodeURIComponent(nickName)}`)
-                .then(res => res.json())
-                .then(data => {
-                    if (data.exists) {
-                        alert("이미 사용 중인 닉네임입니다.");
-                    } else {
-                        alert("사용 가능한 닉네임입니다.");
-                    }
-                })
-                .catch(err => console.error(err));
-        }
-
-        //회원가입 정보 전송
-        function saveJoin() {
-            const userId = document.getElementById("id").value;
-            const password = document.getElementById("password").value;
-            const passCheck = document.getElementById("passCheck").value;
-            const name = document.getElementById("username").value;
-            const nickName = document.getElementById("nickName").value;
-
-            if (!password || !name) {
-                alert("입력하지 않은 항목이 있습니다.");
-                return;
-            }
-
-            if (!passCheck) {
-                alert("비밀번호 확인을 하지 않았습니다.")
-                return;
-            } else if (password !== passCheck) {
-                alert("비밀번호가 일치하지 않습니다.")
-                return;
-            }
-
-            const infoList = { userId, password, name, nickName };
-
-            fetch('스프링툴 path', {
-                method: 'POST', //데이터를 서버에 저장하거나 처리함
-                headers: {  //제이슨 형태로 데이터를 보냄
-                    'content-type': 'application/json'
-                },
-                body: JSON.stringify(infoList) //문자열 형태, 서버로 보내는 데이터(내용)
-            })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.success) {
-                        alert("회원가입 완료!");
-                        window.location.href = "/member-login.html"; //로그인페이지로 이동
-                    } else {
-                        alert("회원가입 실패");
-                    }
-                })
-                .catch(err => console.error(err));
-        }
     </script>
 
 </body>

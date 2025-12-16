@@ -122,79 +122,70 @@
 </head>
 
 <body>
-    <div layout:fragment="content">
 
-        <div id="body">
-            <div id="loginBox">
-                <div>
-                    <h2>◈ 로그인 ◈</h2>
-                </div>
-                <div id="boxIN2">
+	<div layout:fragment="content">	
+	
+		
+            <div id="body">
+				
+                <div id="loginBox">
                     <div>
-                        <span>아이디</span>
-                        <input type="text" id="userId" placeholder="이메일 형식 아이디 입력">
-                        <span>비밀번호</span>
-                        <input type="password" id="userPass" placeholder="비밀번호 입력">
+                        <h2>◈ 로그인 ◈</h2>
                     </div>
-                    <div>
-                        <button onclick="login()">로그인</button>
+
+					<form id="loginForm" th:action="@{/auth/login-process}" method="post">
+                    <div id="boxIN2">
+                        <div>
+                            <span>아이디</span>
+                            <input type="text" id="userId" name="userid" placeholder="이메일 형식 아이디 입력">
+                            <span>비밀번호</span>
+                            <input type="password" id="userPass" name="password" placeholder="비밀번호 입력">
+                        </div>
+						
+                        <div>
+                            <button type="submit">로그인</button>
+                        </div>
+                    </div>
+				</form>
+
+                    <div id="boxIN3">
+                        <span>계정이 없으신가요?</span>
+                        <a href="/join/view">회원가입 ▶</a>
                     </div>
                 </div>
-                <div id="boxIN3">
-                    <span>계정이 없으신가요?</span>
-                    <a href="./member-join.html">'회원가입' ▶</a>
-                </div>
+				
             </div>
-        </div>
-
-    </div>
-    
-
-    <script src="menu.js"></script>
+	
+	
+	</div>
+	
+	
     <script>
-        function login() {
-            //입력값
-            const userId = document.getElementById("userId").value;
-            const userPass = document.getElementById("userPass").value;
+		
+		(function(){
+			if (window.hasInitLoginJS) return;
+			window.hasInitLoginJS = true;
+			
+			const loginForm = document.getElementById("loginForm");
+			if (!loginForm) return;
+			
+			loginForm.addEventListener("submit", function (event) {
+				const userId = document.getElementById("userId").value;
+				const userPass = document.getElementById("userPass").value;
 
-            if (!userId || !userPass) {
-                alert("아이디와 비밀번호를 모두 입력하세요.");
-                return;
-            } else {
-                alert("로그인합니다.");
-            }
+				if (!userId || !userPass) {
+					alert("아이디와 비밀번호를 모두 입력하세요.");
+					event.preventDefault();
+				}
+			});
+		})();
+		
+		console.log("여기는 로그인 에치티엠알 제이에스");
 
-            fetch("/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ userId, password: userPass })
-            })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.success) {
-                        alert("로그인 성공!");
-                        //로그인 유지
-                        user.isLogin = true;
-
-                        //데이터베이스에서 가져온 정보 프론트에 있는 변수에 저장
-                        user.id = data.login_id;
-                        user.name = data.name;
-                        user.nickName = data.nickname;
-                        //비밀번호는 민감하니 따로 처리
-                        let pass;
-                        pass = data.password
-                        user.password = "*".repeat(pass.length);
-
-                        updateMenu();
-                        window.location.href = "./member-mypage.html";
-                    } else {
-                        alert("로그인 실패");
-                    }
-                })
-                .catch(err => console.error(err));
-        }
+		
+		
     </script>
-
+	<th:block layout:fragment="script"></th:block>
+    
 </body>
-
 </html>

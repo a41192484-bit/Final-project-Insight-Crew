@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.insightcrew.repository.MemberMapper">
+
+	<!-- enum 매핑 포함. db테이블 값. -->
+	<resultMap id="memberResultMap" type="com.insightcrew.domain.member.vo.MemberVo">
+		<id property="pkId" column="member_id"/>
+		<result property="userid" column="login_id"/>
+		<result property="password" column="password"/>
+		<result property="name" column="name"/>
+		<result property="nickname" column="nickname"/>
+		<result property="role" column="role"/>
+		<result property="status" column="status"/>
+		<result property="indate" column="in_date"/>
+		<result property="outdate" column="out_date"/>
+	</resultMap>
+	
+	<!-- 아이디 찾는 쿼리문 -->
+	<select id="findByUserid" parameterType="string" resultMap="memberResultMap">
+		SELECT *
+		FROM member
+		WHERE login_id=#{userid}
+		AND status = 'ACTIVE';
+	</select>
+	
+	
+	<!-- 모두 -->
+	<select id="findAll" resultMap="memberResultMap">
+		SELECT * 
+		FROM member
+	</select>
+	
+	
+	<!-- 닉네임 찾는 쿼리문 -->
+	<select id="findByNickname" parameterType="string" resultMap="memberResultMap">
+		SELECT *
+		FROM member
+		WHERE nickname=#{nickname}
+		AND status = 'ACTIVE';
+	</select>
+	
+	
+	<!-- 회원가입:가입정보 넣기-->
+	<insert id="insertMember">
+		INSERT INTO member (login_id, password, name, nickname, role, status, in_date)
+		VALUES (#{userid},#{password},#{name},#{nickname},#{role},#{status},NOW())
+	</insert>
+	
+	
+	
+	
+
+	<!-- 비번 수정 -->
+	<update id="updatePassword">
+		update member
+		set password = #{password}
+		where login_id = #{userid}
+	</update>
+    
+    <!-- 이름 수정 -->
+    <update id="updateName">
+        UPDATE member
+        SET name = #{name}
+        WHERE login_id = #{userid}
+    </update>
+	
+	<!-- 닉네임 수정 -->
+    <update id="updateNickname">
+        UPDATE member
+        SET nickname = #{nickname}
+        WHERE login_id = #{userid}
+    </update>
+	
+	
+	
+	<!-- 탈퇴 -->
+	<update id="updateStatus">
+	    UPDATE member
+	    SET status = 'INACTIVE',
+	    	out_date = now()
+	    WHERE login_id = #{userid}
+	</update>
+	
+</mapper>
