@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.insightcrew.repository.BoardMapper">
+    <insert id="write" parameterType="com.insightcrew.domain.board.dto.BoardRequestDto"
+    useGeneratedKeys="true" keyProperty="boardId">
+        INSERT INTO board (member_id, trip_id, category, title, content)
+        VALUES ( #{memberId}, #{tripId},#{category},#{title},#{content})
+    </insert>
+     <select id="detail" resultMap="BoardDetailMap">
+    SELECT 
+        b.board_id,
+        b.member_id,
+        b.trip_id,
+        b.category,
+        b.title,
+        b.content,
+        b.created_at,
+        f.id AS file_id,
+        f.original_name AS file_original_name,
+        f.saved_name AS file_saved_name
+    FROM board b
+    LEFT JOIN board_file f ON b.board_id = f.board_id
+    WHERE b.board_id = #{boardId}
+</select>
+
+<resultMap id="BoardDetailMap" type="com.insightcrew.domain.board.dto.BoardDetailResponseDto">
+    <result property="memberId" column="member_id"/>
+    <result property="tripId" column="trip_id"/>
+    <result property="category" column="category"/>
+    <result property="title" column="title"/>
+    <result property="content" column="content"/>
+    <result property="createdAt" column="created_at"/>
+
+    <!-- 파일 목록 매핑 -->
+    <collection property="files" ofType="com.insightcrew.domain.board.dto.BoardFileResponseDto">
+        <id property="id" column="file_id"/>
+        <result property="originalName" column="file_original_name"/>
+        <result property="savedName" column="file_saved_name"/>
+        <result property="boardId" column="board_id"/>
+    </collection>
+</resultMap>
+
+    <delete id="delete" parameterType="long">
+		DELETE FROM board WHERE board_id = #{boardId}
+	</delete>
+	<select id="findAll" resultType="com.insightcrew.domain.board.dto.BoardListResponseDto">
+	    SELECT
+	        board_id AS boardId,
+	        member_id AS memberId,
+	        title,
+	        created_at AS createdAt
+	    FROM board
+	    ORDER BY board_id DESC
+	</select>
+	<select id="findById" parameterType="long"
+		resultType="com.insightcrew.domain.board.dto.BoardRequestDto">
+		    SELECT
+		        board_id AS boardId,
+		        member_id AS memberId,
+		        trip_id AS tripId,
+		        category,
+		        title,
+		        content
+		    FROM board
+		    WHERE board_id = #{id}
+	</select>
+	<update id="update" parameterType="com.insightcrew.domain.board.dto.BoardRequestDto">
+	    UPDATE board
+	    SET
+	        title = #{title},
+	        content = #{content},
+	        member_id = #{memberId},
+	        trip_id = #{tripId},
+	        category = #{category}
+	    WHERE board_id = #{boardId}
+	</update>
+<select id="findTitle" resultType="com.insightcrew.domain.board.dto.BoardListResponseDto">
+	    SELECT
+	        board_id AS boardId,
+	        member_id AS memberId,
+	        title,
+	        created_at AS createdAt
+	    FROM board
+	    WHERE title LIKE CONCAT('%', #{keyword}, '%')
+	    ORDER BY board_id DESC
+	</select>
+	<select id="findMember" resultType="com.insightcrew.domain.board.dto.BoardListResponseDto">
+    SELECT
+        board_id AS boardId,
+        member_id AS memberId,
+        title,
+        created_at AS createdAt
+    FROM board
+    WHERE member_id LIKE CONCAT('%', #{keyword}, '%')
+    ORDER BY board_id DESC
+</select>
+
+<select id="findContent" resultType="com.insightcrew.domain.board.dto.BoardListResponseDto">
+    SELECT
+        board_id AS boardId,
+        member_id AS memberId,
+        title,
+        created_at AS createdAt
+    FROM board
+    WHERE content LIKE CONCAT('%', #{keyword}, '%')
+    ORDER BY board_id DESC
+</select>
+
+</mapper>

@@ -82,18 +82,20 @@
 
 <body>
     <div layout:fragment="content">
-        <h1>글 등록</h1>
+        <h1>글 수정</h1>
         <hr>
-        <form action="/board/write" method="post" enctype="multipart/form-data" onsubmit="return confirmWrite()" >
+        <form action="/board/update" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="boardId" th:value="${boardrequest.boardId}">
+
             <div class="input-row">
                 <div>
                     <label>작성자</label>
-                    <input type="number" id="writer" name="memberId">
+                    <input type="number" th:value="${boardrequest.memberId}" id="writer" name="memberId">
                 </div>
 
                 <div>
                     <label>여행지ID</label>
-                    <input type="number" id="locationId" name="tripId">
+                    <input type="number" th:value="${boardrequest.tripId}" id="locationId" name="tripId">
                 </div>
             </div>
 
@@ -101,67 +103,37 @@
                 <div>
                     <label>카테고리</label>
                     <select id="select" name="category">
-                        <option value="INFO">정보</option>
-                        <option value="REVIEW">후기</option>
-                        <option value="FREE">자유</option>
-                        <option value="ETC">기타</option>
+                        <option value="INFO" th:selected="${boardrequest.category == 'INFO'}">정보</option>
+                        <option value="REVIEW" th:selected="${boardrequest.category == 'REVIEW'}">후기</option>
+                        <option value="FREE" th:selected="${boardrequest.category == 'FREE'}">자유</option>
+                        <option value="ETC" th:selected="${boardrequest.category == 'ETC'}">기타</option>
                     </select>
                 </div>
 
                 <div style="flex: 1;">
                     <label>제목</label>
-                    <input type="text" name="title" id="textt" placeholder="제목 입력">
+                    <input type="text" th:value="${boardrequest.title}" name="title" id="textt" placeholder="제목 입력">
                 </div>
             </div>
 
             <div style="margin-top: 20px;">
-                <textarea id="textc" name="content" placeholder="내용을 남겨주세요"></textarea>
+                <textarea id="textc" name="content" th:text="${boardrequest.content}" placeholder="내용을 남겨주세요"></textarea>
             </div>
+
             <div class="file-box">
                 <div class="file-title">첨부 파일</div>
-                <input type="file" accept=".hwp, .hwpx, application/msword" name="files" multiple />
+                <input type="file" accept=".hwp, .hwpx, application/msword">
+                <input type="file" accept=".hwp, .hwpx, application/msword">
             </div>
+
             <div style="margin-top: 20px;">
                 <input type="checkbox"> 회원만 보기
             </div>
-
             <div style="margin-top: 25px;">
                 <button type="submit" class="action-btn">저장하기</button>
-				<button type="button" class="action-btn" onclick="history.back()">이전으로</button>
             </div>
-			<br>
         </form>
     </div>
 </body>
 
 </html>
-<script>
-    function confirmWrite() {
-        const writer = document.getElementById("writer").value.trim();
-        const locationId = document.getElementById("locationId").value.trim();
-        const title = document.getElementById("textt").value.trim();
-        const content = document.getElementById("textc").value.trim();
-
-        if (!writer) {
-            alert("작성자를 입력해주세요.");
-            return false;
-        }
-
-        if (!locationId) {
-            alert("여행지ID를 입력해주세요.");
-            return false;
-        }
-
-        if (!title) {
-            alert("제목을 입력해주세요.");
-            return false;
-        }
-
-        if (!content) {
-            alert("내용을 입력해주세요.");
-            return false;
-        }
-
-        return confirm("글을 작성하시겠습니까?");
-    }
-</script>
