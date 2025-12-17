@@ -48,7 +48,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/view","/auth/login-proces", "/auth/**","/join/**", "/css/**", "/js/**", "/img/**").permitAll()
                         .requestMatchers("/member/**").hasRole("USER") // USER 권한 필요
                         .requestMatchers("/mypage/**").hasRole("USER")
-                        .requestMatchers("/java").hasRole("ADMIN") // ADMIN 권한 필요
+                        .requestMatchers("/admin", "/admin/**").hasRole("ADMIN") // ADMIN 권한 필요
                         .anyRequest().authenticated() // 그 외 모든 요청 인증 필요
         )
         .formLogin(login -> login
@@ -56,7 +56,18 @@ public class SecurityConfig {
                         .loginProcessingUrl("/auth/login-process") // POST 로그인 처리 URL. 시큐리티가 실제 인증 처리하는url
                         .usernameParameter("userid")  //인풋 값 이름 여기다가 지정
                         .passwordParameter("password") //인풋값 이름 여기다 지정
-                        .defaultSuccessUrl("/mypage/view", true) // 로그인 성공 시 이동
+                        // .defaultSuccessUrl("/mypage/view", true) // 로그인 성공 시 이동 -> 관리자 권한을 위해 수정
+                        .successHandler((request, response, authentication) -> {
+
+                            boolean isAdmin = authentication.getAuthorities().stream()
+                                    .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+
+                            if (isAdmin) {
+                                response.sendRedirect("/admin");
+                            } else {
+                                response.sendRedirect("/mypage/view");
+                            }
+                        })
                         .failureUrl("/auth/view?error=true") // 로그인 실패 시 이동
                         ) //로그인 실패 후 다시 로그인 페이지로 접근할 수 있도록 하는 것.
         								//이래야 로그인 실패 메시지도 확인 가능.
