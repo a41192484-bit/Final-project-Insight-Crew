@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.insightcrew.domain.member.vo.MemberVo;
-import com.insightcrew.repository.CommandMapper;
+import com.insightcrew.repository.MemberMapper;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,14 +17,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PasswordMigrationUtil {
 
-	private final CommandMapper memberRepository;
+	private final MemberMapper memberMapper;
 	private final PasswordEncoder passwordEncoder;
 	
 	@GetMapping("/convert-password")
 	public String convertPassword() {
 		
 		//모든 회원 조회
-		List<MemberVo> memberList = memberRepository.findAll();
+		List<MemberVo> memberList = memberMapper.findAll();
 		
 		for(MemberVo membervo : memberList) {
 			String oldPW = membervo.getPassword();
@@ -34,7 +34,7 @@ public class PasswordMigrationUtil {
 				
 				//일반 텍트스 비번을 BCrypt로 암호화
 				String encoded = passwordEncoder.encode(oldPW);
-				memberRepository.updatePassword(membervo.getUserid(), encoded);
+				memberMapper.updatePassword(membervo.getUserid(), encoded);
 				System.out.println(membervo.getUserid()+"비밀번호 변환 완료");
 			}else {
 				System.out.println("이미 암호화 됨: "+membervo.getUserid());

@@ -40,7 +40,7 @@ public class JoinController {
 		
 		if(res.isSuccess()) {
 			System.out.println("회원가입 성공");
-			return "redirect:/member/member-mypage";
+			return "redirect:/auth/view";
 		}else {
 			model.addAttribute("error", "회원가입 실패");
 			return "auth/auth-join";
