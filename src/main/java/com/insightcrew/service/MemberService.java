@@ -8,7 +8,7 @@ import com.insightcrew.domain.auth.dto.MemberJoinRequestDto;
 import com.insightcrew.domain.auth.dto.MemberJoinResponseDto;
 import com.insightcrew.domain.member.dto.MemberInfoDto;
 import com.insightcrew.domain.member.vo.MemberVo;
-import com.insightcrew.repository.CommandMapper;
+import com.insightcrew.repository.MemberMapper;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,25 +16,25 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemberService {
 
-	private final CommandMapper memberRepository;
+	private final MemberMapper memberMapper;
 	private final PasswordEncoder passwordEncoder;
 	private final MappingService mappingService;
 	
 	
 	//회원 조회
 	public MemberInfoDto findUser(String userid) {
-		MemberVo vo = memberRepository.findByUserid(userid);
+		MemberVo vo = memberMapper.findByUserid(userid);
 		return mappingService.toDto(vo);
 	}
 	public void updateName(String userid, String name) {
-		memberRepository.updateName(userid, name);
+		memberMapper.updateName(userid, name);
 	}
 	public void updateNickname(String userid, String nickname) {
-		memberRepository.updateNickname(userid, nickname);
+		memberMapper.updateNickname(userid, nickname);
 	}
 	public void updatePassword(String userid, String password) {
 		String encod = passwordEncoder.encode(password);
-		memberRepository.updatePassword(userid, encod);
+		memberMapper.updatePassword(userid, encod);
 	}
 	
 	
@@ -73,7 +73,7 @@ public class MemberService {
 		MemberVo vo = mappingService.toMemberVo(requestdto, encodedPassword);
 		
 		//회원정보 저장
-		memberRepository.insertMember(vo);
+		memberMapper.insertMember(vo);
 		
 		return new MemberJoinResponseDto(true, "회원가입 성공");
 	}
@@ -82,13 +82,13 @@ public class MemberService {
 	public boolean existsByUserid(String userid) {
 		//db에서 id를 조회했는데 null이 아니면 존재=중복임.
 		//true 중복, false 중복아님
-		return memberRepository.findByUserid(userid) != null;
+		return memberMapper.findByUserid(userid) != null;
 	}
 	
 	//닉네임 중복체크
 	public boolean existsByNickname(String nickname) {
 		//트루=중복 , false=중복아님
-        return memberRepository.findByNickname(nickname) != null;
+        return memberMapper.findByNickname(nickname) != null;
     }
 
 
@@ -101,17 +101,17 @@ public class MemberService {
 	public void updateOneField(String userid, String field, String value) {
 		switch(field) {
 		case "name":
-			memberRepository.updateName(userid, value);
+			memberMapper.updateName(userid, value);
 			break;
 		case "nickname":
 			if(existsByNickname(value)) {
 				throw new IllegalArgumentException("이미 존재하는 닉네임입니다.");
 			}
-			memberRepository.updateNickname(userid, value);
+			memberMapper.updateNickname(userid, value);
 			break;
 		case "password":
 			String encoded = passwordEncoder.encode(value);
-			memberRepository.updatePassword(userid, encoded);
+			memberMapper.updatePassword(userid, encoded);
 			break;
 			
 		default:
@@ -135,7 +135,7 @@ public class MemberService {
 	@Transactional
 	public void inactive(String userid) {
 		
-		int result = memberRepository.updateStatus(userid);
+		int result = memberMapper.updateStatus(userid);
 		
 		//result값: 1=정상적 탈퇴 처리, 0=해당 유저 아이디 없거나 이미 inactive 상태
 		if(result != 1) {

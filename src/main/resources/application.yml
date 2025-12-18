@@ -1,0 +1,33 @@
+# Conversion to YAML from Properties formar report
+# Warnings:
+# - The yaml file had comments which are lost in the refactoring!
+spring:
+  application:
+    name: TripInsight
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://192.168.1.16:3306/team?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+    username: team
+    password: 1234
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: false
+mybatis:
+  mapper-locations: classpath:mybatis/mapper/**/*.xml
+  type-aliases-package: com.insightcrew.domain
+  configuration:
+    map-underscore-to-camel-case: true
+logging:
+  level:
+    org:
+      mybatis: DEBUG
+      springframework:
+        jdbc:
+          core: DEBUG
+    jdbc:
+      sqlonly: DEBUG
+      resultsettable: DEBUG
+weather:
+  api:
+    key: 78b9c2a83c39592f5ff7d8d2894fb9dcda394689982f0a4434c07b3c13af9f1c
