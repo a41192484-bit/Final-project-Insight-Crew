@@ -99,4 +99,5 @@ public class BoardController {
 		model.addAttribute("keyword", keyword);
 		return "board/board-list";
 	}
+	
 }

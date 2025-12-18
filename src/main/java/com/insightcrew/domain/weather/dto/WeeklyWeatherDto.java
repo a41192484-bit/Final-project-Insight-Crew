@@ -1,6 +1,7 @@
 package com.insightcrew.domain.weather.dto;
 
 import java.time.LocalDate;
+
 import lombok.Data;
 
 @Data
@@ -8,9 +9,20 @@ public class WeeklyWeatherDto {
 
     private LocalDate date;
 
-    private String sky;          // 대표 하늘상태 (pm 우선)
-    private Integer tempHigh;
-    private Integer tempLow;
+    private int minTemp;
+    private int maxTemp;
 
-    private Integer rain;        // 대표 강수확률 (max)
+    private int rainPercent;
+    private int windSpeed;
+    private int cloudPercent;
+
+    private String weatherText;
+    private String iconCode;
+
+    /** 화면용 아이콘 URL */
+    public String getIconUrl() {
+        return "https://openweathermap.org/img/wn/"
+             + iconCode
+             + "@2x.png";
+    }
 }

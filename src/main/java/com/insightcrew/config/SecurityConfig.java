@@ -45,7 +45,7 @@ public class SecurityConfig {
         //페이지별 사이트url별로 접근 권한 설정
         .authorizeHttpRequests(auth -> auth
         				//어떤 url이 대상인지. permitAll()은 누구나 접근 허용
-                        .requestMatchers("/auth/view","/auth/login-proces", "/auth/**","/join/**", "/css/**", "/js/**", "/img/**").permitAll()
+                        .requestMatchers("/auth/view","/auth/login-proces", "/auth/**","/join/**", "/css/**", "/js/**", "/img/**", "/board/**").permitAll()
                         .requestMatchers("/member/**").hasRole("USER") // USER 권한 필요
                         .requestMatchers("/mypage/**").hasRole("USER")
                         .requestMatchers("/admin", "/admin/**").hasRole("ADMIN") // ADMIN 권한 필요

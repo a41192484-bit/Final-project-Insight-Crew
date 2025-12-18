@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.insightcrew.repository.WeatherForecastMapper">
+
+    <!-- 24시간 캐시 존재 여부 -->
+    <select id="existsRecentCache" resultType="boolean">
+        SELECT CASE WHEN COUNT(*) > 0 THEN TRUE ELSE FALSE END
+        FROM weather_forecast_cache
+        WHERE region_id = #{regionId}
+          AND updated_at >= #{threshold}
+    </select>
+
+    <!-- 오늘 날씨 (가장 가까운 1건) -->
+    <select id="findTodayByRegion"
+            resultType="com.insightcrew.domain.weather.vo.WeatherForecastVo">
+        SELECT
+            region_id      AS regionId,
+            weather_date   AS weatherDate,
+            min_temp       AS minTemp,
+            max_temp       AS maxTemp,
+            rain_percent   AS rainPercent,
+            wind_speed     AS windSpeed,
+            cloud_percent  AS cloudPercent,
+            weather_text   AS weatherText,
+            icon_code      AS iconCode,
+            updated_at     AS updatedAt
+        FROM weather_forecast_cache
+        WHERE region_id = #{regionId}
+          AND weather_date = CURDATE()
+        LIMIT 1
+    </select>
+
+    <!-- 주간 날씨 (오늘 포함 7일) -->
+    <select id="findWeeklyByRegion"
+            resultType="com.insightcrew.domain.weather.vo.WeatherForecastVo">
+        SELECT
+            region_id      AS regionId,
+            weather_date   AS weatherDate,
+            min_temp       AS minTemp,
+            max_temp       AS maxTemp,
+            rain_percent   AS rainPercent,
+            wind_speed     AS windSpeed,
+            cloud_percent  AS cloudPercent,
+            weather_text   AS weatherText,
+            icon_code      AS iconCode,
+            updated_at     AS updatedAt
+        FROM weather_forecast_cache
+        WHERE region_id = #{regionId}
+          AND weather_date >= CURDATE()
+        ORDER BY weather_date ASC
+        LIMIT 7
+    </select>
+
+    <!-- UPSERT -->
+    <insert id="upsertForecast">
+        INSERT INTO weather_forecast_cache (
+            region_id,
+            weather_date,
+            min_temp,
+            max_temp,
+            rain_percent,
+            wind_speed,
+            cloud_percent,
+            weather_text,
+            icon_code,
+            updated_at
+        )
+        VALUES (
+            #{regionId},
+            #{weatherDate},
+            #{minTemp},
+            #{maxTemp},
+            #{rainPercent},
+            #{windSpeed},
+            #{cloudPercent},
+            #{weatherText},
+            #{iconCode},
+            NOW()
+        )
+        ON DUPLICATE KEY UPDATE
+            min_temp      = VALUES(min_temp),
+            max_temp      = VALUES(max_temp),
+            rain_percent  = VALUES(rain_percent),
+            wind_speed    = VALUES(wind_speed),
+            cloud_percent = VALUES(cloud_percent),
+            weather_text  = VALUES(weather_text),
+            icon_code     = VALUES(icon_code),
+            updated_at    = NOW()
+    </insert>
+
+    <!-- 지역별 캐시 삭제 -->
+    <delete id="deleteByRegion">
+        DELETE FROM weather_forecast_cache
+        WHERE region_id = #{regionId}
+    </delete>
+    
+    <!-- 관리자 대시보드용 -->
+    <select id="countToday" resultType="int">
+    	SELECT COUNT(*)
+    	FROM weather_forecast_cache
+    	WHERE DATE(updated_at) = CURDATE()
+	</select>
+
+</mapper>
