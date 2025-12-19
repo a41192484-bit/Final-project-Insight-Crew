@@ -31,4 +31,10 @@ public interface BoardMapper {
 	List<BoardListResponseDto> findContent(@Param("keyword") String keyword);
 
 	void saveBoard(BoardRequestDto request);
+	
+	// 메인화면 최신글 조회 기능 (추가)
+	List<BoardListResponseDto> findLatest(int limit);
+	
+	// 관리자 페이지 대시보드 전체 게시글 수 (추가)
+	int countAll();
 }

@@ -15,7 +15,7 @@ public class TripRankingDto {
     private Double temperature;  // 기온
     private String weather;      // 날씨 텍스트
     
-    private String region;       // ★ 지역 필터링용
+    private String region;       // 지역 필터링용
     private String reason;       // 추천 이유
     
 }

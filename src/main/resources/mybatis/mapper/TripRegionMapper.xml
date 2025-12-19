@@ -12,8 +12,8 @@
             id,
             sido,
             sigungu,
-            nx,
-            ny,
+            lat,
+            lon,
             mid_region_code
         FROM region
         WHERE sido = #{sido}
@@ -28,8 +28,8 @@
             id,
             sido,
             sigungu,
-            nx,
-            ny,
+            lat,
+            lon,
             mid_region_code
         FROM region
         WHERE id = #{id}
@@ -54,15 +54,15 @@
         ORDER BY sigungu ASC
     </select>
 
-    <!-- 전체 지역 조회 (단기예보/랭킹 배치용) -->
+    <!-- 전체 지역 조회 (단기예보 / 주간날씨 / 랭킹 배치용) -->
     <select id="findAll"
             resultType="com.insightcrew.domain.trip.vo.RegionVo">
         SELECT 
             id,
             sido,
             sigungu,
-            nx,
-            ny,
+            lat,
+            lon,
             mid_region_code
         FROM region
         ORDER BY id ASC
@@ -89,7 +89,8 @@
             content_id AS contentId,
             category,
             full_address AS fullAddress,
-            lat, lon
+            lat,
+            lon
         FROM trip
         WHERE region_id = #{regionId}
     </select>

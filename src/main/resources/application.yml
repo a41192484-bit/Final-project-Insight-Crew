@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: TripInsight
+
+openweather:
+  key: e8d7d90e9ff48fe3c409b2253d207f30

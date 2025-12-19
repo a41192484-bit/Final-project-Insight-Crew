@@ -53,6 +53,13 @@
         LIMIT 5
 
     </select>
+    
+    <!-- 관리자 대시보드용 -->
+    <select id="countToday" resultType="int">
+    	SELECT COUNT(*)
+    	FROM ranking_cache
+    	WHERE DATE(created_at) = CURDATE()
+	</select>
 
 </mapper>
 
