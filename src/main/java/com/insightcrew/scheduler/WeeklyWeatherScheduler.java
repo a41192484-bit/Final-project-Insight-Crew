@@ -16,10 +16,10 @@ public class WeeklyWeatherScheduler {
     private final WeatherForecastService weatherForecastService;
 
     /**
-     * 매일 새벽 01:00
+     * 매일 새벽 05:00
      * 전 지역 주간 날씨 갱신
      */
-    @Scheduled(cron = "0 0 1 * * *")
+    @Scheduled(cron = "0 0 5 * * *")
     public void updateWeeklyWeatherAllRegions() {
         regionMapper.findAll().forEach(region -> {
             try {
@@ -35,7 +35,7 @@ public class WeeklyWeatherScheduler {
     }
     
     
-      // 개발용,, but, 호출제한때문에 막아두자
+      // 개발용,, 호출제한 유의
 //    @Scheduled(initialDelay = 10000, fixedDelay = Long.MAX_VALUE)
 //    public void devUpdateAllRegions() {
 //

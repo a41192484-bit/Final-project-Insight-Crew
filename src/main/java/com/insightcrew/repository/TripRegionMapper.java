@@ -20,7 +20,6 @@ public interface TripRegionMapper {
     // 전체 지역 목록 조회 (날씨 업데이트용)
     List<RegionVo> findAll();
 
-
     // 시도 전체 조회 (드롭다운용)
     List<String> findDistinctSido();
 

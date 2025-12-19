@@ -35,12 +35,12 @@ public class MainController {
     ) {
 
         /* =================================================
-         * 0 시/도 목록
+         * 1. 시/도 목록
          * ================================================= */
         model.addAttribute("sidoList", regionMapper.findDistinctSido());
 
         /* =================================================
-         * 1 기본 지역 처리
+         * 2. 기본 지역 처리
          * ================================================= */
         if (sido == null || sido.isBlank()) sido = "서울특별시";
         if (sigungu == null || sigungu.isBlank()) sigungu = "중구";
@@ -49,13 +49,13 @@ public class MainController {
         model.addAttribute("selectedSigungu", sigungu);
 
         /* =================================================
-         * 2 시군구 목록
+         * 3. 시군구 목록
          * ================================================= */
         List<String> sigunguList = regionMapper.findSigunguBySido(sido);
         model.addAttribute("sigunguList", sigunguList);
 
         /* =================================================
-         * 3 지역 정보 조회
+         * 4. 지역 정보 조회
          * ================================================= */
         RegionVo region = regionMapper.findBySidoAndSigungu(sido, sigungu);
         if (region == null) {
@@ -67,20 +67,20 @@ public class MainController {
         double lon = region.getLon();
 
         /* =================================================
-         * 4 오늘의 여행지 TOP5 랭킹
+         * 5. 오늘의 여행지 TOP5 랭킹
          * ================================================= */
         List<TripRankingDto> rankingList = rankingService.getTodayRanking();
         model.addAttribute("rankingList", rankingList);
 
         /* =================================================
-         * 5 주간 날씨 (오늘 포함 7일)
+         * 6. 주간 날씨 (오늘 포함 7일)
          * ================================================= */
         List<WeatherForecastVo> forecastList =
                 weatherForecastService.getForecast(regionId);
         model.addAttribute("forecastList", forecastList);
 
         /* =================================================
-         * 6 오늘 날씨
+         * 7. 오늘 날씨
          * ================================================= */
         WeatherForecastVo todayWeather =
                 weatherForecastService.getToday(regionId);

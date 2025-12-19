@@ -19,7 +19,7 @@ public interface TripMapper {
     int countAll();
     TripDetailResponse findTripDetailById(Long tripId);
 
-    // ⭐ 신규: 지역검색 포함
+    // 신규: 지역검색 포함
     List<TripVo> searchTrips(
             @Param("keyword") String keyword,
             @Param("category") String category,
