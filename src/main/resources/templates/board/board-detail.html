@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"  layout:decorate="~{common/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시판</title>
+
+    <style>
+        .action-btn {
+            padding: 8px 16px;
+            background-color: rgb(148, 157, 255);
+            border: none;
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            font-size: 15px;
+            margin-top: 20px;
+        }
+
+        .action-btn:hover {
+            opacity: 0.9;
+        }
+
+        #form {
+            width: 900px;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .content-box {
+            background: rgba(217, 220, 253, 1);
+            padding: 15px;
+            border-radius: 8px;
+            width: 95%;
+            min-height: 180px;
+            font-size: 15px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        .file-box {
+            width: 95%;
+            padding: 12px 16px;
+            border: 1px solid #d8d8ff;
+            background: #f8f8ff;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="board" layout:fragment="content">
+        <h1>상세보기</h1>
+
+        <hr>
+        <article>
+            <form id="form">
+
+                <div class="row3">
+                    <div>카테고리 : <span th:text="${board.category}"></span></div>
+					<br>
+                    <div>여행지ID : <span th:text="${board.tripId}"></span></div>
+					<br>
+                    <div>작성일 : <span th:text="${board.createdAt}"></span></div>
+					<br>
+                </div>
+                <div class="info-row">
+                    작성자 : <span th:text="${board.memberId}"></span>
+                </div>
+				<br>
+                <div class="info-row">
+                    제목 : <span th:text="${board.title}"></span>
+                </div>
+				<br>
+                <div class="info-row">
+                    <div class="content-box" th:text="${board.content}"></div>
+                </div>
+
+                <hr style="margin: 30px 0 20px;">
+
+                <div style="margin-bottom: 10px;">
+                    첨부파일
+                </div>
+
+                <div class="file-box">
+					
+                    <div th:if="${!#lists.isEmpty(board.files)}">
+						<div th:each="file : ${board.files}">
+							<a th:href="@{/file/download/{id}(id=${file.id})}"
+							th:text="${file.originalName}"></a>
+						<br>
+						</div>
+					</div>
+					<!--첨부파일 없음-->
+					<div th:if="${#lists.isEmpty(board.files)}">
+						등록된 첨부파일이 없습니다.
+					</div>
+					
+					
+					
+                </div>
+                <button type="button" class="action-btn" onclick="history.back()">이전으로</button>
+
+            </form>
+        </article>
+    </div>
+</body>
+
+</html>

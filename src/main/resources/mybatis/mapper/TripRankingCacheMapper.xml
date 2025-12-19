@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.insightcrew.repository.TripRankingCacheMapper">
+
+    <!-- 기존 캐시 전체 삭제 -->
+    <delete id="deleteAll">
+        DELETE FROM ranking_cache
+    </delete>
+
+    <!-- 새로운 랭킹 저장 -->
+    <insert id="insertRanking">
+        INSERT INTO ranking_cache (
+            trip_id,
+            title,
+            image_url,
+            ranking,
+            score,
+            temperature,
+            weather,
+            region,
+            reason
+        ) VALUES (
+            #{tripId},
+            #{title},
+            #{imageUrl},
+            #{rankNo},
+            #{score},
+            #{temperature},
+            #{weather},
+            #{region},
+            #{reason}
+        )
+    </insert>
+
+    <!-- TOP 5 조회 -->
+    <select id="findTop5"
+            resultType="com.insightcrew.domain.trip.dto.TripRankingDto">
+
+        SELECT
+            ranking       AS rankNo,
+            trip_id       AS tripId,
+            title         AS title,
+            image_url     AS imageUrl,
+            score         AS score,
+            temperature   AS temperature,
+            weather       AS weather,
+            region        AS region,
+            reason        AS reason
+        FROM ranking_cache
+        ORDER BY ranking ASC
+        LIMIT 5
+
+    </select>
+    
+    <!-- 관리자 대시보드용 -->
+    <select id="countToday" resultType="int">
+    	SELECT COUNT(*)
+    	FROM ranking_cache
+    	WHERE DATE(created_at) = CURDATE()
+	</select>
+
+</mapper>
+

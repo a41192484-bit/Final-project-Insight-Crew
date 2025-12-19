@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{common/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시판</title>
+
+    <style>
+        #select {
+            width: 100px;
+            height: 40px;
+        }
+
+        #textc {
+            width: 960px;
+            height: 200px;
+        }
+
+        #textt {
+            width: 100%;
+            height: 40px;
+        }
+
+        .input-row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .input-row div {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-row input {
+            width: 200px;
+            height: 40px;
+            padding-left: 10px;
+        }
+
+        .file-box {
+            margin-top: 25px;
+            padding: 20px;
+            width: 520px;
+            background-color: #fdfdff;
+            border-radius: 12px;
+            border: 1px solid #e1e1f9;
+            box-shadow: 0px 2px 6px rgba(180, 180, 255, 0.25);
+        }
+
+        .file-title {
+            font-size: 17px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            color: #4a4a9f;
+        }
+
+        .file-box input {
+            display: block;
+            margin: 10px 0;
+        }
+
+        .action-btn {
+            padding: 10px 20px;
+            background-color: rgb(148, 157, 255);
+            border: none;
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .action-btn:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+
+<body>
+    <div layout:fragment="content">
+        <h1>글 등록</h1>
+        <hr>
+        <form action="/board/write" method="post" enctype="multipart/form-data" onsubmit="return confirmWrite()" >
+            <div class="input-row">
+                <div>
+                    <label>작성자</label>
+                    <input type="number" id="writer" name="memberId">
+                </div>
+
+                <div>
+                    <label>여행지ID</label>
+                    <input type="number" id="locationId" name="tripId">
+                </div>
+            </div>
+
+            <div class="input-row" style="margin-top: 30px;">
+                <div>
+                    <label>카테고리</label>
+                    <select id="select" name="category">
+                        <option value="INFO">정보</option>
+                        <option value="REVIEW">후기</option>
+                        <option value="FREE">자유</option>
+                        <option value="ETC">기타</option>
+                    </select>
+                </div>
+
+                <div style="flex: 1;">
+                    <label>제목</label>
+                    <input type="text" name="title" id="textt" placeholder="제목 입력">
+                </div>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <textarea id="textc" name="content" placeholder="내용을 남겨주세요"></textarea>
+            </div>
+            <div class="file-box">
+                <div class="file-title">첨부 파일</div>
+                <input type="file" accept=".hwp, .hwpx, application/msword" name="files" multiple />
+            </div>
+            <div style="margin-top: 20px;">
+                <input type="checkbox"> 회원만 보기
+            </div>
+
+            <div style="margin-top: 25px;">
+                <button type="submit" class="action-btn">저장하기</button>
+				<button type="button" class="action-btn" onclick="history.back()">이전으로</button>
+            </div>
+			<br>
+        </form>
+    </div>
+</body>
+
+</html>
+<script>
+    function confirmWrite() {
+        const writer = document.getElementById("writer").value.trim();
+        const locationId = document.getElementById("locationId").value.trim();
+        const title = document.getElementById("textt").value.trim();
+        const content = document.getElementById("textc").value.trim();
+
+        if (!writer) {
+            alert("작성자를 입력해주세요.");
+            return false;
+        }
+
+        if (!locationId) {
+            alert("여행지ID를 입력해주세요.");
+            return false;
+        }
+
+        if (!title) {
+            alert("제목을 입력해주세요.");
+            return false;
+        }
+
+        if (!content) {
+            alert("내용을 입력해주세요.");
+            return false;
+        }
+
+        return confirm("글을 작성하시겠습니까?");
+    }
+</script>

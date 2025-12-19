@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{common/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인</title>
+
+    <style>
+        #body {
+            /* border: 1px solid; */
+            height: 700px;
+            width: 960px;
+
+            /* 가운데 정렬 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        #loginBox {
+            border: 1px solid;
+            border-color: royalblue;
+            border-radius: 10px;
+
+            height: 380px;
+            width: 480px;
+            background-color: white;
+        }
+
+        #loginBox h2 {
+            /* border: 1px solid; */
+            height: 60px;
+            margin: 15px;
+            color: royalblue;
+            background-color: #dce7ff;
+            border-radius: 10px;
+
+            /* 가운데 정렬 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #boxIN2 {
+            /* border: 1px solid; */
+            height: auto;
+            padding-top: 18px;
+            margin: 15px;
+
+            /* 가운데 정렬 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            gap: 40px;
+        }
+
+        #boxIN2 span {
+            /* border: 1px solid; */
+            font-size: 18px;
+            font-weight: bold;
+            color: royalblue;
+
+            display: inline-block;
+            width: 215px;
+            text-align: left;
+
+            margin-bottom: 5px;
+        }
+
+        #boxIN2 input {
+            display: block;
+            height: 20px;
+            margin-bottom: 20px;
+            padding: 8px;
+            width: 200px;
+        }
+
+        #boxIN2 button {
+            border-radius: 10px;
+
+            display: flexbox;
+            height: 125px;
+            width: 80px;
+
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        #boxIN2 button:hover {
+            font-weight: bold;
+            color: white;
+
+            border-color: royalblue;
+            background-color: rgb(202, 213, 245)
+        }
+
+        #boxIN3 {
+            /* border: 1px solid; */
+            border-top: royalblue 1px solid;
+            padding: 15px;
+            margin: 15px;
+        }
+
+        #boxIN3 a {
+            /* border: 1px solid; */
+            display: inline;
+            width: 400px;
+            font-size: 17px;
+
+            color: black;
+            text-decoration: none;
+        }
+
+        #boxIN3 a:hover {
+            color: mediumvioletred;
+            /* font-weight: bold; */
+        }
+    </style>
+</head>
+
+<body>
+
+	<div layout:fragment="content">	
+	
+		
+            <div id="body">
+				
+                <div id="loginBox">
+                    <div>
+                        <h2>◈ 로그인 ◈</h2>
+                    </div>
+
+					<form id="loginForm" th:action="@{/auth/login-process}" method="post">
+                    <div id="boxIN2">
+                        <div>
+                            <span>아이디</span>
+                            <input type="text" id="userId" name="userid" placeholder="이메일 형식 아이디 입력">
+                            <span>비밀번호</span>
+                            <input type="password" id="userPass" name="password" placeholder="비밀번호 입력">
+                        </div>
+						
+                        <div>
+                            <button type="submit">로그인</button>
+                        </div>
+                    </div>
+				</form>
+
+                    <div id="boxIN3">
+                        <span>계정이 없으신가요?</span>
+                        <a href="/join/view">회원가입 ▶</a>
+                    </div>
+                </div>
+				
+            </div>
+	
+	
+	</div>
+	
+	
+    <script>
+		
+		(function(){
+			if (window.hasInitLoginJS) return;
+			window.hasInitLoginJS = true;
+			
+			const loginForm = document.getElementById("loginForm");
+			if (!loginForm) return;
+			
+			loginForm.addEventListener("submit", function (event) {
+				const userId = document.getElementById("userId").value;
+				const userPass = document.getElementById("userPass").value;
+
+				if (!userId || !userPass) {
+					alert("아이디와 비밀번호를 모두 입력하세요.");
+					event.preventDefault();
+				}
+			});
+		})();
+		
+		console.log("여기는 로그인 에치티엠알 제이에스");
+
+		
+		
+    </script>
+	<th:block layout:fragment="script"></th:block>
+    
+</body>
+</html>

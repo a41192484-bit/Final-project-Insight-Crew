@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>여행지 목록</title>
+
+    <style>
+        body {
+            display: block !important;
+            width: 100% !important;
+            margin: 0;
+            padding: 0;
+        }
+
+        #trip-container {
+            width: 960px;
+            margin: 40px auto 100px auto;
+            font-family: Arial, sans-serif;
+        }
+
+        .search-area {
+            margin: 30px 0 15px 0;
+            text-align: center;
+        }
+
+        .search-area form {
+            display: inline-flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .search-area select {
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        .search-area input {
+            width: 220px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            font-size: 15px;
+        }
+
+        .search-area button {
+            padding: 10px 18px;
+            background: #868FEE;
+            color: white;
+            border-radius: 10px;
+            border: 1px solid #868FEE;
+            cursor: pointer;
+        }
+
+        .category-box {
+            text-align: center;
+            margin: 25px 0 40px 0;
+        }
+
+        .category-box a {
+            padding: 8px 18px;
+            margin: 0 8px;
+            border-radius: 18px;
+            border: 1px solid #868FEE;
+            background: #F5F3FF;
+            cursor: pointer;
+            color: black;
+            text-decoration: none;
+        }
+
+        .category-box a.active {
+            background: #868FEE;
+            color: white;
+        }
+
+        .trip-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin-top: 70px;
+            margin-bottom: 50px;
+        }
+
+        .trip-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            transition: transform 0.2s;
+        }
+
+        .trip-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .trip-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: contain;
+            background: #f7f7f7;
+        }
+
+        .trip-card-body { padding: 12px; }
+        .trip-card-body h3 { font-size: 15px; margin: 0 0 5px; }
+        .trip-card-body p { font-size: 13px; color: #666; margin: 0; }
+
+        .pagination {
+            margin-top: 40px;
+            margin-bottom: 50px;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .pagination a {
+            min-width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+            border: 1px solid #868FEE;
+            border-radius: 8px;
+            font-size: 15px;
+            text-decoration: none;
+            color: #6F73FF;
+            transition: 0.2s;
+        }
+
+        .pagination a.active {
+            background: #868FEE;
+            color: white;
+            border-color: #868FEE;
+        }
+
+        .pagination a:hover {
+            background: rgba(134, 143, 238, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="trip-container" layout:fragment="content">
+
+    <!-- 제목 -->
+    <div style="text-align:center; margin-bottom:20px;">
+        <div style="font-size:20px;">🏝️🚌</div>
+        <h1 style="font-size:24px; font-weight:800; color:#6F73FF; letter-spacing:-1px;">
+            TripInsight 여행지 목록
+        </h1>
+        <p style="font-size:16px; color:#666; margin-bottom:4px;">원하는 여행지를 검색해보세요</p>
+    </div>
+
+    <!-- 검색 + 지역 한 줄 -->
+    <section class="search-area">
+        <form th:action="@{/trip/list}" method="get">
+
+            <!-- 시/도 -->
+            <select id="sidoSelect" name="sido">
+                <option value="">시/도 선택</option>
+                <option th:each="s : ${sidoList}"
+                        th:value="${s}"
+                        th:text="${s}"
+                        th:selected="${selectedSido == s}">
+                </option>
+            </select>
+
+            <!-- 시군구 -->
+            <select id="sigunguSelect" name="sigungu">
+                <option value="">시/군/구 선택</option>
+                <option th:each="g : ${sigunguList}"
+                        th:value="${g}"
+                        th:text="${g}"
+                        th:selected="${selectedSigungu == g}">
+                </option>
+            </select>
+
+            <!-- 키워드 -->
+            <input type="text" name="keyword" placeholder="지역 또는 키워드를 입력하세요"
+                   th:value="${keyword}">
+
+            <!-- 카테고리 유지 -->
+            <input type="hidden" name="category" th:value="${category ?: ''}">
+
+            <button type="submit">검색</button>
+        </form>
+    </section>
+
+    <!-- 카테고리 -->
+    <section class="category-box">
+
+        <a th:href="@{/trip/list(category='ALL', keyword=${keyword ?: ''}, sido=${selectedSido ?: ''}, sigungu=${selectedSigungu ?: ''})}"
+           th:classappend="${(category == null or category == 'ALL') ? 'active' : ''}">All</a>
+
+        <a th:href="@{/trip/list(category='NATURE', keyword=${keyword ?: ''}, sido=${selectedSido ?: ''}, sigungu=${selectedSigungu ?: ''})}"
+           th:classappend="${category} == 'NATURE' ? 'active' : ''">자연</a>
+
+        <a th:href="@{/trip/list(category='CULTURE', keyword=${keyword ?: ''}, sido=${selectedSido ?: ''}, sigungu=${selectedSigungu ?: ''})}"
+           th:classappend="${category} == 'CULTURE' ? 'active' : ''">문화</a>
+
+        <a th:href="@{/trip/list(category='LEISURE', keyword=${keyword ?: ''}, sido=${selectedSido ?: ''}, sigungu=${selectedSigungu ?: ''})}"
+           th:classappend="${category} == 'LEISURE' ? 'active' : ''">체험</a>
+
+        <a th:href="@{/trip/list(category='FOOD', keyword=${keyword ?: ''}, sido=${selectedSido ?: ''}, sigungu=${selectedSigungu ?: ''})}"
+           th:classappend="${category} == 'FOOD' ? 'active' : ''">음식</a>
+
+        <a th:href="@{/trip/list(category='SHOPPING', keyword=${keyword ?: ''}, sido=${selectedSido ?: ''}, sigungu=${selectedSigungu ?: ''})}"
+           th:classappend="${category} == 'SHOPPING' ? 'active' : ''">쇼핑</a>
+
+    </section>
+
+    <!-- 목록 -->
+    <section class="trip-grid">
+        <div th:each="t : ${tripList}" class="trip-card">
+            <a th:href="@{/trip/detail/{id}(id=${t.tripId})}" style="text-decoration:none; color:black;">
+                <img th:src="${#strings.isEmpty(t.imageUrl) ? '/img/no-image.png' : t.imageUrl}"
+                     onerror="this.onerror=null; this.src='/img/no-image.png';">
+                <div class="trip-card-body">
+                    <h3 th:text="${t.name}"></h3>
+                    <p th:text="${t.fullAddress}"></p>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- 페이징 -->
+    <div class="pagination">
+
+        <a th:if="${startPage > 1}"
+           th:href="@{/trip/list(page=${startPage - 1}, keyword=${keyword ?: ''}, category=${category ?: ''}, sido=${selectedSido ?: ''}, sigungu=${selectedSigungu ?: ''})}">
+            이전
+        </a>
+
+        <a th:each="p : ${#numbers.sequence(startPage, endPage)}"
+           th:href="@{/trip/list(page=${p}, keyword=${keyword ?: ''}, category=${category ?: ''}, sido=${selectedSido ?: ''}, sigungu=${selectedSigungu ?: ''})}"
+           th:classappend="${p == page} ? 'active' : ''">
+            <span th:text="${p}"></span>
+        </a>
+
+        <a th:if="${endPage < totalPages}"
+           th:href="@{/trip/list(page=${endPage + 1}, keyword=${keyword ?: ''}, category=${category ?: ''}, sido=${selectedSido ?: ''}, sigungu=${selectedSigungu ?: ''})}">
+            다음
+        </a>
+
+    </div>
+	
+	<!-- 시도 선택 시 → 시군구만 갱신 (자동 검색 X) -->
+	<script>
+	document.addEventListener("DOMContentLoaded", function () {
+
+	    const sidoSelect = document.getElementById("sidoSelect");
+	    const sigunguSelect = document.getElementById("sigunguSelect");
+
+	    if (!sidoSelect || !sigunguSelect) {
+	        console.error("sidoSelect 또는 sigunguSelect를 찾을 수 없음");
+	        return;
+	    }
+
+	    // ⭐ 시/도 변경 → 시군구 자동 로딩
+	    sidoSelect.addEventListener("change", function (e) {
+	        e.preventDefault(); // 🔥 자동 submit 방지
+
+	        const sido = this.value;
+
+	        // 시군구 옵션 초기화
+	        sigunguSelect.innerHTML = "<option value=''>시/군/구 선택</option>";
+
+	        // 선택 안 했으면 종료
+	        if (!sido) return;
+
+	        // API 요청
+	        fetch(`/api/regions/sigungu?sido=${encodeURIComponent(sido)}`)
+	            .then(res => res.json())
+	            .then(list => {
+	                list.forEach(g => {
+	                    const opt = document.createElement("option");
+	                    opt.value = g;
+	                    opt.textContent = g;
+	                    sigunguSelect.appendChild(opt);
+	                });
+	            })
+	            .catch(err => console.error("시군구 로딩 실패:", err));
+	    });
+
+	});
+	</script>
+
+</div>
+
+</body>
+</html>

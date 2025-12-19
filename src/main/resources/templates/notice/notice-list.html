@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{common/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시판</title>
+
+    <style>
+        .search-area-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .search-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #select {
+            width: 100px;
+            height: 40px;
+        }
+
+        #search {
+            width: 400px;
+            height: 40px;
+            padding-left: 10px;
+        }
+
+        button {
+            border: none;
+            background: none;
+            cursor: pointer;
+        }
+
+        #button img {
+            width: 40px;
+            height: 40px;
+        }
+
+        table {
+            width: 960px;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th {
+            background-color: rgb(181, 187, 255);
+            padding: 10px;
+        }
+
+        td {
+            text-align: center;
+            padding: 10px;
+        }
+
+        tr {
+            border-bottom: 1px solid #ccc;
+        }
+
+        tr:last-child {
+            border-bottom: none;
+        }
+
+        #board-actions {
+            width: 960px;
+            margin: 20px auto 10px auto;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .action-btn {
+            padding: 8px 16px;
+            background-color: rgb(148, 157, 255);
+            border: none;
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .action-btn:hover {
+            opacity: 0.9;
+        }
+
+        #page {
+            margin-top: 30px;
+            margin-bottom: 50px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .page-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div layout:fragment="content">
+
+        <div class="board">
+            <h1>공지사항</h1>
+            <span style="font-size:20px; color:#555;">알려드립니다</span>
+        </div>
+
+        <hr>
+
+        <div class="search-area-wrapper">
+            <div class="search-area">
+                <select id="select">
+                    <option value="">제목</option>
+                    <option value="">작성자</option>
+                    <option value="">내용</option>
+                </select>
+
+                <input type="text" id="search" placeholder="검색어를 입력하세요">
+
+                <button id="button" onclick="alert('검색합니다!')">
+                    <img src="img/1.png" alt="검색">
+                </button>
+            </div>
+        </div>
+
+        <table>
+            <tr>
+
+                <th>번호</th>
+                <th>제목</th>
+                <th>작성자</th>
+                <th>작성일</th>
+                <th>조회수</th>
+            </tr>
+
+            <tr>
+                <td>1</td>
+                <td>글 제목 1</td>
+                <td>작성자1</td>
+                <td>2025-11-20</td>
+                <td>10</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>글 제목 2</td>
+                <td>작성자2</td>
+                <td>2025-11-19</td>
+                <td>5</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>글 제목 3</td>
+                <td>작성자3</td>
+                <td>2025-11-18</td>
+                <td>20</td>
+            </tr>
+            <tr>
+
+                <td>4</td>
+                <td>글 제목 4</td>
+                <td>작성자4</td>
+                <td>2025-11-17</td>
+                <td>8</td>
+            </tr>
+            <tr>
+
+                <td>5</td>
+                <td>글 제목 5</td>
+                <td>작성자5</td>
+                <td>2025-11-16</td>
+                <td>16</td>
+            </tr>
+            <tr>
+
+                <td>6</td>
+                <td>글 제목 6</td>
+                <td>작성자6</td>
+                <td>2025-11-15</td>
+                <td>3</td>
+            </tr>
+            <tr>
+
+                <td>7</td>
+                <td>글 제목 7</td>
+                <td>작성자7</td>
+                <td>2025-11-14</td>
+                <td>30</td>
+            </tr>
+            <tr>
+
+                <td>8</td>
+                <td>글 제목 8</td>
+                <td>작성자8</td>
+                <td>2025-11-13</td>
+                <td>11</td>
+            </tr>
+            <tr>
+
+                <td>9</td>
+                <td>글 제목 9</td>
+                <td>작성자9</td>
+                <td>2025-11-12</td>
+                <td>7</td>
+            </tr>
+            <tr>
+
+                <td>10</td>
+                <td>글 제목 10</td>
+                <td>작성자10</td>
+                <td>2025-11-11</td>
+                <td>14</td>
+            </tr>
+        </table>
+        <div id="board-actions">
+            <button class="action-btn">작성하기</button>
+            <button class="action-btn">수정</button>
+            <button class="action-btn">삭제</button>
+        </div>
+
+        <div id="page">
+            <button class="page-btn">이전</button>
+            <div> 1 2 3 4 5</div>
+            <button class="page-btn">다음</button>
+        </div>
+
+    </div>
+</body>
+
+</html>

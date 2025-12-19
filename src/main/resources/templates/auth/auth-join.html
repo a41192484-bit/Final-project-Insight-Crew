@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{common/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입</title>
+
+    <style>
+        #body {
+            /* border: 1px solid; */
+            height: 700px;
+            width: 960px;
+
+            /* 가운데 정렬 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #joinBox {
+            border: 1px solid;
+            border-color: royalblue;
+            border-radius: 10px;
+
+            height: 600px;
+            width: 550px;
+            background-color: white;
+        }
+
+        #joinTitle {
+            /* border: 1px solid; */
+            height: 60px;
+            margin: 15px;
+            color: royalblue;
+            background-color: #dce7ff;
+            border-radius: 10px;
+
+            /* 가운데 정렬 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        #joinList {
+            /* border: 1px solid; */
+            border-color: royalblue;
+            border-radius: 10px;
+            height: 400px;
+            margin: 15px;
+
+            /* 가운데 정렬 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #inputInfo label {
+            /* border: 1px solid; */
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            color: royalblue;
+        }
+
+        #inputInfo label {
+            /* border: 1px solid; */
+            display: inline-block;
+            width: 130px;
+            text-align: right;
+        }
+
+        #inputInfo input {
+            width: 200px;
+            padding: 6px;
+        }
+
+        #inputInfo ul {
+            /* border: 1px solid; */
+            /*기본 들여쓰기 제거*/
+            padding-left: 0;
+            /*리스트 불릿 제거*/
+            list-style: none;
+
+            font-weight: 550;
+            font-size: 20px;
+
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        li {
+            /* border: 1px solid; */
+            /* 가운데 정렬 */
+            display: flex;
+            align-items: center;
+
+            gap: 20px;
+        }
+
+        li button {
+            /* border: 1px solid; */
+            border-radius: 10px;
+            width: 80px;
+            height: 30px;
+            font-weight: 500;
+            color: brown;
+        }
+
+        li button:hover {
+            background-color: #ffe9a6;
+            color: blue;
+        }
+
+        #joinBtn {
+            /* border: 1px solid; */
+            border-top: 1px solid;
+            border-color: royalblue;
+            margin: 0 15px;
+
+            /* 가운데 정렬 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #joinBtn button {
+            font-size: 15px;
+            font-weight: bold;
+            padding: 15px 30px;
+            border-radius: 30px;
+            margin-top: 20px;
+
+            background-color: #dce7ff;
+            border-color: royalblue;
+        }
+
+        #joinBtn button:hover {
+            background-color: royalblue;
+            color: white;
+        }
+    </style>
+</head>
+
+
+
+<body>
+	
+    <div layout:fragment="content">
+		<form th:action="@{/join/process}" method="post" id="joinform">
+        <div id="body">
+			
+            <div id="joinBox">
+                <div id="joinTitle">
+                    <span>◈ 회원가입 ◈</span>
+                </div>
+				
+                <div id="joinList">
+                    <div id="inputInfo">
+                        <ul>
+                            <li>
+                                <label for="userid">아이디 :</label>
+                                <input type="text" id="userid" name="userid" placeholder="이메일 형식으로 입력">
+                                <button type="button" id="checkIdBtn">중복확인</button>
+                            </li>
+                            <li>
+                                <label for="password">비밀번호 :</label>
+                                <input type="password" id="password" name="password" placeholder="비밀번호 입력">
+                            </li>
+                            <li>
+                                <label for="passCheck">비밀번호 확인 :</label>
+                                <input type="password" id="passCheck" placeholder="비밀번호 확인">
+                            </li>
+                            <li>
+                                <label for="name">이름 :</label>
+                                <input type="text" id="name" name="name" placeholder="이름 입력">
+                            </li>
+                            <li>
+                                <label for="nickname">닉네임 :</label>
+                                <input type="text" id="nickname" name="nickname" placeholder="닉네임 입력">
+                                <button type="button" id="checkNickBtn">중복확인</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="joinBtn">
+                    <button type="submit">시작하기</button>
+                </div>
+            </div>
+			
+        </div>
+	
+	</form>
+    </div>
+	
+	
+
+
+
+    <script>
+		
+		(function(){
+			const checkIdBtn = document.getElementById("checkIdBtn");
+			const checkNickBtn = document.getElementById("checkNickBtn");
+			
+			// id 중복 확인
+			if (checkIdBtn) {
+				checkIdBtn.addEventListener("click", function () {
+					const userId = document.getElementById("userid").value.trim();
+					if (!userId) {
+						alert("아이디를 입력해주세요.");
+						return;
+					}
+
+					fetch(`/join/check-id?userid=${encodeURIComponent(userId)}`)
+						.then(res => res.json())
+						.then(data => {
+							if (data.exists) {
+								alert("이미 사용 중인 아이디입니다.");
+							} else {
+								alert("사용 가능한 아이디입니다.");
+							}
+						});
+				});
+			}
+
+			
+			// 닉네임 중복 확인
+			if (checkNickBtn) {
+				checkNickBtn.addEventListener("click", function () {
+					const nickName = document.getElementById("nickname").value.trim();
+					if (!nickName) {
+						alert("닉네임을 입력해주세요.");
+						return;
+					}
+
+					fetch(`/join/check-nick?nickname=${encodeURIComponent(nickName)}`)
+						.then(res => res.json())
+						.then(data => {
+							if (data.exists) {
+								alert("이미 사용 중인 닉네임입니다.");
+							} else {
+								alert("사용 가능한 닉네임입니다.");
+							}
+						});
+				});
+			}
+		})();
+		
+
+    </script>
+
+</body>
+
+</html>

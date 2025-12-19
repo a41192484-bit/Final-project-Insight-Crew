@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>자유게시판</title>
+
+    <style>
+        .search-area-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .search-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #select {
+            width: 100px;
+            height: 40px;
+        }
+
+        #search {
+            width: 400px;
+            height: 40px;
+            padding-left: 10px;
+        }
+
+        button {
+            border: none;
+            background: none;
+            cursor: pointer;
+        }
+
+        #button img {
+            width: 40px;
+            height: 40px;
+        }
+
+        table {
+            width: 960px;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th {
+            background-color: rgb(181, 187, 255);
+            padding: 10px;
+        }
+
+        td {
+            text-align: center;
+            padding: 10px;
+        }
+
+        tr {
+            border-bottom: 1px solid #ccc;
+        }
+
+        tr:last-child {
+            border-bottom: none;
+        }
+
+        #board-actions {
+            width: 960px;
+            margin: 20px auto 10px auto;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .action-btn {
+            padding: 8px 16px;
+            background-color: rgb(148, 157, 255);
+            border: none;
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .action-btn:hover {
+            opacity: 0.9;
+        }
+
+        .action-btn-delete {
+            padding: 8px 16px;
+            background-color: rgb(255, 114, 114);
+            border: none;
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        #page {
+            margin-top: 30px;
+            margin-bottom: 50px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+    </style>
+</head>
+
+<body>
+<div layout:fragment="content">
+
+    <div class="board">
+        <h1>자유게시판</h1>
+        <span style="font-size:20px; color:#555;">여행 글을 쓰는 자유로운 공간입니다</span>
+    </div>
+
+    <hr>
+
+    <div class="search-area-wrapper">
+        <form th:action="@{/board/search}" method="get" class="search-area">
+            <select id="select" name="type">
+                <option value="title">제목</option>
+                <option value="memberId">작성자</option>
+                <option value="content">내용</option>
+            </select>
+
+            <input type="text" id="search" name="keyword" placeholder="검색어를 입력하세요" th:value="${keyword}">
+
+           
+			<button id="button">
+			    <img th:src="@{/img/1.png}" alt="검색">
+			</button>
+
+        </form>
+    </div>
+
+   
+    <form action="/board/delete" method="post" id="deleteForm">
+		<table>
+		    <tr>
+		        <th></th>
+		        <th>번호</th>
+		        <th>제목</th>
+		        <th>작성자</th>
+		        <th>작성일</th>
+		    </tr>
+
+		    <tr th:each="board : ${boardList}">
+		        <td><input type="radio" name="boardId" th:value="${board.boardId}"></td>
+		        <td th:text="${board.viewOrder}"></td>
+		        <td>
+		            <a th:href="@{/board/detail/{id}(id=${board.boardId})}" th:text="${board.title}"></a>
+		        </td>
+		        <td th:text="${board.memberId}"></td>
+		        <td th:text="${board.createdAt}"></td>
+		    </tr>
+		</table>
+
+		<div id="board-actions">
+		    <button type="button" class="action-btn"
+		            onclick="location.href='/board/write'">글 등록</button>
+		    <button type="button" class="action-btn" id="btn-update" onclick="goUpdate()">수정</button>
+		    <button type="button" class="action-btn-delete" onclick="goDelete()">삭제</button>
+		</div>
+    </form>
+</div>
+</body>
+</html>
+<script>
+function goUpdate() {
+    const id = document.querySelector("input[name='boardId']:checked")?.value;
+    if (!id) {
+        alert("수정할 글을 선택하세요.");
+        return;
+    }
+    window.location.href = "/board/update/" + id;
+}
+function goDelete() {
+    const id = document.querySelector("input[name='boardId']:checked")?.value;
+    if (!id) {
+        alert("삭제할 글을 선택하세요.");
+        return;
+    }
+    if (confirm("선택한 글을 삭제하시겠습니까?")) {
+        const form = document.getElementById("deleteForm");
+        form.submit();
+    }
+}
+</script>

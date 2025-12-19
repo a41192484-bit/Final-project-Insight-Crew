@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 페이지</title>
+
+    <style>
+        .detail-container {
+            padding: 40px 20px;
+        }
+
+        .admin-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 24px;
+        }
+
+        /* ===== 통계 보드 ===== */
+        .stats-board {
+            border: 1px solid royalblue;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 40px;
+            background: #fff;
+        }
+
+        .stats-board h3 {
+            margin: 0 0 16px;
+            font-size: 18px;
+            color: royalblue;
+        }
+
+        .stats-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+
+        .stats-table th,
+        .stats-table td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #e0e0e0;
+            text-align: left;
+        }
+
+        .stats-table th {
+            width: 200px;
+            color: #555;
+            background: #f7f8ff;
+        }
+
+        .stats-value {
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* ===== 관리 메뉴 ===== */
+        .admin-board {
+            border: 1px solid royalblue;
+            border-radius: 12px;
+            padding: 20px;
+            background: #fff;
+        }
+
+        .admin-board h3 {
+            margin: 0 0 16px;
+            font-size: 18px;
+            color: royalblue;
+        }
+
+        .admin-links {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .admin-link {
+            border: 1px solid #dcdcdc;
+            border-radius: 8px;
+            padding: 16px;
+            cursor: pointer;
+            transition: 0.2s ease;
+            background: #fafafa;
+        }
+
+        .admin-link:hover {
+            background: #eef0ff;
+            border-color: royalblue;
+        }
+
+        .admin-link strong {
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .admin-link span {
+            font-size: 13px;
+            color: #555;
+        }
+    </style>
+</head>
+
+<body>
+
+<div layout:fragment="content">
+    <main class="detail-container">
+
+        <div class="admin-title">관리자 대시보드</div>
+
+        <!-- 🔹 통계 보드 -->
+        <section class="stats-board">
+            <h3>서비스 운영 현황</h3>
+            <table class="stats-table">
+                <tr>
+                    <th>전체 유저 수</th>
+                    <td class="stats-value" th:text="${memberCount}">0</td>
+                </tr>
+                <tr>
+                    <th>전체 여행지 수</th>
+                    <td class="stats-value" th:text="${tripCount}">0</td>
+                </tr>
+                <tr>
+                    <th>전체 게시글 수</th>
+                    <td class="stats-value" th:text="${boardCount}">0</td>
+                </tr>
+                <tr>
+                    <th>오늘 날씨 캐시 상태</th>
+                    <td class="stats-value" th:text="${todayWeatherStatus}">정상</td>
+                </tr>
+                <tr>
+                    <th>랭킹 캐시 상태</th>
+                    <td class="stats-value" th:text="${rankingStatus}">완료</td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- 🔹 관리자 기능 보드 -->
+        <section class="admin-board">
+            <h3>관리자 기능</h3>
+            <div class="admin-links">
+
+                <div class="admin-link" onclick="location.href='/admin/member'">
+                    <strong>멤버 관리</strong>
+                    <span>회원 조회 및 권한 관리</span>
+                </div>
+
+                <div class="admin-link" onclick="location.href='/admin/trip'">
+                    <strong>여행지 관리</strong>
+                    <span>여행지 등록 · 수정 · 삭제</span>
+                </div>
+
+                <div class="admin-link" onclick="location.href='/admin/board'">
+                    <strong>게시글 관리</strong>
+                    <span>게시글 조회 및 관리</span>
+                </div>
+
+                <div class="admin-link" onclick="location.href='/admin/weather'">
+                    <strong>날씨 캐시 관리</strong>
+                    <span>오늘 / 주간 날씨 캐시 관리</span>
+                </div>
+
+                <div class="admin-link" onclick="location.href='/admin/ranking'">
+                    <strong>랭킹 관리</strong>
+                    <span>랭킹 캐시 조회 및 재계산</span>
+                </div>
+
+                <div class="admin-link" onclick="location.href='/'">
+                    <strong>서비스 바로가기</strong>
+                    <span>사용자 화면 이동</span>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{common/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원정보</title>
+
+    <style>
+        #body {
+            /* border: 1px solid; */
+            height: 700px;
+            width: 960px;
+
+            /* 가로 가운데 정렬 */
+            display: flex;
+            align-items: center;
+        }
+
+        #back {
+            /* border: 1px solid; */
+            height: 600px;
+            width: 240px;
+            text-align: right;
+        }
+
+        #back a {
+            /* border: 1px solid; */
+            margin: 40px;
+            font-size: 20px;
+            color: gray;
+            text-decoration: none;
+        }
+
+        #back a:hover {
+            color: blueviolet;
+            font-weight: 700;
+        }
+
+        #joinInfo {
+            border: 1px solid;
+            border-color: royalblue;
+            border-radius: 10px;
+
+            height: 600px;
+            width: 480px;
+            background-color: white;
+        }
+
+        #title {
+            /* border: 1px solid; */
+            height: 60px;
+            margin: 15px;
+            color: royalblue;
+            background-color: #dce7ff;
+            border-radius: 10px;
+
+            font-size: 25px;
+            font-weight: bold;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #infoList {
+            /* border: 1px solid; */
+            height: 490px;
+            margin: 15px;
+
+            /* 가운데 정렬 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #infoList ul {
+            /*기본 들여쓰기 제거*/
+            padding-left: 0;
+            /*리스트 불릿 제거*/
+            list-style: none;
+
+            font-size: 20px;
+
+            display: flex;
+            flex-direction: column;
+            gap: 80px;
+        }
+
+        #infoList .label {
+            /* border: 1px solid; */
+            color: royalblue;
+            font-weight: 600;
+            display: inline-block;
+            width: 100px;
+            text-align: right;
+        }
+
+        #infoList input {
+            width: 180px;
+            padding: 6px;
+        }
+
+        li {
+            /* border: 1px solid; */
+            /* 가운데 정렬 */
+            display: flex;
+            align-items: center;
+
+            gap: 20px;
+        }
+
+        li button {
+            /* border: 1px solid; */
+            border-radius: 10px;
+            width: 80px;
+            height: 30px;
+            font-weight: 500;
+            color: darkgreen;
+        }
+
+        li button:hover {
+            background-color: #dddcff;
+            color: deeppink;
+        }
+    </style>
+</head>
+
+<body>
+    <div layout:fragment="content">
+
+        <div id="body">
+            <div id="back">
+                <a th:href="@{/mypage/view}">◀ 뒤로가기</a>
+            </div>
+			
+			
+            <div id="joinInfo">
+                <div id="title">
+                    <span>◈ 정보 조회 ◈</span>
+                </div>
+                <div id="infoList">
+                    <ul>
+                        <li>
+                            <span class="label">아이디 :</span>
+                            <span id="displayUserid" th:text="${loginuser.userid}">Loading...</span>
+                        </li>
+						<li>
+							<span class="label">비밀번호 :</span>
+							<span id="displayPassword">*******</span>
+							
+							<form id="editPasswordForm" action="/member/update/password" method="post" style="display:none;">
+								<input type="text" name="password" placeholder="새 비밀번호 입력">
+								<button type="submit">저장</button>
+								<button type="button" onclick="cancelEdit('password')">취소</button>
+							</form>
+							
+							<button id="editPasswordBtn" type="button" onclick="editField('Password')">변경</button>
+						</li>
+                        <li>
+							<!-- 조회모드 -->
+							<span class="label">이름 :</span>
+							<span id="displayName" th:text="${loginuser.name}">Loading...</span>
+							<!-- 수정모드 -->
+							<form id="editNameForm" action="/member/update/name" method="post" style="display:none;">	
+								<input type="text" name="name" th:value="${loginuser.name}">
+								<button type="submit">저장</button>
+								<button type="button" onclick="cancelEdit('name')">취소</button>
+							</form>
+							
+							<!-- 수정버튼 -->
+							<button id="editNameBtn" type="button" onclick="editField('Name')">수정</button>
+                        </li>
+						
+                        <li>
+                            <span class="label">닉네임 :</span>
+                            <span id="displayNickname" th:text="${loginuser.nickname}">Loading...</span>
+							
+							<form id="editNicknameForm" action="/member/update/nickname" method="post" style="display:none;">
+								<input type="text" name="nickname" th:value="${loginuser.nickname}">
+								<button type="submit">저장</button>
+								<button type="button" onclick="cancelEdit('nickname')">취소</button>
+                            </form>
+							
+							<button id="editNicknameBtn" type="button" onclick="editField('Nickname')">수정</button>
+                        </li>
+						
+                    </ul>
+                </div>
+            </div>
+
+			
+        </div>
+    
+
+	
+	
+	<!-- 서버 dto를 js에서 사용할 수 있도록 제이슨(js객체)으로 변환 -->
+	<script th:inline="javascript">
+	    let userData = /*[[${memberInfoDto}]]*/{};
+	</script>
+	
+	
+	
+	<script>
+		
+		//조회모드 -> 수정모드 전환
+		function editField(field) {
+			document.getElementById('display' + field).style.display = "none";
+			document.getElementById('edit' + field + "Form").style.display = "inline";
+			document.getElementById('edit' + field + "Btn").style.display = "none";
+		}
+
+		//수정모드 -> 조회모드 전환
+		function cancelEdit(field) {
+			document.getElementById('display' + field).style.display = "inline";
+			document.getElementById('edit' + field + "Form").style.display = "none";
+			document.getElementById('edit' + field + "Btn").style.display = "inline";
+		}
+		
+	</script>
+	
+</body>
+</html>
