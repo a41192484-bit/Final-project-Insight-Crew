@@ -1,4 +1,4 @@
-// 임시 실행용
+// 지역매핑, 관리자 기능
 package com.insightcrew.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;

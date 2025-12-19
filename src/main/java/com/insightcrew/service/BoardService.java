@@ -82,5 +82,12 @@ public class BoardService {
             list.get(i).setViewOrder(i + 1);
         }
     }
+    
+    /* =================================================
+     * 메인 페이지용 최신글 조회 (추가)
+     * ================================================= */
+    public List<BoardListResponseDto> findLatestPosts(int limit) {
+        return boardmapper.findLatest(limit);
+    }
 
 }

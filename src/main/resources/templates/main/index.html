@@ -11,281 +11,336 @@
     <style>
         /* ================= 공통 ================= */
         main { background:#f4f6ff; padding-bottom:60px; }
-		.section {
-		    padding: 0 20px;
-		    margin-bottom: 60px;
-		}
-
-        /* ================= HERO ================= */
-		.hero {
-			overflow-x: hidden;
-		    position: relative;
-		    text-align: center;
-		    padding: 72px 20px 80px;
-
-		    background: linear-gradient(
-		        120deg,
-		        #d7dcff 0%,
-		        #c9d0ff 35%,
-		        #eef0ff 55%,
-		        #c9d0ff 75%,
-		        #d7dcff 100%
-		    );
-		    background-size: 300% 300%;
-		    animation: heroShimmer 5s ease-in-out infinite;
-		}
+        .section { padding: 0 20px; margin-bottom: 60px; }
 		
-		@keyframes heroShimmer {
-		    0%   { background-position: 0% 50%; }
-		    50%  { background-position: 100% 50%; }
-		    100% { background-position: 0% 50%; }
-		}
-		
-		.hero::after {
-		    content: "";
-		    position: absolute;
-		    top: 0;
-		    left: -80%;
-		    width: 80%;
-		    height: 100%;
-
-		    background: linear-gradient(
-		        120deg,
-		        transparent 0%,
-		        rgba(255,255,255,0.55) 50%,
-		        transparent 100%
-		    );
-
-		    animation: heroLight 6s ease-in-out infinite;
-		    pointer-events: none;
-		}
-		
-		@keyframes heroLight {
-		    0%   { left: -80%; opacity: 0; }
-		    20%  { opacity: 1; }
-		    45%  { left: 120%; opacity: 0; }
-		    100% { left: 120%; opacity: 0; }
-		}
-		
-		.hero-title {
-		    font-size: 30px;
-		    font-weight: 800;
-		    color: #3f45a6;
-		    letter-spacing: -0.3px;
-		}
-
-		.hero-sub {
-		    margin-top: 8px;
-		    font-size: 15px;
-		    color: #555aa8;
-		}
-
-		.sparkle {
-		    display: inline-block;
-		    margin-left: 6px;
-		    animation: sparkle 2s infinite ease-in-out;
-		    transform-origin: center;
-		}
-
-		@keyframes sparkle {
-		    0%   { transform: scale(1) rotate(0deg); opacity: 0.6; }
-		    50%  { transform: scale(1.25) rotate(10deg); opacity: 1; }
-		    100% { transform: scale(1) rotate(0deg); opacity: 0.6; }
-		}
-		
-		.hero-divider {
-		    width: 60px;
-		    height: 3px;
-		    background: #6F73FF;
-		    margin: 24px auto 0;
-		    border-radius: 999px;
-		}
-		
-		/* ================= RANKING ================= */
-
-		.ranking-grid {
-		    display: grid;
-		    grid-template-columns: repeat(5, 1fr);
-		    gap: 16px;
-		}
-
-		.ranking-card {
-		    background: #fff;
-		    border-radius: 18px;
-		    box-shadow: 0 4px 14px rgba(150,150,200,.15);
-		    overflow: hidden;
-		    text-align: center;
-			transition: transform .25s ease, box-shadow .25s ease;
-
-		}
-		
-		.ranking-card:hover {
-		    transform: translateY(-6px);
-		    box-shadow: 0 10px 26px rgba(111,115,255,.25);
-		}
-
-		/* 이미지 영역 */
-		.ranking-image {
-		    position: relative;
-		    height: 120px;
-		    overflow: hidden;
-		}
-
-		.ranking-image img {
-		    width: 100%;
-		    height: 100%;
-		    object-fit: cover;
-		}
-		
-		.ranking-link {
-		    text-decoration: none;
+		/* ===== 링크 밑줄 완전 제거 ===== */
+		a,
+		a:link,
+		a:visited,
+		a:hover,
+		a:active {
+		    text-decoration: none !important;
 		    color: inherit;
 		}
 
-		/* 🔥 추천 번호 뱃지 */
-		.recommend-badge {
-		    position: absolute;
-		    top: 10px;
-		    left: 10px;
+        /* ================= HERO ================= */
+        .hero {
+            overflow-x: hidden;
+            position: relative;
+            text-align: center;
+            padding: 72px 20px 80px;
+            background: linear-gradient(
+                120deg,
+                #d7dcff 0%,
+                #c9d0ff 35%,
+                #eef0ff 55%,
+                #c9d0ff 75%,
+                #d7dcff 100%
+            );
+            background-size: 300% 300%;
+            animation: heroShimmer 5s ease-in-out infinite;
+        }
 
-		    width: 26px;
-		    height: 26px;
-		    border-radius: 50%;
-
-		    background: #6F73FF;
-		    color: #fff;
-		    font-size: 13px;
+        @keyframes heroShimmer {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+		
+		.hero-badge {
+		    display: inline-block;
+		    padding: 6px 14px;
+		    border-radius: 20px;
+		    background: rgba(111,115,255,.15);
+		    color: #4f54a8;
+		    font-size: 12px;
 		    font-weight: 700;
-
-		    display: flex;
-		    align-items: center;
-		    justify-content: center;
-
-		    box-shadow: 0 3px 8px rgba(111,115,255,.35);
-		    z-index: 2;
+		    margin-bottom: 14px;
 		}
 
-		/* 카드 하단 정보 */
+        .hero-title {
+            font-size: 30px;
+            font-weight: 800;
+            color: #3f45a6;
+        }
+
+        .hero-sub {
+            margin-top: 8px;
+            font-size: 15px;
+            color: #555aa8;
+        }
+		
+		.hero + .section {
+		    margin-top: 40px;
+		}
+
+        /* ================= RANKING ================= */
+        .ranking-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+        }
+
+        .ranking-card {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 4px 14px rgba(150,150,200,.15);
+            overflow: hidden;
+            text-align: center;
+            transition: transform .25s ease, box-shadow .25s ease;
+        }
+
+        .ranking-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 26px rgba(111,115,255,.25);
+        }
+
+        .ranking-image {
+            position: relative;
+            height: 120px;
+            overflow: hidden;
+        }
+
+        .ranking-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .recommend-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: #6F73FF;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
 		.ranking-info {
 		    padding: 12px 10px 14px;
-		    min-height: 56px;   /* ⭐ 핵심 */
-		    display: flex;
-		    align-items: center;
-		    justify-content: center;
+		    min-height: 56px;
+		    display: block;
 		}
+		
+		.ranking-address{
+		    margin-top: 4px;
+		    font-size: 12px;
+		    color: #888;
+		    line-height: 1.3;
 
-		.ranking-title {
-		    font-weight: 700;
-		    font-size: 14px;
-		    color: #333;
-		    line-height: 1.4;
-
-		    display: -webkit-box;
-		    -webkit-line-clamp: 2;   /* 최대 2줄 */
-		    -webkit-box-orient: vertical;
+		    white-space: nowrap;
 		    overflow: hidden;
+		    text-overflow: ellipsis;
+
+		    display: inline-flex;      /* ✅ 아이콘 + 텍스트 정렬 */
+		    align-items: center;
+		    justify-content: center;   /* ✅ 카드가 center 정렬이라면 맞춤 */
+		    gap: 6px;
 		}
 
-        /* ================= REGION SEARCH ================= */
-        .region-search {
-            display:flex;
-            gap:10px;
-            margin:10px 0 26px;
-        }
-        .region-search select,
-        .region-search button {
-            padding:10px 12px;
-            border-radius:12px;
-            border:1px solid #ccc;
-            font-size:14px;
-        }
-        .region-search button {
-            background:#6F73FF;
-            color:#fff;
-            font-weight:700;
-            border:none;
-            cursor:pointer;
+		.ranking-address::before{
+		    content: "📍";
+		    font-size: 12px;
+		    line-height: 1;
+		}
+
+        .ranking-title {
+            font-weight: 700;
+            font-size: 14px;
+            color: #333;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
         /* ================= WEATHER ================= */
         .weather-title {
-            font-size:22px;
-            font-weight:700;
-            color:#4f54a8;
-            margin:10px 0 18px;
+            font-size: 22px;
+            font-weight: 700;
+            color: #4f54a8;
+            margin: 10px 0 18px;
         }
-        .today-weather {
-            background:linear-gradient(145deg,#eef0ff,#fff);
-            border:2px solid #6F73FF;
-            border-radius:20px;
-            padding:22px;
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            box-shadow:0 4px 14px rgba(150,150,200,.15);
-            margin-bottom:25px;
-        }
-        .today-temp { font-size:32px; font-weight:800; color:#6F73FF; }
+		
+		/* ================= TODAY ================= */
+		
+		.weather-inline {
+		    margin: 14px 0 22px;
+			padding: 14px 24px;
+		    display: flex;
+		    justify-content: center;
+		    align-items: center;
+		    gap: 8px;
 
-		.week-weather{
-		    display:grid;
-		    grid-template-columns: repeat(6, 1fr);
-		    gap:12px;
+		    background: linear-gradient(145deg, #eef0ff, #ffffff);
+		    border-radius: 14px;
+
+		    font-size: 15px;
+		    font-weight: 600;
+		    color: #4f54a8;
+
+		    box-shadow: 0 4px 14px rgba(150,150,200,.18);
+		}
+
+		.weather-inline img {
+		    width: 26px;
+		    height: 26px;
+		}
+
+		.weather-inline .temp {
+		    font-size: 15px;
+		    font-weight: 800;
+		    color: #6F73FF;
+		}
+
+		.weather-inline .desc {
+		    color: #555;
+		}
+
+		.weather-inline .dot {
+		    color: #bbb;
 		}
 		
-		.week-card{
-		    background:#fff;
-		    border-radius:16px;
-		    padding:14px 0;
-		    text-align:center;
-		    box-shadow:0 4px 14px rgba(150,150,200,.15);
+		.weather-inline .date {
+		    font-size: 12px;
+		    font-weight: 700;
+		    color: #4f54a8;
+		    margin-right: 6px;
 		}
-		
+
+		.week-date {
+		    font-size: 13px;
+		    font-weight: 700;
+		    color: #4f54a8;
+		    margin-bottom: 6px;
+		}
+        
+
+        /* ================= WEEKLY ================= */
+        .week-weather {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 12px;
+        }
+
+        .week-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 14px 0;
+            text-align: center;
+            box-shadow: 0 4px 14px rgba(150,150,200,.15);
+        }
+
         .week-card.today {
-            background:linear-gradient(145deg,#eef0ff,#fff);
-            border:2px solid #6F73FF;
+            background: linear-gradient(145deg,#eef0ff,#fff);
+            border: 2px solid #6F73FF;
         }
 		
 		/* ================= BOARD ================= */
 
-		.board-list {
-		    background: #fff;
-		    border-radius: 18px;
-		    box-shadow: 0 4px 14px rgba(150,150,200,.15);
-		    overflow: hidden;
-		}
-
+		/* 헤더 + 아이템 동일 그리드 */
+		.board-header,
 		.board-item {
-		    display: flex;
+		    display: grid;
+		    grid-template-columns: 80px 1fr 120px 100px;
 		    align-items: center;
-		    gap: 10px;
-
-		    padding: 14px 18px;
-		    border-bottom: 1px solid #eee;
-		    font-size: 14px;
 		}
 
-		.board-item:last-child {
-		    border-bottom: none;
-		}
+		/* 헤더 */
+		.board-header {
+		    padding: 14px 24px;
+		    margin-bottom: 14px;
 
-		.board-category {
-		    font-size: 12px;
-		    color: #6F73FF;
+		    background: linear-gradient(145deg, #eef0ff, #ffffff);
+		    border-radius: 14px;
+
+		    font-size: 13px;
 		    font-weight: 700;
+		    color: #4f54a8;
+
+		    box-shadow: 0 4px 12px rgba(150,150,200,.15);
 		}
 
-		.board-title {
-		    flex: 1;
+		/* 아이템 */
+		.board-item {
+		    padding: 14px 24px;
+		    background: #fff;
+		    border-radius: 12px;
+		    margin-bottom: 8px;
+
+		    text-decoration: none;
+		    color: inherit;
+
+		    transition: background .15s ease;
+		}
+
+		.board-item:hover {
+		    background: #f6f7ff;
+		}
+
+		/* 컬럼 공통 */
+		.board-header span,
+		.board-item span {
+		    text-align: center;
+		}
+
+		/* 제목 */
+		.col-title {
+		    font-weight: 500;
 		    color: #333;
-		    white-space: nowrap;
-		    overflow: hidden;
-		    text-overflow: ellipsis;
 		}
 
-		.board-date {
+		/* 작성자 / 날짜 */
+		.col-writer,
+		.col-date {
 		    font-size: 12px;
-		    color: #999;
+		    color: #888;
+		}
+		
+		.board-grid {
+		    display: grid;
+		    grid-template-columns: repeat(3, 1fr); /* 👈 핵심 */
+		    gap: 16px;
+		}
+
+		.board-card {
+		    background: #fff;
+		    border-radius: 16px;
+		    padding: 16px 18px;
+		    box-shadow: 0 4px 12px rgba(150,150,200,.12);
+		    text-decoration: none;
+		    transition: transform .2s ease, box-shadow .2s ease;
+		}
+
+		.board-card:hover {
+		    transform: translateY(-4px);
+		    box-shadow: 0 10px 24px rgba(111,115,255,.25);
+		}
+
+		.board-card-title {
+		    font-size: 14px;
+		    font-weight: 700;
+		    color: #333;
+		    line-height: 1.4;
+		    margin-bottom: 8px;
+
+		    display: -webkit-box;
+		    -webkit-line-clamp: 2;
+		    -webkit-box-orient: vertical;
+		    overflow: hidden;
+		}
+
+		.board-card-meta {
+		    font-size: 12px;
+		    color: #888;
 		}
     </style>
 </head>
@@ -295,197 +350,177 @@
 
     <!-- HERO -->
     <section class="hero">
-		<div class="hero-title">
-		    오늘, 떠나기 좋은 여행지
-		    <span class="sparkle">✨</span>
-		</div>
-		<div class="hero-sub">날씨 기반 전국 여행지 추천 서비스</div>
-		
-		<div class="hero-divider"></div>
+		<div class="hero-badge">TODAY PICK</div>
+        <div class="hero-title">
+            오늘, 떠나기 좋은 여행지
+        </div>
+        <div class="hero-sub">날씨 기반 전국 여행지 추천 서비스</div>
     </section>
-	
+
 	<!-- ================= RANKING ================= -->
-	<section class="section ranking-section">
+	<section class="section">
 	    <div class="weather-title">🔥 오늘의 여행지 추천</div>
 
 	    <div class="ranking-grid">
-			<th:block th:each="trip, stat : ${rankingList}">
-			    <a th:href="@{/trip/detail/{id}(id=${trip.tripId})}"
-			       class="ranking-link">
+	        <th:block th:each="trip, stat : ${rankingList}">
+	            <a th:href="@{/trip/detail/{id}(id=${trip.tripId})}">
+	                <div class="ranking-card">
+	                    <div class="ranking-image">
+	                        <div class="recommend-badge"
+	                             th:text="${stat.index + 1}"></div>
 
-			        <div class="ranking-card">
-			            <div class="ranking-image">
-			                <div class="recommend-badge"
-			                     th:text="${stat.index + 1}"></div>
+	                        <img th:src="${#strings.isEmpty(trip.imageUrl) 
+	                                      ? '/img/no-image.png' 
+	                                      : trip.imageUrl}"
+	                             onerror="this.onerror=null; this.src='/img/no-image.png';">
+	                    </div>
 
-								 <img th:src="${#strings.isEmpty(trip.imageUrl) ? '/img/no-image.png' : trip.imageUrl}"
-								      th:classappend="${#strings.isEmpty(trip.imageUrl)} ? 'no-img' : ''"
-								      onerror="this.onerror=null; this.src='/img/no-image.png'"
-								      alt="여행지 이미지">
-			            </div>
+						<div class="ranking-info">
+						    <div class="ranking-title"
+						         th:text="${trip.title}"></div>
 
-			            <div class="ranking-info">
-			                <div class="ranking-title"
-			                     th:text="${trip.title}">여행지명</div>
-			            </div>
-			        </div>
-
-			    </a>
-			</th:block>
-	    </div>
-	</section>
-
-    <!-- WEATHER -->
-    <section class="section">
-        <div class="weather-title">☀️ 오늘 & 주간 날씨</div>
-
-        <!-- REGION SEARCH -->
-        <div class="region-search">
-            <select id="sidoSelect">
-                <option value="">시/도 선택</option>
-                <option th:each="sido : ${sidoList}"
-                        th:value="${sido}"
-                        th:text="${sido}"
-                        th:selected="${sido == selectedSido}">
-                </option>
-            </select>
-
-            <select id="sigunguSelect">
-                <option value="">시/군/구 선택</option>
-            </select>
-
-            <button type="button" id="searchWeatherBtn">검색</button>
-        </div>
-
-        <!-- TODAY -->
-        <div class="today-weather">
-            <div class="today-temp"
-                 th:text="${todayWeather.temp + '°C'}">--°C</div>
-            <div>
-                <span th:switch="${todayWeather.sky}">
-                    <span th:case="'맑음'">☀️</span>
-                    <span th:case="'구름많음'">🌤️</span>
-                    <span th:case="'흐림'">☁️</span>
-                    <span th:case="'눈'">❄️</span>
-                    <span th:case="*">🌧️</span>
-                </span>
-                <span th:text="' 풍속 ' + ${todayWeather.wind} + 'm/s · 강수 ' + ${todayWeather.rain} + '%'"></span>
-            </div>
-        </div>
-
-		<!-- WEEKLY -->
-		<!-- SHORT TERM (내일 · 모레) -->
-		<div class="week-weather">
-
-		    <div class="week-card" th:each="w : ${weeklyWeather}">
-
-		        <!-- 요일 -->
-		        <div style="font-weight:700;"
-		             th:text="${#temporals.format(w.date,'E')}"></div>
-
-		        <!-- 아이콘 -->
-		        <div style="font-size:18px;margin:4px 0;">
-		            <span th:switch="${w.sky}">
-		                <span th:case="'맑음'">☀️</span>
-		                <span th:case="'구름많음'">🌤️</span>
-		                <span th:case="'흐림'">☁️</span>
-		                <span th:case="'눈'">❄️</span>
-		                <span th:case="*">🌧️</span>
-		            </span>
-		        </div>
-
-		        <!-- 하늘 상태 -->
-		        <div style="font-size:13px;color:#666;"
-		             th:text="${w.sky}"></div>
-
-		        <!-- 최고 / 최저 -->
-		        <div style="margin-top:6px;font-weight:600;">
-		            <span style="color:#ff5a5a;"
-		                  th:text="${w.tempHigh != null ? w.tempHigh + '°' : '--'}"></span>
-		            /
-		            <span style="color:#4a6cff;"
-		                  th:text="${w.tempLow != null ? w.tempLow + '°' : '--'}"></span>
-		        </div>
-
-		        <!-- 강수 -->
-		        <div style="margin-top:4px;font-size:12px;color:#888;"
-		             th:text="'강수 ' + ${w.rain} + '%'"></div>
-
-		    </div>
-
-		</div>
-    </section>
-
-	<!-- ================= BOARD ================= -->
-	<section class="section">
-	    <div class="weather-title">📝 커뮤니티 최신글</div>
-
-	    <div class="board-list">
-	        <th:block th:each="board : ${latestBoards}">
-	            <div class="board-item">
-	                <span class="board-category"
-	                      th:text="${board.category}">공지</span>
-
-	                <span class="board-title"
-	                      th:text="${board.title}">
-	                    게시글 제목
-	                </span>
-
-	                <span class="board-date"
-	                      th:text="${#temporals.format(board.createdAt,'MM.dd')}">
-	                    12.15
-	                </span>
-	            </div>
+						    <div class="ranking-address"
+						         th:if="${trip.region != null}">
+						        <span th:text="${trip.region}"></span>
+						    </div>
+	                    </div>
+	                </div>
+	            </a>
 	        </th:block>
 	    </div>
 	</section>
 
-<!-- ================= JS ================= -->
-<script>
-document.getElementById("sidoSelect").addEventListener("change", function () {
-    const sido = this.value;
-    const sigunguSelect = document.getElementById("sigunguSelect");
+    <!-- ================= WEATHER ================= -->
+    <section class="section">
+        <div class="weather-title">☀️ 오늘 & 주간 날씨</div>
+		
+		<!-- 🔍 지역 날씨 검색 -->
+		<form id="regionForm" method="get" action="/"
+		      style="margin-bottom:20px; display:flex; gap:10px; align-items:center;">
 
-    sigunguSelect.innerHTML = '<option value="">시/군/구 선택</option>';
-    if (!sido) return;
+		    <!-- 시/도 -->
+			<select name="sido"
+			        onchange="onSidoChange()"
+			        style="padding:8px 12px;border-radius:8px;border:1px solid #ccc;">
+			    <option th:each="s : ${sidoList}"
+			            th:value="${s}"
+			            th:text="${s}"
+			            th:selected="${s == selectedSido}">
+			    </option>
+			</select>
 
-    fetch(`/api/regions/sigungu?sido=${encodeURIComponent(sido)}`)
-        .then(res => res.json())
-        .then(data => {
-            data.forEach(sigungu => {
-                const opt = document.createElement("option");
-                opt.value = sigungu;
-                opt.textContent = sigungu;
-                if (sigungu === "[[${selectedSigungu}]]") {
-                    opt.selected = true;
-                }
-                sigunguSelect.appendChild(opt);
-            });
-        });
-});
+			<!-- 시군구 -->
+			<select name="sigungu"
+			        style="padding:8px 12px;border-radius:8px;border:1px solid #ccc;">
+			    <option th:each="g : ${sigunguList}"
+			            th:value="${g}"
+			            th:text="${g}"
+			            th:selected="${g == selectedSigungu}">
+			    </option>
+			</select>
 
-// 최초 로딩 시 시군구 자동 세팅 (선택 유지)
-window.addEventListener("DOMContentLoaded", () => {
-    const sido = document.getElementById("sidoSelect").value;
-    if (sido) {
-        document.getElementById("sidoSelect").dispatchEvent(new Event("change"));
-    }
-});
+			<button type="submit"
+			        style="padding:8px 16px;
+			               border-radius:10px;
+			               border:none;
+			               background:#6F73FF;
+			               color:#fff;
+			               font-weight:700;">
+			    검색
+			</button>
+		</form>
+		<!-- ================= TODAY ================= -->
+		<div class="weather-inline" th:if="${todayWeather != null}">
+		    <span class="date">
+		        오늘 · 
+		        <span th:text="${#temporals.format(todayWeather.weatherDate, 'M/d(E)')}"></span>
+		    </span>
 
-document.getElementById("searchWeatherBtn").addEventListener("click", () => {
-    const sido = document.getElementById("sidoSelect").value;
-    const sigungu = document.getElementById("sigunguSelect").value;
+		    <img th:src="${todayWeather.iconUrl}" alt="weather">
 
-    if (!sido || !sigungu) {
-        alert("지역을 선택해주세요");
-        return;
-    }
+		    <span class="temp" th:text="${todayWeather.maxTemp + '°C'}"></span>
+		    <span class="desc" th:text="${todayWeather.weatherText}"></span>
 
-    location.href = `/?sido=${encodeURIComponent(sido)}&sigungu=${encodeURIComponent(sigungu)}`;
-});
-</script>
+		    <span class="dot">·</span>
+		    <span>☔ <span th:text="${todayWeather.rainPercent + '%'}"></span></span>
+		    <span class="dot">·</span>
+		    <span>💨 <span th:text="${todayWeather.windSpeed + 'm/s'}"></span></span>
+		</div>
+
+		<!-- ================= WEEKLY (내일부터) ================= -->
+		<div class="week-weather" th:if="${forecastList != null}">
+
+		    <div class="week-card"
+		         th:each="w : ${forecastList}"
+		         th:if="${w.weatherDate.isAfter(T(java.time.LocalDate).now())}">
+
+		        <!-- 날짜 + 요일 -->
+		        <div class="week-date"
+		             th:text="${#temporals.format(w.weatherDate,'M/d(E)')}"></div>
+
+		        <img th:src="${w.iconUrl}"
+		             alt="weather"
+		             style="width:36px;height:36px;margin:6px 0;">
+
+		        <div style="margin-top:6px;font-weight:600;">
+		            <span style="color:#ff5a5a;"
+		                  th:text="${w.maxTemp + '°'}"></span>
+		            /
+		            <span style="color:#4a6cff;"
+		                  th:text="${w.minTemp + '°'}"></span>
+		        </div>
+
+		        <div style="margin-top:6px;font-size:12px;color:#888;"
+		             th:text="${w.weatherText}"></div>
+		    </div>
+		</div>
+    </section>
+	
+	<!-- ================= BOARD ================= -->
+	<section class="section">
+	    <div class="weather-title">📝 커뮤니티 최신글</div>
+
+	    <!-- 헤더 -->
+	    <div class="board-header">
+	        <span class="col-no">NO</span>
+	        <span class="col-title">제목</span>
+	        <span class="col-writer">작성자</span>
+	        <span class="col-date">날짜</span>
+	    </div>
+
+		<!-- 목록 -->
+		<div class="board-list">
+		    <a th:each="post, stat : ${latestBoardList}"
+		       th:href="@{/board/detail/{id}(id=${post.boardId})}"
+		       class="board-item">
+
+		        <span class="col-no"
+		              th:text="${stat.index + 1}"></span>
+
+		        <span class="col-title"
+		              th:text="${post.title}"></span>
+
+		        <span class="col-writer">-</span>
+
+		        <span class="col-date"
+		              th:text="${#temporals.format(post.createdAt,'MM.dd')}"></span>
+		    </a>
+		</div>
+
+	    <div style="text-align:center;margin-top:16px;">
+	        <a href="/board/list"
+	           style="font-size:13px;font-weight:700;color:#6F73FF;">
+	            게시판 더보기 →
+	        </a>
+	    </div>
+	</section>
+	
+	<script>
+	    function onSidoChange() {
+	        document.getElementById('regionForm').submit();
+	    }
+	</script>
 
 </main>
-
 </body>
 </html>

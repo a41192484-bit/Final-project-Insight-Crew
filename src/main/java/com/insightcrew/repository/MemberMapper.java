@@ -38,4 +38,9 @@ public interface MemberMapper {
 	//회원탈퇴 - 상태 업데이트
 	int updateStatus(@Param("userid") String userid);
 	
+	
+	
+	// 관리자 페이지 대시보드 전체 멤버 수(수정)
+	int countAll();
+	
 }

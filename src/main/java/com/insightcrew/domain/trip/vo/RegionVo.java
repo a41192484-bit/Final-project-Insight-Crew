@@ -8,7 +8,7 @@ public class RegionVo {
     private Integer id;
     private String sido;
     private String sigungu;
-    private Integer nx;
-    private Integer ny;
+    private Double lat;
+    private Double lon;
     private String midRegionCode;
 }

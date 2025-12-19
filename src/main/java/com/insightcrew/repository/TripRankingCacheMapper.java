@@ -8,6 +8,8 @@ import com.insightcrew.domain.trip.dto.TripRankingDto;
 
 @Mapper
 public interface TripRankingCacheMapper {
+	
+	int countToday();
 
     void deleteAll();
 

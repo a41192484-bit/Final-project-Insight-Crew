@@ -20,7 +20,7 @@ public class TripRegionMappingService {
     private final TripRegionMapper regionMapper;
 
     /**
-     * 🔥 전체 여행지 지역 매핑 실행
+     * 전체 여행지 지역 매핑 실행
      */
     public void mapAllTripsRegion() {
 
@@ -59,7 +59,7 @@ public class TripRegionMappingService {
     }
 
     /**
-     * 📌 주소에서 시도 / 시군구 추출
+     * 주소에서 시도 / 시군구 추출
      * 예: "경기도 고양시 덕양구 무슨동" → ["경기도", "고양시"]
      */
     private String[] parseRegion(String fullAddr) {

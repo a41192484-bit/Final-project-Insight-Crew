@@ -84,4 +84,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	    WHERE login_id = #{userid}
 	</update>
 	
+	
+    <!-- 관리자 대시보드용 (추가) -->
+    <select id="countAll" resultType="int">
+        SELECT COUNT(*)
+        FROM member
+    </select>
+	
 </mapper>
